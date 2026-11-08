@@ -1,0 +1,300 @@
+{
+  "components": [
+    {
+      "name": "Platform & Infra",
+      "description": "Repo, CI/CD, containers, release, Terraform/AWS, lint/build tooling."
+    },
+    {
+      "name": "Security",
+      "description": "Secrets, session storage, auth hardening, network exposure, SOC 2 readiness."
+    },
+    {
+      "name": "Product & UI",
+      "description": "React Desktop + quick sheet, native macOS shell, voice, permissions UX."
+    },
+    {
+      "name": "Brain & Integrations",
+      "description": "API, loop extraction, drafting, approve/execute/verify, Gmail/Calendar/Jira/GitHub connectors."
+    },
+    {
+      "name": "QA & Release",
+      "description": "Test harness, device QA, CI test gates, dogfood gate."
+    }
+  ],
+  "issues": [
+    {
+      "ref": "JOS-REF-001",
+      "type": "Bug",
+      "priority": "Highest",
+      "component": "Platform & Infra",
+      "stage": "implementation",
+      "summary": "Repo has no git history — .git is an empty stub, CI and release workflows have never run",
+      "evidence": "`.git/` contains only `description` and `info/` (no HEAD, no objects). `git status` → \"fatal: not a git repository\". `.github/workflows/ci.yml` and `release.yml` exist but have never executed; tag v0.2.0 cannot be created.",
+      "fix": "Initialize the repo, verify `.gitignore` excludes `apps/api/.env`, `*.db`, `.venv-*`, `node_modules`; first commit; push to GitHub remote.",
+      "acceptance": [
+        "`git log` shows an initial commit; `git check-ignore apps/api/.env` returns the path",
+        "CI workflow runs green on main (unit + integration + Docker build)",
+        "Tag v0.2.0 produces a GitHub Release and a GHCR image"
+      ]
+    },
+    {
+      "ref": "JOS-REF-002",
+      "type": "Bug",
+      "priority": "High",
+      "component": "Brain & Integrations",
+      "stage": "implementation",
+      "summary": "Calendar proposals fail verify when Google is connected live (loop stuck in `executing`)",
+      "evidence": "`apps/api/src/services/osClose.ts:450` sets `created: gmail?.mode !== \"oauth\"`. With live OAuth `created` is false, so `verifyProposal` throws 409 \"Nothing to verify\" and the loop stays `executing`. No Calendar API call is made at all.",
+      "fix": "On approve of an `event` proposal with OAuth, call Google Calendar `events.insert`, store `eventId` in resultJson; keep demo path simulated.",
+      "acceptance": [
+        "Live OAuth: approve → event created in Google Calendar → loop `done`",
+        "Demo mode unchanged",
+        "Harness test covers event approve-send in demo and with stubbed Calendar fetch"
+      ]
+    },
+    {
+      "ref": "JOS-REF-003",
+      "type": "Bug",
+      "priority": "High",
+      "component": "Product & UI",
+      "stage": "implementation",
+      "summary": "OsSensors runs in every window — one ⌘⇧L creates duplicate clip loops and ambient posts double",
+      "evidence": "`apps/desktop/src/App.tsx` mounts `<OsSensors />` for every route. In the macOS shell both the Desktop and quick sheet WebViews receive `juv-os-clip-hotkey` and each POSTs `/os/loops/clip`; ambient is sampled twice per minute. John's 2026-11-08 screenshot shows two identical \"Clipped while in Cursor\" loops.",
+      "fix": "Run sensors in exactly one owner (quick sheet / agent route, or native side) — not per WebView.",
+      "acceptance": [
+        "One ⌘⇧L press = exactly one `/os/loops/clip` request (verified via audit log)",
+        "Ambient posts once per interval with Desktop and sheet both open"
+      ]
+    },
+    {
+      "ref": "JOS-REF-004",
+      "type": "Bug",
+      "priority": "Medium",
+      "component": "Brain & Integrations",
+      "stage": "implementation",
+      "summary": "Legacy stub clip loops (\"Clipped while in …\") still sit in band HIGH and outrank mail",
+      "evidence": "dev.db query: `select band,count(*) from Loop where source='clip' and status in ('open','proposed')` → `high|5`, all titled `Clipped while in …`. Current `createClipLoop` (osLoops.ts) caps clips at `normal` and refuses stub clips, but old rows predate that rule.",
+      "fix": "One-time migration: dismiss open stub clip loops with audit reason `legacy_weak_clip`; demote any other open clip loop above `normal`.",
+      "acceptance": [
+        "Same query returns 0 HIGH clip loops",
+        "Audit events recorded per dismissed loop",
+        "Migration is idempotent (second run changes nothing)"
+      ]
+    },
+    {
+      "ref": "JOS-REF-005",
+      "type": "Bug",
+      "priority": "Medium",
+      "component": "Brain & Integrations",
+      "stage": "implementation",
+      "summary": "LLM polish rewrites every draft as an email reply — todo/checklist/event drafts get turned into emails",
+      "evidence": "`apps/api/src/services/osClose.ts:158` prompt is fixed: \"You draft a short professional email reply…\". `maybeLlmPolish` runs for todo, clip, voice-checklist and event proposals whenever `ANTHROPIC_API_KEY` is set.",
+      "fix": "Prompt per proposal kind (reply / event / todo / voice-email); todo stays a checklist.",
+      "acceptance": [
+        "Unit test with mocked Anthropic client asserts kind-specific prompt",
+        "Voice todo draft remains a numbered checklist after polish"
+      ]
+    },
+    {
+      "ref": "JOS-REF-006",
+      "type": "Bug",
+      "priority": "Medium",
+      "component": "Product & UI",
+      "stage": "implementation",
+      "summary": "Quick sheet \"Open Desktop\" drops the focused loop id in the macOS bridge",
+      "evidence": "`apps/desktop/src/windows/QuickSheet.tsx` calls `openDesktop(top?.id)`, but `OsWebBridge.swift:97` defines `openDesktop: function () { return call(\"openDesktop\"); }` — argument discarded; Desktop opens on its default view.",
+      "fix": "Pass `loopId` through the bridge → `ShellController.openDesktop(loopId:)` → Desktop URL param → Desktop focuses that loop.",
+      "acceptance": [
+        "Open Desktop from sheet lands on the same loop with its draft open"
+      ]
+    },
+    {
+      "ref": "JOS-REF-007",
+      "type": "Story",
+      "priority": "High",
+      "component": "Brain & Integrations",
+      "stage": "design",
+      "summary": "Voice email drafts can't send: add new-message Gmail send + recipient resolution",
+      "evidence": "Hold-fn voice (2026-11-08) creates `objectType: voice`, proposal kind `todo` (`apps/api/src/services/osVoice.ts`). \"Draft an email to my investors\" closes locally only — no new-message compose exists (only `sendGmailReply` to a thread) and \"investors\" is not resolved to addresses.",
+      "fix": "Resolve recipients from Gmail sent history/contacts; ambiguous → user picks in ModalityHost; send new message via Gmail behind the same approve + SENI grant.",
+      "acceptance": [
+        "Voice \"email Sarah about X\" → draft with resolved To: → Approve & send → message in Gmail Sent",
+        "Unresolved recipient blocks send with a picker, never guesses",
+        "Harness test with stubbed Gmail fetch"
+      ]
+    },
+    {
+      "ref": "JOS-REF-008",
+      "type": "Bug",
+      "priority": "High",
+      "component": "Security",
+      "stage": "implementation",
+      "summary": "Session JWT stored in plaintext UserDefaults (macOS) and localStorage (web)",
+      "evidence": "`apps/macos/JuvantageOSMac/Services/TokenStore.swift` reads/writes the JWT via `UserDefaults.standard` (plaintext plist in ~/Library/Preferences). `apps/desktop/src/lib/api.ts:24-29` uses `localStorage`; `QuickSheetWebView.swift` injects the token into WebKit localStorage.",
+      "fix": "macOS: Keychain (kSecClassGenericPassword); WebViews obtain the token via the bridge, not localStorage.",
+      "acceptance": [
+        "`defaults read com.juvantage.os.mac` shows no token",
+        "Token present in Keychain; logout removes it",
+        "Mac WebViews work with localStorage token absent"
+      ]
+    },
+    {
+      "ref": "JOS-REF-009",
+      "type": "Bug",
+      "priority": "High",
+      "component": "Security",
+      "stage": "implementation",
+      "summary": "API boots with default JWT secret and reuses it as the OAuth token encryption key",
+      "evidence": "`apps/api/src/lib/env.ts:11` falls back to `\"dev-secret-change-me\"`; `env.ts:27-28` `tokenEncryptionKey` falls back to `JWT_SECRET` then `\"dev-token-key\"`. No startup check — a misconfigured deploy runs with forgeable tokens and encrypts Google refresh tokens with a known key.",
+      "fix": "Fail fast when `NODE_ENV=production` (or `DEMO_MODE=false`) and either secret is missing/default; require distinct keys.",
+      "acceptance": [
+        "Prod boot without JWT_SECRET exits non-zero with a clear error",
+        "Prod boot with TOKEN_ENCRYPTION_KEY == JWT_SECRET exits non-zero",
+        "Unit test for the guard"
+      ]
+    },
+    {
+      "ref": "JOS-REF-010",
+      "type": "Bug",
+      "priority": "High",
+      "component": "Security",
+      "stage": "implementation",
+      "summary": "Dev API listens on all interfaces with seeded demo login and CORS \"*\"",
+      "evidence": "`apps/api/src/index.ts` calls `serve({ fetch, port })` with no hostname (Node binds all interfaces). `env.ts:14` CORS defaults to `*`. `prisma/seed.ts:26` seeds `john@juvantage.com / demo1234`. Anyone on the same Wi-Fi can log in to the dev API, which holds live Gmail-derived loops after OAuth.",
+      "fix": "Default bind `127.0.0.1` (override via `HOST` for Docker); CORS default to the Vite origin; refuse seeded demo password when a live OAuth connector exists.",
+      "acceptance": [
+        "`lsof -iTCP:3001 -sTCP:LISTEN` shows 127.0.0.1 only in dev",
+        "docker-compose still reachable (HOST=0.0.0.0 inside container)",
+        "Preflight from a non-allowed origin rejected"
+      ]
+    },
+    {
+      "ref": "JOS-REF-011",
+      "type": "Task",
+      "priority": "Medium",
+      "component": "Platform & Infra",
+      "stage": "implementation",
+      "summary": "ESLint is non-functional — no flat config, no lint step in CI",
+      "evidence": "`npx eslint apps/desktop/src/windows/QuickSheet.tsx` (2026-11-08) prints the ESLint 9 flat-config migration error; no `eslint.config.*` exists in the repo; root package.json has no `lint` script.",
+      "fix": "Add `eslint.config.js` (TS + React hooks rules), `npm run lint`, CI step.",
+      "acceptance": [
+        "`npm run lint` passes on main",
+        "CI fails on a lint error"
+      ]
+    },
+    {
+      "ref": "JOS-REF-012",
+      "type": "Task",
+      "priority": "Low",
+      "component": "Brain & Integrations",
+      "stage": "implementation",
+      "summary": "Closable object types defined twice (API + shared) — drifts on every new object type",
+      "evidence": "`apps/api/src/services/osModality.ts:60` hard-codes the list; `packages/shared/src/os.ts` has `CLOSABLE_OBJECT_TYPES`. Adding `voice` on 2026-11-08 required editing both.",
+      "fix": "API imports `isClosableObjectType` / `LoopObjectType` from `@juvantage/shared`.",
+      "acceptance": [
+        "Single source of truth; contract test asserts API and shared agree"
+      ]
+    },
+    {
+      "ref": "JOS-REF-013",
+      "type": "Task",
+      "priority": "Medium",
+      "component": "QA & Release",
+      "stage": "verification",
+      "summary": "No automated tests for the macOS shell (no XCTest target; fn push-to-talk state machine untested)",
+      "evidence": "`apps/macos/project.yml` defines only the app target. `VoiceController.handle(type:flags:)` (hold threshold, fn+key cancel, release-to-send) has zero tests; CI does not build the Mac app.",
+      "fix": "Extract fn state machine into a pure type; add XCTest target; CI macOS job runs `xcodebuild test`.",
+      "acceptance": [
+        "Tests: tap < 220ms ignored; hold starts; fn+key cancels; release delivers",
+        "CI macOS job green"
+      ]
+    },
+    {
+      "ref": "JOS-REF-014",
+      "type": "Task",
+      "priority": "Medium",
+      "component": "QA & Release",
+      "stage": "verification",
+      "summary": "HTTP harness never exercises the live Gmail execute branch (P0.1 path untested in CI)",
+      "evidence": "`apps/api/src/integration/closeDemo.harness.test.ts` covers demo mail + voice only. The OAuth branch in `osClose.ts:340-425` (send-scope check, threadId, `sendGmailReply`, 401 handling) has no automated coverage — the `accessToken is not defined` bug reached John manually.",
+      "fix": "Harness case with an oauth connector row and stubbed `fetch` for Gmail send.",
+      "acceptance": [
+        "Asserts MIME To/Subject/threadId sent to Gmail",
+        "Asserts 401 → \"Gmail session expired\" error",
+        "Runs in CI without network"
+      ]
+    },
+    {
+      "ref": "JOS-REF-015",
+      "type": "Story",
+      "priority": "Medium",
+      "component": "Product & UI",
+      "stage": "design",
+      "summary": "First-run permission check for Microphone, Speech and Accessibility + fn-key conflict guidance",
+      "evidence": "`VoiceController.beginListening` only shows an error pill when Mic/Speech are denied; global fn/⌘⇧L monitors silently don't fire without Accessibility (no `AXIsProcessTrusted` check). macOS \"Press 🌐 key to\" emoji/dictation can fire on fn release.",
+      "fix": "Native first-run checklist panel: status per permission, deep links to System Settings, fn-key setting hint.",
+      "acceptance": [
+        "Fresh install shows checklist; each item turns green when granted",
+        "Accessibility missing is detected and explained"
+      ]
+    },
+    {
+      "ref": "JOS-REF-016",
+      "type": "Task",
+      "priority": "High",
+      "component": "QA & Release",
+      "stage": "verification",
+      "summary": "Hold-fn voice has only been compiled, never verified on hardware",
+      "evidence": "2026-11-08: `xcodebuild` BUILD SUCCEEDED and API harness passes for `/os/loops/voice`, but no human has run the native path (fn monitor, mic, SFSpeech, pill, sheet handoff).",
+      "fix": "Device QA run with recorded results.",
+      "acceptance": [
+        "Pass: hold fn → pill + live transcript",
+        "Pass: release → sheet focuses new draft, pill reports result",
+        "Pass: fn tap and fn+arrow do not trigger",
+        "Pass: denied mic shows guidance",
+        "Pass: API down → pill shows \"Quick sheet didn't answer\" within 10s"
+      ]
+    },
+    {
+      "ref": "JOS-REF-017",
+      "type": "Task",
+      "priority": "Medium",
+      "component": "Platform & Infra",
+      "stage": "design",
+      "summary": "os_brain Terraform stack never planned or applied",
+      "evidence": "`infrastructure/services/os_brain/main.tf` exists; `infrastructure/envs/dev/` contains only README.md — no backend config, no tfvars, no state. Blocked on AWS account/credentials from John.",
+      "fix": "Remote state (S3 + lock), dev env wiring, `terraform plan` in CI on PRs touching infrastructure/.",
+      "acceptance": [
+        "`terraform plan` for dev runs clean in CI",
+        "Secrets via AWS Secrets Manager module, none in tfvars"
+      ]
+    },
+    {
+      "ref": "JOS-REF-018",
+      "type": "Task",
+      "priority": "Medium",
+      "component": "QA & Release",
+      "stage": "verification",
+      "summary": "Dogfood journal Days 2–14 unfilled — Day 14 gate decision has no data",
+      "evidence": "`docs/DOGFOOD_JOURNAL.md` has Day 1 filled (2026-11-08); Day 2–14 sections are empty templates. `/os/metrics` (clear/accept/edit rates) is the data source.",
+      "fix": "Daily entry from `/os/metrics` + 2-line human note; consider auto-filling metrics.",
+      "acceptance": [
+        "14 entries with metrics; Day 14 go/no-go recorded"
+      ]
+    },
+    {
+      "ref": "JOS-REF-019",
+      "type": "Epic",
+      "priority": "High",
+      "component": "Brain & Integrations",
+      "stage": "requirements",
+      "summary": "AI Engineering Operations — architecture proposal before build (Jira + GitHub, human-supervised)",
+      "evidence": "Agreed 2026-11-08: Juvantage OS should create/maintain Jira work for our own org so new hires land in organized work. Spec requires an architecture proposal, roadmap, dependencies and acceptance criteria before large implementation; must reuse ModalityHost + approve/SENI grants and not break Gmail P0.1.",
+      "fix": "Architecture doc: Jira connector (OAuth 3LO), ticket proposals as Loop/Proposal objects, duplicate detection via JQL label, approval tiers, audit trail, GitHub PR/CI linkage.",
+      "acceptance": [
+        "Proposal reviewed by CTO gate and John",
+        "Ticket creation flows through the existing approve gate (no autonomous high-impact actions)"
+      ]
+    }
+  ]
+}

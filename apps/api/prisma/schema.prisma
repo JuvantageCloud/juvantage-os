@@ -1,0 +1,323 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  memberships  Membership[]
+  conversations AgentConversation[]
+}
+
+model Organization {
+  id          String     @id @default(cuid())
+  name        String
+  createdAt   DateTime   @default(now())
+  memberships Membership[]
+  businesses  Business[]
+}
+
+model Membership {
+  id             String       @id @default(cuid())
+  userId         String
+  organizationId String
+  role           String       @default("owner")
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+}
+
+model Business {
+  id            String   @id @default(cuid())
+  organizationId String
+  name          String
+  category      String
+  status        String   @default("healthy")
+  metricLabel   String   @default("Revenue today")
+  metricValue   String   @default("$0")
+  metricDelta   Float?
+  timezone      String   @default("America/Los_Angeles")
+  currency      String   @default("USD")
+  revenueToday  Float    @default(0)
+  openTasks     Int      @default(0)
+  createdAt     DateTime @default(now())
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  connections   Connection[]
+  events        BusinessEvent[]
+  alerts        Alert[]
+  socialPosts   SocialPost[]
+  calendarEvents CalendarEvent[]
+  metricSnapshots MetricSnapshot[]
+  conversations AgentConversation[]
+}
+
+model Connection {
+  id             String    @id @default(cuid())
+  businessId     String?
+  userId         String?
+  provider       String
+  status         String    @default("disconnected")
+  label          String
+  detail         String?
+  enabled        Boolean   @default(false)
+  comingSoon     Boolean   @default(false)
+  accessToken    String?
+  refreshToken   String?
+  tokenExpiresAt DateTime?
+  lastSyncAt     DateTime?
+  metadata       String?
+  business       Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([userId, provider])
+}
+
+/** Personal OS — cached Gmail threads (Phase 2 sync; Phase 3 extracts loops). */
+model OsMailThread {
+  id             String   @id @default(cuid())
+  userId         String
+  externalId     String
+  threadId       String
+  subject        String?
+  snippet        String?
+  fromAddr       String?
+  lastMessageAt  DateTime?
+  payloadJson    String?
+  syncedAt       DateTime @default(now())
+
+  @@unique([userId, externalId])
+  @@index([userId, lastMessageAt])
+}
+
+/** Personal OS — cached Calendar events (Phase 2 sync). */
+model OsCalendarItem {
+  id          String   @id @default(cuid())
+  userId      String
+  externalId  String
+  title       String
+  startsAt    DateTime
+  endsAt      DateTime
+  payloadJson String?
+  syncedAt    DateTime @default(now())
+
+  @@unique([userId, externalId])
+  @@index([userId, startsAt])
+}
+
+/** Personal OS — open loops (Phase 3). */
+model Loop {
+  id             String    @id @default(cuid())
+  userId         String
+  kind           String
+  band           String    @default("normal")
+  status         String    @default("open")
+  title          String
+  summary        String?
+  source         String?
+  sourceRef      String?
+  evidenceJson   String?
+  ambientJson    String?
+  /** Modality object: mail|chat|pdf|form|calendar|clip|hint|unknown (RP-01 / Thm III) */
+  objectType     String    @default("unknown")
+  routerConf     Float?
+  canonicalUri   String?
+  dueAt          DateTime?
+  snoozedUntil   DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  proposals      Proposal[]
+
+  @@unique([userId, source, sourceRef])
+  @@index([userId, status, band])
+  @@index([userId, objectType])
+}
+
+/** SENI linear approve token (Distinction Thm I.1). Fresh → consumed exactly once. */
+model ApprovalGrant {
+  id          String    @id @default(cuid())
+  userId      String
+  proposalId  String
+  nonce       String
+  mask        String
+  status      String    @default("fresh") // fresh|consumed|expired
+  mac         String
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, proposalId, status])
+  @@index([proposalId, status])
+}
+
+/** Personal OS — draft actions (Phase 4). Nothing executes without approve. */
+model Proposal {
+  id           String   @id @default(cuid())
+  loopId       String
+  userId       String
+  kind         String
+  status       String   @default("pending_approval")
+  title        String
+  body         String
+  rationale    String?
+  resultJson   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  loop         Loop     @relation(fields: [loopId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([loopId, createdAt])
+}
+
+/** Personal OS — audit trail (Personal now; Teams later). */
+model OsAuditEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  loopId     String?
+  proposalId String?
+  action     String
+  detailJson String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([loopId])
+}
+
+/** Personal OS — ambient app/title/URL ledger (purge ≤24h). */
+model AmbientEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  app        String
+  title      String?
+  url        String?
+  recordedAt DateTime @default(now())
+
+  @@index([userId, recordedAt])
+}
+
+/**
+ * Server / client failures for ASAP investigate → suggest PR (OS capability).
+ * Never auto-merge — human review only.
+ */
+model OpsIncident {
+  id            String    @id @default(cuid())
+  fingerprint   String
+  source        String    @default("api")
+  method        String?
+  path          String?
+  statusCode    Int?
+  message       String
+  stack         String?
+  contextJson   String?
+  userId        String?
+  occurrenceCount Int     @default(1)
+  status        String    @default("open")
+  investigationJson String?
+  githubIssueUrl String?
+  lastSeenAt    DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([fingerprint])
+  @@index([status, lastSeenAt])
+}
+
+model BusinessEvent {
+  id         String   @id @default(cuid())
+  businessId String
+  kind       String
+  title      String
+  detail     String?
+  createdAt  DateTime @default(now())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model Alert {
+  id             String   @id @default(cuid())
+  businessId     String?
+  severity       String
+  title          String
+  body           String?
+  labels         String   @default("[]")
+  read           Boolean  @default(false)
+  impactOrders   Int?
+  impactRevenue  Float?
+  createdAt      DateTime @default(now())
+  business       Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+}
+
+model SocialPost {
+  id               String   @id @default(cuid())
+  businessId       String
+  platform         String
+  title            String
+  caption          String
+  views            Int
+  engagementDelta  Float
+  durationSec      Int?
+  likes            Int?
+  comments         Int?
+  shares           Int?
+  engagementRate   Float?
+  createdAt        DateTime @default(now())
+  business         Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model CalendarEvent {
+  id         String   @id @default(cuid())
+  businessId String?
+  title      String
+  startsAt   DateTime
+  endsAt     DateTime
+  icon       String   @default("calendar")
+  externalId String?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+}
+
+model MetricSnapshot {
+  id         String   @id @default(cuid())
+  businessId String
+  key        String
+  value      Float
+  capturedAt DateTime @default(now())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model AgentConversation {
+  id         String   @id @default(cuid())
+  userId     String
+  businessId String?
+  agentKind  String   @default("ops")
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  messages   AgentMessage[]
+}
+
+model AgentMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String
+  content        String
+  title          String?
+  metricsJson    String?
+  actionsJson    String?
+  createdAt      DateTime @default(now())
+  conversation   AgentConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model AgentRun {
+  id             String   @id @default(cuid())
+  conversationId String?
+  status         String   @default("completed")
+  toolCallsJson  String?
+  requiresConfirm Boolean @default(false)
+  createdAt      DateTime @default(now())
+}

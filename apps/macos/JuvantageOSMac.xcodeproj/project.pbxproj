@@ -1,0 +1,387 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		26848DB98C0CB5664EE44779 /* VoiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CD258E091EED972B16629C /* VoiceController.swift */; };
+		2F05E1A2DC999CE21A55CAA3 /* BrainClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C2F0D564011C5F3E59824F /* BrainClient.swift */; };
+		3BDDE0C72947ED185A9EEC01 /* AgentFloatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ACFA0572099F827CC9F5AE /* AgentFloatView.swift */; };
+		55E671B2F437763CB3401EDD /* OsWebBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660DD9771E60C629A61BE73 /* OsWebBridge.swift */; };
+		71FE67A3E3952459CC45F66D /* LaunchHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B93C61AD80D1C1B088C2EE /* LaunchHubView.swift */; };
+		7469A37B2DC61F6E5E7DE56E /* QuickSheetWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2316B83921B5E8632FAEF7B8 /* QuickSheetWebView.swift */; };
+		82E48F5B7EF899D8334F9B79 /* OSDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820166AD15B147234700D7C7 /* OSDTOs.swift */; };
+		8DC0814365E5BBEEACBE63DD /* DesktopWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59F8F3052DC522469BB282 /* DesktopWebView.swift */; };
+		AFBC6970FED09FEE62B39252 /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67DA63A43B52708872FB3DE7 /* TokenStore.swift */; };
+		C23B7871242A637A789CD91D /* AmbientSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9934A7DC7DF594F66104A8A4 /* AmbientSampler.swift */; };
+		C4728F6B15B262BBB1B8C8EA /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703AD789134FB0624AFB26FE /* AppConfig.swift */; };
+		E7B31734A468E76154B57A4A /* JuvantageOSMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B18BFAF007C79F4350C5EA6 /* JuvantageOSMacApp.swift */; };
+		F21E6E001399AC825E9AF0D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C928004E3537F401ECDC9873 /* AppDelegate.swift */; };
+		F5F1BE7547CF0241C673F18A /* VoicePillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238C7AF2316853215B3533D4 /* VoicePillView.swift */; };
+		FBB9835449205A77E2CB240A /* QuickSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B21AB6FF1158D1FAA36CEF3 /* QuickSheetView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		11CD258E091EED972B16629C /* VoiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceController.swift; sourceTree = "<group>"; };
+		1B18BFAF007C79F4350C5EA6 /* JuvantageOSMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuvantageOSMacApp.swift; sourceTree = "<group>"; };
+		1B59F8F3052DC522469BB282 /* DesktopWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopWebView.swift; sourceTree = "<group>"; };
+		2316B83921B5E8632FAEF7B8 /* QuickSheetWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSheetWebView.swift; sourceTree = "<group>"; };
+		238C7AF2316853215B3533D4 /* VoicePillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePillView.swift; sourceTree = "<group>"; };
+		2B21AB6FF1158D1FAA36CEF3 /* QuickSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSheetView.swift; sourceTree = "<group>"; };
+		30C2F0D564011C5F3E59824F /* BrainClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrainClient.swift; sourceTree = "<group>"; };
+		55ACFA0572099F827CC9F5AE /* AgentFloatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentFloatView.swift; sourceTree = "<group>"; };
+		65B93C61AD80D1C1B088C2EE /* LaunchHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchHubView.swift; sourceTree = "<group>"; };
+		67DA63A43B52708872FB3DE7 /* TokenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStore.swift; sourceTree = "<group>"; };
+		703AD789134FB0624AFB26FE /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		820166AD15B147234700D7C7 /* OSDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSDTOs.swift; sourceTree = "<group>"; };
+		9934A7DC7DF594F66104A8A4 /* AmbientSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientSampler.swift; sourceTree = "<group>"; };
+		B660DD9771E60C629A61BE73 /* OsWebBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsWebBridge.swift; sourceTree = "<group>"; };
+		C928004E3537F401ECDC9873 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E19ABCFFB67CCEB7E2637C88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F3C7449A0C2F59289FC6ABB7 /* JuvantageOSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuvantageOSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		48AAAD95C09B19E72DD15CA2 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				703AD789134FB0624AFB26FE /* AppConfig.swift */,
+				C928004E3537F401ECDC9873 /* AppDelegate.swift */,
+				1B18BFAF007C79F4350C5EA6 /* JuvantageOSMacApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6140B84391F764A3DB882DFD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3C7449A0C2F59289FC6ABB7 /* JuvantageOSMac.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		811C0FEE4D766B7E17DC9DF6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				820166AD15B147234700D7C7 /* OSDTOs.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8C1B7F9E1F5465AFA2AEEEC4 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				55ACFA0572099F827CC9F5AE /* AgentFloatView.swift */,
+				1B59F8F3052DC522469BB282 /* DesktopWebView.swift */,
+				65B93C61AD80D1C1B088C2EE /* LaunchHubView.swift */,
+				2B21AB6FF1158D1FAA36CEF3 /* QuickSheetView.swift */,
+				2316B83921B5E8632FAEF7B8 /* QuickSheetWebView.swift */,
+				238C7AF2316853215B3533D4 /* VoicePillView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		C2721B9DB66BA6626FFFB2A5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9934A7DC7DF594F66104A8A4 /* AmbientSampler.swift */,
+				30C2F0D564011C5F3E59824F /* BrainClient.swift */,
+				B660DD9771E60C629A61BE73 /* OsWebBridge.swift */,
+				67DA63A43B52708872FB3DE7 /* TokenStore.swift */,
+				11CD258E091EED972B16629C /* VoiceController.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CA9B1A8B7C0AA97378EBD9AE /* JuvantageOSMac */ = {
+			isa = PBXGroup;
+			children = (
+				E19ABCFFB67CCEB7E2637C88 /* Info.plist */,
+				48AAAD95C09B19E72DD15CA2 /* App */,
+				811C0FEE4D766B7E17DC9DF6 /* Models */,
+				C2721B9DB66BA6626FFFB2A5 /* Services */,
+				8C1B7F9E1F5465AFA2AEEEC4 /* UI */,
+			);
+			path = JuvantageOSMac;
+			sourceTree = "<group>";
+		};
+		D4399FD8E488D1DCDAC06AB0 = {
+			isa = PBXGroup;
+			children = (
+				CA9B1A8B7C0AA97378EBD9AE /* JuvantageOSMac */,
+				6140B84391F764A3DB882DFD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		790BE5E139469F9E8F0D9FC4 /* JuvantageOSMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A49DCE6D0D96B47F1291473C /* Build configuration list for PBXNativeTarget "JuvantageOSMac" */;
+			buildPhases = (
+				D83DAD5D44458AD59499734C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JuvantageOSMac;
+			packageProductDependencies = (
+			);
+			productName = JuvantageOSMac;
+			productReference = F3C7449A0C2F59289FC6ABB7 /* JuvantageOSMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9B0EBE2E3BC3DE518F2D340D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					790BE5E139469F9E8F0D9FC4 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = AED2C4C9B995CBE707B2DD14 /* Build configuration list for PBXProject "JuvantageOSMac" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D4399FD8E488D1DCDAC06AB0;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6140B84391F764A3DB882DFD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				790BE5E139469F9E8F0D9FC4 /* JuvantageOSMac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D83DAD5D44458AD59499734C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BDDE0C72947ED185A9EEC01 /* AgentFloatView.swift in Sources */,
+				C23B7871242A637A789CD91D /* AmbientSampler.swift in Sources */,
+				C4728F6B15B262BBB1B8C8EA /* AppConfig.swift in Sources */,
+				F21E6E001399AC825E9AF0D5 /* AppDelegate.swift in Sources */,
+				2F05E1A2DC999CE21A55CAA3 /* BrainClient.swift in Sources */,
+				8DC0814365E5BBEEACBE63DD /* DesktopWebView.swift in Sources */,
+				E7B31734A468E76154B57A4A /* JuvantageOSMacApp.swift in Sources */,
+				71FE67A3E3952459CC45F66D /* LaunchHubView.swift in Sources */,
+				82E48F5B7EF899D8334F9B79 /* OSDTOs.swift in Sources */,
+				55E671B2F437763CB3401EDD /* OsWebBridge.swift in Sources */,
+				FBB9835449205A77E2CB240A /* QuickSheetView.swift in Sources */,
+				7469A37B2DC61F6E5E7DE56E /* QuickSheetWebView.swift in Sources */,
+				AFBC6970FED09FEE62B39252 /* TokenStore.swift in Sources */,
+				26848DB98C0CB5664EE44779 /* VoiceController.swift in Sources */,
+				F5F1BE7547CF0241C673F18A /* VoicePillView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0CAF345DDE182E8F671FFEB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JuvantageOSMac/Info.plist;
+				INFOPLIST_GENERATION_MODE = Generated;
+				INFOPLIST_KEY_CFBundleDisplayName = "Juvantage OS";
+				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSAppTransportSecurity_AllowsLocalNetworking = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.juvantage.os.mac;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		35510CC359B7B2A6E1750281 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JuvantageOSMac/Info.plist;
+				INFOPLIST_GENERATION_MODE = Generated;
+				INFOPLIST_KEY_CFBundleDisplayName = "Juvantage OS";
+				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSAppTransportSecurity_AllowsLocalNetworking = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.juvantage.os.mac;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		75709F40F8D5DDF4AAFCF4BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		A7C41BDDB0CDDA2887ED536F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A49DCE6D0D96B47F1291473C /* Build configuration list for PBXNativeTarget "JuvantageOSMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0CAF345DDE182E8F671FFEB2 /* Debug */,
+				35510CC359B7B2A6E1750281 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AED2C4C9B995CBE707B2DD14 /* Build configuration list for PBXProject "JuvantageOSMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75709F40F8D5DDF4AAFCF4BF /* Debug */,
+				A7C41BDDB0CDDA2887ED536F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9B0EBE2E3BC3DE518F2D340D /* Project object */;
+}

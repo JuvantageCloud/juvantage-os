@@ -1,0 +1,9 @@
+{
+  "source": "api",
+  "method": "GET",
+  "path": "/os/connectors",
+  "statusCode": 401,
+  "message": "Unauthorized",
+  "stack": "Error: Unauthorized\n    at requireAuth (apps/api/src/middleware/auth.ts:12:12)",
+  "occurrenceCount": 3
+}

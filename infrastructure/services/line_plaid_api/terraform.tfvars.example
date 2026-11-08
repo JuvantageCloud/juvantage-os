@@ -1,0 +1,6 @@
+aws_region = "us-east-1"
+env        = "dev"
+# Your public IP only, never 0.0.0.0/0:
+ssh_cidr   = "x.x.x.x/32"
+# Optional EC2 key pair name already in AWS:
+# key_name = "juvantage-dev"

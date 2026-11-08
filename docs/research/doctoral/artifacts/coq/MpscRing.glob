@@ -1,0 +1,395 @@
+DIGEST d73de3d6269c0e99ba62d12671faddd3
+FMpscRing
+R809:812 Stdlib.Lists.List <> <> lib
+R814:818 Stdlib.Arith.Arith <> <> lib
+R820:822 Stdlib.micromega.Lia <> <> lib
+R832:844 Stdlib.Lists.List ListNotations <> mod
+rec 855:858 <> Ring
+proj 865:868 <> head
+proj 877:880 <> tail
+R872:874 Corelib.Init.Datatypes <> nat ind
+R884:886 Corelib.Init.Datatypes <> nat ind
+def 903:905 <> gap
+R912:915 MpscRing <> Ring rec
+binder 908:908 <> r:4
+R920:922 Corelib.Init.Datatypes <> nat ind
+R933:935 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R927:930 MpscRing <> tail proj
+R932:932 MpscRing <> r:4 var
+R936:939 MpscRing <> head proj
+R941:941 MpscRing <> r:4 var
+def 956:958 <> inv
+R965:967 Corelib.Init.Datatypes <> nat ind
+binder 961:961 <> N:5
+R975:978 MpscRing <> Ring rec
+binder 971:971 <> r:6
+R1009:1012 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R999:1002 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R993:996 MpscRing <> head proj
+R998:998 MpscRing <> r:6 var
+R1003:1006 MpscRing <> tail proj
+R1008:1008 MpscRing <> r:6 var
+R1018:1021 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R1013:1015 MpscRing <> gap def
+R1017:1017 MpscRing <> r:6 var
+R1022:1022 MpscRing <> N:5 var
+def 1037:1046 <> try_occupy
+R1053:1055 Corelib.Init.Datatypes <> nat ind
+binder 1049:1049 <> N:7
+R1063:1066 MpscRing <> Ring rec
+binder 1059:1059 <> r:8
+R1071:1076 Corelib.Init.Datatypes <> option ind
+R1078:1081 MpscRing <> Ring rec
+R1096:1099 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R1091:1093 MpscRing <> gap def
+R1095:1095 MpscRing <> r:8 var
+R1100:1100 MpscRing <> N:7 var
+R1162:1165 Corelib.Init.Datatypes <> None constr
+R1109:1112 Corelib.Init.Datatypes <> Some constr
+R1117:1120 MpscRing <> head proj
+R1133:1136 MpscRing <> tail proj
+R1125:1128 MpscRing <> head proj
+R1130:1130 MpscRing <> r:8 var
+R1141:1141 Corelib.Init.Datatypes <> S constr
+R1144:1147 MpscRing <> tail proj
+R1149:1149 MpscRing <> r:8 var
+def 1180:1190 <> try_consume
+R1197:1200 MpscRing <> Ring rec
+binder 1193:1193 <> r:9
+R1205:1210 Corelib.Init.Datatypes <> option ind
+R1212:1215 MpscRing <> Ring rec
+R1231:1234 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R1225:1228 MpscRing <> head proj
+R1230:1230 MpscRing <> r:9 var
+R1235:1238 MpscRing <> tail proj
+R1240:1240 MpscRing <> r:9 var
+R1302:1305 Corelib.Init.Datatypes <> None constr
+R1249:1252 Corelib.Init.Datatypes <> Some constr
+R1257:1260 MpscRing <> head proj
+R1277:1280 MpscRing <> tail proj
+R1265:1265 Corelib.Init.Datatypes <> S constr
+R1268:1271 MpscRing <> head proj
+R1273:1273 MpscRing <> r:9 var
+R1285:1288 MpscRing <> tail proj
+R1290:1290 MpscRing <> r:9 var
+prf 1315:1330 <> occupy_preserves
+binder 1343:1343 <> N:10
+binder 1345:1345 <> r:11
+binder 1347:1348 <> r':12
+R1362:1369 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1355:1357 MpscRing <> inv def
+R1359:1359 MpscRing <> N:10 var
+R1361:1361 MpscRing <> r:11 var
+R1394:1401 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1384:1386 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1370:1379 MpscRing <> try_occupy def
+R1381:1381 MpscRing <> N:10 var
+R1383:1383 MpscRing <> r:11 var
+R1387:1390 Corelib.Init.Datatypes <> Some constr
+R1392:1393 MpscRing <> r':12 var
+R1402:1404 MpscRing <> inv def
+R1406:1406 MpscRing <> N:10 var
+R1408:1409 MpscRing <> r':12 var
+R1462:1471 MpscRing <> try_occupy def
+R1500:1503 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R1495:1497 MpscRing <> gap def
+R1524:1533 Stdlib.Arith.PeanoNat Nat ltb_lt thm
+R1555:1560 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1595:1597 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1561:1564 MpscRing <> head proj
+R1577:1580 MpscRing <> tail proj
+R1569:1572 MpscRing <> head proj
+R1585:1585 Corelib.Init.Datatypes <> S constr
+R1588:1591 MpscRing <> tail proj
+R1662:1664 Corelib.Init.Datatypes <> nat ind
+binder 1656:1656 <> h:13
+binder 1658:1658 <> t:14
+R1681:1684 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1676:1679 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R1675:1675 MpscRing <> h:13 var
+R1680:1680 MpscRing <> t:14 var
+R1695:1698 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1690:1693 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R1686:1688 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R1685:1685 MpscRing <> t:14 var
+R1689:1689 MpscRing <> h:13 var
+R1708:1711 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1704:1706 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R1700:1702 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R1699:1699 MpscRing <> t:14 var
+R1703:1703 MpscRing <> h:13 var
+R1720:1723 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R1713:1716 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R1712:1712 MpscRing <> h:13 var
+R1717:1717 Corelib.Init.Datatypes <> S constr
+R1719:1719 MpscRing <> t:14 var
+R1731:1734 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R1727:1729 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R1724:1724 Corelib.Init.Datatypes <> S constr
+R1726:1726 MpscRing <> t:14 var
+R1730:1730 MpscRing <> h:13 var
+binder 1656:1656 <> h:15
+binder 1658:1658 <> t:16
+R1675:1675 MpscRing <> h:15 var
+R1680:1680 MpscRing <> t:16 var
+R1685:1685 MpscRing <> t:16 var
+R1689:1689 MpscRing <> h:15 var
+R1699:1699 MpscRing <> t:16 var
+R1703:1703 MpscRing <> h:15 var
+R1712:1712 MpscRing <> h:15 var
+R1719:1719 MpscRing <> t:16 var
+R1726:1726 MpscRing <> t:16 var
+R1730:1730 MpscRing <> h:15 var
+R1785:1787 MpscRing <> inv def
+R1790:1792 MpscRing <> gap def
+prf 1856:1872 <> consume_preserves
+binder 1885:1885 <> N:17
+binder 1887:1887 <> r:18
+binder 1889:1890 <> r':19
+R1904:1911 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1897:1899 MpscRing <> inv def
+R1901:1901 MpscRing <> N:17 var
+R1903:1903 MpscRing <> r:18 var
+R1935:1942 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1925:1927 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1912:1922 MpscRing <> try_consume def
+R1924:1924 MpscRing <> r:18 var
+R1928:1931 Corelib.Init.Datatypes <> Some constr
+R1933:1934 MpscRing <> r':19 var
+R1943:1945 MpscRing <> inv def
+R1947:1947 MpscRing <> N:17 var
+R1949:1950 MpscRing <> r':19 var
+R2003:2013 MpscRing <> try_consume def
+R2043:2046 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R2037:2040 MpscRing <> head proj
+R2047:2050 MpscRing <> tail proj
+R2072:2081 Stdlib.Arith.PeanoNat Nat ltb_lt thm
+R2103:2108 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2143:2145 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2109:2112 MpscRing <> head proj
+R2129:2132 MpscRing <> tail proj
+R2117:2117 Corelib.Init.Datatypes <> S constr
+R2120:2123 MpscRing <> head proj
+R2137:2140 MpscRing <> tail proj
+R2210:2212 Corelib.Init.Datatypes <> nat ind
+binder 2204:2204 <> h:20
+binder 2206:2206 <> t:21
+R2229:2232 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2224:2227 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2223:2223 MpscRing <> h:20 var
+R2228:2228 MpscRing <> t:21 var
+R2243:2246 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2238:2241 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2234:2236 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2233:2233 MpscRing <> t:21 var
+R2237:2237 MpscRing <> h:20 var
+R2252:2255 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2248:2250 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R2247:2247 MpscRing <> h:20 var
+R2251:2251 MpscRing <> t:21 var
+R2264:2267 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2259:2262 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2256:2256 Corelib.Init.Datatypes <> S constr
+R2258:2258 MpscRing <> h:20 var
+R2263:2263 MpscRing <> t:21 var
+R2275:2278 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2269:2271 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2268:2268 MpscRing <> t:21 var
+R2272:2272 Corelib.Init.Datatypes <> S constr
+R2274:2274 MpscRing <> h:20 var
+binder 2204:2204 <> h:22
+binder 2206:2206 <> t:23
+R2223:2223 MpscRing <> h:22 var
+R2228:2228 MpscRing <> t:23 var
+R2233:2233 MpscRing <> t:23 var
+R2237:2237 MpscRing <> h:22 var
+R2247:2247 MpscRing <> h:22 var
+R2251:2251 MpscRing <> t:23 var
+R2258:2258 MpscRing <> h:22 var
+R2263:2263 MpscRing <> t:23 var
+R2268:2268 MpscRing <> t:23 var
+R2274:2274 MpscRing <> h:22 var
+R2329:2331 MpscRing <> inv def
+R2334:2336 MpscRing <> gap def
+ind 2404:2406 <> Act
+constr 2411:2416 <> Occupy
+constr 2420:2426 <> Consume
+scheme 2404:2406 <> Act_rect
+scheme 2404:2406 <> Act_ind
+scheme 2404:2406 <> Act_rec
+scheme 2404:2406 <> Act_sind
+def 2439:2441 <> run
+R2448:2450 Corelib.Init.Datatypes <> nat ind
+binder 2444:2444 <> N:26
+R2458:2461 MpscRing <> Ring rec
+binder 2454:2454 <> r:27
+R2472:2475 Corelib.Init.Datatypes <> list ind
+R2477:2479 MpscRing <> Act ind
+binder 2465:2468 <> acts:28
+R2484:2487 MpscRing <> Ring rec
+R2500:2503 MpscRing <> acts:28 var
+R2514:2515 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R2520:2520 MpscRing <> r:27 var
+R2532:2535 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2526:2531 MpscRing <> Occupy constr
+R2556:2565 MpscRing <> try_occupy def
+R2567:2567 MpscRing <> N:26 var
+R2569:2569 MpscRing <> r:27 var
+R2584:2587 Corelib.Init.Datatypes <> Some constr
+R2595:2597 MpscRing <> run:29 def
+R2599:2599 MpscRing <> N:26 var
+R2617:2620 Corelib.Init.Datatypes <> None constr
+R2625:2627 MpscRing <> run:29 def
+R2631:2631 MpscRing <> r:27 var
+R2629:2629 MpscRing <> N:26 var
+R2659:2662 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2652:2658 MpscRing <> Consume constr
+R2683:2693 MpscRing <> try_consume def
+R2695:2695 MpscRing <> r:27 var
+R2710:2713 Corelib.Init.Datatypes <> Some constr
+R2721:2723 MpscRing <> run:29 def
+R2725:2725 MpscRing <> N:26 var
+R2743:2746 Corelib.Init.Datatypes <> None constr
+R2751:2753 MpscRing <> run:29 def
+R2757:2757 MpscRing <> r:27 var
+R2755:2755 MpscRing <> N:26 var
+prf 2788:2800 <> run_preserves
+binder 2813:2816 <> acts:31
+binder 2818:2818 <> N:32
+binder 2820:2820 <> r:33
+R2830:2833 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2823:2825 MpscRing <> inv def
+R2827:2827 MpscRing <> N:32 var
+R2829:2829 MpscRing <> r:33 var
+R2834:2836 MpscRing <> inv def
+R2838:2838 MpscRing <> N:32 var
+R2841:2843 MpscRing <> run def
+R2845:2845 MpscRing <> N:32 var
+R2847:2847 MpscRing <> r:33 var
+R2849:2852 MpscRing <> acts:31 var
+R2964:2973 MpscRing <> try_occupy def
+R3012:3027 MpscRing <> occupy_preserves thm
+R3080:3090 MpscRing <> try_consume def
+R3127:3143 MpscRing <> consume_preserves thm
+prf 3194:3205 <> no_overwrite
+binder 3218:3221 <> acts:34
+binder 3223:3223 <> N:35
+R3226:3228 MpscRing <> inv def
+R3230:3230 MpscRing <> N:35 var
+R3233:3235 MpscRing <> run def
+R3237:3237 MpscRing <> N:35 var
+R3242:3245 MpscRing <> head proj
+R3253:3256 MpscRing <> tail proj
+R3266:3269 MpscRing <> acts:34 var
+R3303:3315 MpscRing <> run_preserves thm
+R3325:3327 MpscRing <> inv def
+R3330:3332 MpscRing <> gap def
+R3357:3367 Stdlib.Arith.PeanoNat Nat le_refl thm
+R3376:3385 Stdlib.Arith.PeanoNat Nat le_0_l thm
+prf 3402:3419 <> try_occupy_decides
+binder 3432:3432 <> N:36
+binder 3434:3434 <> r:37
+R3458:3461 Corelib.Init.Logic <> ::type_scope:x_'\/'_x not
+R3451:3453 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3437:3446 MpscRing <> try_occupy def
+R3448:3448 MpscRing <> N:36 var
+R3450:3450 MpscRing <> r:37 var
+R3454:3457 Corelib.Init.Datatypes <> None constr
+R3462:3468 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R3471:3472 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 3469:3470 <> r':38
+R3487:3489 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3473:3482 MpscRing <> try_occupy def
+R3484:3484 MpscRing <> N:36 var
+R3486:3486 MpscRing <> r:37 var
+R3490:3493 Corelib.Init.Datatypes <> Some constr
+R3495:3496 MpscRing <> r':38 var
+R3530:3539 MpscRing <> try_occupy def
+prf 3625:3638 <> occupy_enabled
+binder 3651:3651 <> N:39
+binder 3653:3653 <> r:40
+R3669:3676 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3665:3667 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R3660:3662 MpscRing <> gap def
+R3664:3664 MpscRing <> r:40 var
+R3668:3668 MpscRing <> N:39 var
+R3677:3683 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R3686:3687 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 3684:3685 <> r':41
+R3712:3715 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R3702:3704 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3688:3697 MpscRing <> try_occupy def
+R3699:3699 MpscRing <> N:39 var
+R3701:3701 MpscRing <> r:40 var
+R3705:3708 Corelib.Init.Datatypes <> Some constr
+R3710:3711 MpscRing <> r':41 var
+R3736:3739 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R3723:3725 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3716:3719 MpscRing <> tail proj
+R3721:3722 MpscRing <> r':41 var
+R3726:3726 Corelib.Init.Datatypes <> S constr
+R3729:3732 MpscRing <> tail proj
+R3734:3734 MpscRing <> r:40 var
+R3747:3749 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3740:3743 MpscRing <> head proj
+R3745:3746 MpscRing <> r':41 var
+R3750:3753 MpscRing <> head proj
+R3755:3755 MpscRing <> r:40 var
+R3791:3800 MpscRing <> try_occupy def
+R3820:3823 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R3815:3817 MpscRing <> gap def
+R3904:3913 Stdlib.Arith.PeanoNat Nat ltb_ge thm
+R3941:3953 Stdlib.Arith.PeanoNat Nat lt_irrefl thm
+R3956:3958 MpscRing <> gap def
+R3976:3990 Stdlib.Arith.PeanoNat Nat lt_le_trans thm
+def 4029:4032 <> full
+R4039:4041 Corelib.Init.Datatypes <> nat ind
+binder 4035:4035 <> N:42
+R4046:4049 MpscRing <> Ring rec
+R4057:4060 MpscRing <> head proj
+R4068:4071 MpscRing <> tail proj
+R4076:4076 MpscRing <> N:42 var
+prf 4089:4104 <> occupy_full_none
+binder 4115:4115 <> N:43
+R4139:4141 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4118:4127 MpscRing <> try_occupy def
+R4129:4129 MpscRing <> N:43 var
+R4132:4135 MpscRing <> full def
+R4137:4137 MpscRing <> N:43 var
+R4142:4145 Corelib.Init.Datatypes <> None constr
+R4173:4182 MpscRing <> try_occupy def
+R4185:4188 MpscRing <> full def
+R4191:4193 MpscRing <> gap def
+R4213:4223 Stdlib.Arith.PeanoNat Nat sub_0_r thm
+R4234:4247 Stdlib.Arith.PeanoNat Nat ltb_irrefl thm
+def 4278:4289 <> retry_occupy
+R4298:4300 Corelib.Init.Datatypes <> nat ind
+binder 4292:4292 <> n:44
+binder 4294:4294 <> N:45
+R4308:4311 MpscRing <> Ring rec
+binder 4304:4304 <> r:46
+R4316:4321 Corelib.Init.Datatypes <> option ind
+R4323:4326 MpscRing <> Ring rec
+R4339:4339 MpscRing <> n:44 var
+R4355:4358 Corelib.Init.Datatypes <> None constr
+R4364:4364 Corelib.Init.Datatypes <> S constr
+R4384:4393 MpscRing <> try_occupy def
+R4395:4395 MpscRing <> N:45 var
+R4397:4397 MpscRing <> r:46 var
+R4412:4415 Corelib.Init.Datatypes <> Some constr
+R4423:4426 Corelib.Init.Datatypes <> Some constr
+R4439:4442 Corelib.Init.Datatypes <> None constr
+R4447:4458 MpscRing <> retry_occupy:47 def
+R4465:4465 MpscRing <> r:46 var
+R4463:4463 MpscRing <> N:45 var
+prf 4659:4693 <> blocking_enqueue_misses_every_bound
+binder 4706:4706 <> n:49
+binder 4708:4708 <> N:50
+R4736:4738 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4711:4722 MpscRing <> retry_occupy def
+R4724:4724 MpscRing <> n:49 var
+R4726:4726 MpscRing <> N:50 var
+R4729:4732 MpscRing <> full def
+R4734:4734 MpscRing <> N:50 var
+R4739:4742 Corelib.Init.Datatypes <> None constr
+R4813:4828 MpscRing <> occupy_full_none thm

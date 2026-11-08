@@ -1,0 +1,87 @@
+name: Investigate OS incident
+
+# Failure → investigate ASAP → draft PR for human review (never auto-merge).
+# Part of Juvantage OS capabilities (propose → approve).
+
+on:
+  workflow_dispatch:
+    inputs:
+      incident_json:
+        description: "JSON OpsIncident payload (message, path, statusCode, stack, …)"
+        required: true
+        type: string
+  repository_dispatch:
+    types: [os-incident]
+  schedule:
+    # Safety net: nightly noop unless .ci/pending-incident.json exists in repo artifacts path
+    - cron: "0 9 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: investigate-incident
+  cancel-in-progress: false
+
+jobs:
+  investigate:
+    name: Investigate & open draft PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Materialize incident payload
+        env:
+          INPUT_JSON: ${{ inputs.incident_json }}
+          DISPATCH_JSON: ${{ toJson(github.event.client_payload) }}
+        run: |
+          mkdir -p .ci
+          if [ -n "${INPUT_JSON}" ] && [ "${INPUT_JSON}" != "" ]; then
+            printf '%s\n' "$INPUT_JSON" > .ci/pending-incident.json
+          elif [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            printf '%s\n' "$DISPATCH_JSON" > .ci/pending-incident.json
+          elif [ -f .ci/pending-incident.json ]; then
+            echo "Using existing .ci/pending-incident.json"
+          else
+            echo "No incident payload — skipping proposal."
+            echo "skip=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          echo "skip=false" >> "$GITHUB_ENV"
+          cat .ci/pending-incident.json
+
+      - name: Generate investigation proposal
+        if: env.skip != 'true'
+        run: node tools/investigate-incident.mjs --input .ci/pending-incident.json --out .ci/incident-proposal.md
+
+      - name: Create draft pull request
+        if: env.skip != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "ops: investigate OS Brain incident (draft for review)"
+          title: "ops: investigate OS Brain incident (review required)"
+          body: |
+            ## Summary
+            Automated **investigate → suggest** run for a Juvantage OS Brain / Desktop failure.
+
+            This is an OS capability: failures are captured, investigated ASAP by CI, and a **change is proposed for human review**.
+
+            - Proposal: `.ci/incident-proposal.md`
+            - **Do not auto-merge.** Approve gate applies.
+
+            ## Test plan
+            - [ ] Read proposal recommendations
+            - [ ] Implement minimal fix + regression test
+            - [ ] `npm test` / typecheck green
+          branch: ops/incident-investigate-${{ github.run_id }}
+          draft: true
+          add-paths: |
+            .ci/incident-proposal.md
+            .ci/incident-proposal.json
+            .ci/pending-incident.json

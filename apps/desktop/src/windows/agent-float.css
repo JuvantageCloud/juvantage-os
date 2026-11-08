@@ -1,0 +1,66 @@
+.agent-float {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.agent-drag {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 18px;
+  z-index: 2;
+  -webkit-app-region: drag;
+  cursor: grab;
+}
+
+.agent-hit {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: transform 0.2s ease;
+}
+
+.agent-hit:hover {
+  transform: translateY(-3px);
+}
+
+.agent-hit:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: 16px;
+}
+
+.agent-float.has-nudge .agent-hit {
+  animation: nudge-pulse 1.8s ease-in-out infinite;
+}
+
+.nudge-dot {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c45c26;
+  box-shadow: 0 0 0 2px #fcfbf7;
+}
+
+@keyframes nudge-pulse {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}

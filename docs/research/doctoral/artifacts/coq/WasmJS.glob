@@ -1,0 +1,461 @@
+DIGEST ea44164496e443b5a4293b3ed79108c6
+FWasmJS
+R642:645 Stdlib.Lists.List <> <> lib
+R647:651 Stdlib.Arith.Arith <> <> lib
+R653:655 Stdlib.micromega.Lia <> <> lib
+R657:660 Stdlib.Bool.Bool <> <> lib
+R670:682 Stdlib.Lists.List ListNotations <> mod
+def 697:700 <> Byte
+R705:707 Corelib.Init.Datatypes <> nat ind
+def 721:723 <> Mem
+R728:731 Corelib.Init.Datatypes <> list ind
+R733:736 WasmJS <> Byte def
+def 749:751 <> get
+R758:760 WasmJS <> Mem def
+binder 754:754 <> m:1
+R768:770 Corelib.Init.Datatypes <> nat ind
+binder 764:764 <> a:2
+R775:778 WasmJS <> Byte def
+R794:794 WasmJS <> m:1 var
+R791:791 WasmJS <> a:2 var
+R808:809 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R820:820 Corelib.Init.Datatypes <> O constr
+R824:827 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R839:839 Corelib.Init.Datatypes <> S constr
+R845:848 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R854:856 WasmJS <> get:3 def
+def 879:884 <> prefix
+R891:893 Corelib.Init.Datatypes <> nat ind
+binder 887:887 <> k:6
+R901:903 WasmJS <> Mem def
+binder 897:897 <> m:7
+R908:910 WasmJS <> Mem def
+R926:926 WasmJS <> m:7 var
+R923:923 WasmJS <> k:6 var
+R937:937 Corelib.Init.Datatypes <> O constr
+R945:946 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R955:956 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R961:962 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R968:968 Corelib.Init.Datatypes <> S constr
+R974:977 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R984:987 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R988:993 WasmJS <> prefix:8 def
+def 1016:1018 <> set
+R1025:1027 WasmJS <> Mem def
+binder 1021:1021 <> m:11
+R1037:1039 Corelib.Init.Datatypes <> nat ind
+binder 1031:1031 <> a:12
+binder 1033:1033 <> v:13
+R1044:1046 WasmJS <> Mem def
+R1062:1062 WasmJS <> a:12 var
+R1059:1059 WasmJS <> m:11 var
+R1073:1074 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1077:1077 Corelib.Init.Datatypes <> O constr
+R1082:1082 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1084:1084 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1083:1083 WasmJS <> v:13 var
+R1090:1091 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1094:1094 Corelib.Init.Datatypes <> S constr
+R1102:1105 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1106:1108 WasmJS <> set:14 def
+R1115:1115 WasmJS <> v:13 var
+R1110:1111 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1122:1125 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1129:1129 Corelib.Init.Datatypes <> O constr
+R1135:1138 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1134:1134 WasmJS <> v:13 var
+R1146:1149 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1153:1153 Corelib.Init.Datatypes <> S constr
+R1161:1164 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1165:1167 WasmJS <> set:14 def
+R1173:1173 WasmJS <> v:13 var
+ind 1193:1196 <> Step
+constr 1203:1207 <> Store
+constr 1236:1239 <> Read
+constr 1256:1261 <> Export
+R1217:1219 Corelib.Init.Datatypes <> nat ind
+binder 1210:1213 <> addr:19
+R1229:1231 Corelib.Init.Datatypes <> nat ind
+binder 1223:1225 <> val:20
+R1249:1251 Corelib.Init.Datatypes <> nat ind
+binder 1242:1245 <> addr:21
+R1268:1270 Corelib.Init.Datatypes <> nat ind
+binder 1264:1264 <> k:22
+scheme 1193:1196 <> Step_rect
+scheme 1193:1196 <> Step_ind
+scheme 1193:1196 <> Step_rec
+scheme 1193:1196 <> Step_sind
+rec 1282:1283 <> St
+proj 1290:1292 <> mem
+proj 1301:1305 <> trace
+R1296:1298 WasmJS <> Mem def
+R1309:1312 Corelib.Init.Datatypes <> list ind
+R1314:1317 WasmJS <> Byte def
+def 1334:1338 <> empty
+R1342:1343 WasmJS <> St rec
+R1351:1353 WasmJS <> mem proj
+R1366:1370 WasmJS <> trace proj
+R1358:1358 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1360:1361 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1363:1363 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1375:1376 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+def 1392:1395 <> exec
+R1406:1409 Corelib.Init.Datatypes <> list ind
+R1411:1414 WasmJS <> Step ind
+binder 1398:1402 <> steps:26
+R1422:1423 WasmJS <> St rec
+binder 1418:1418 <> s:27
+R1428:1429 WasmJS <> St rec
+R1442:1446 WasmJS <> steps:26 var
+R1457:1458 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1463:1463 WasmJS <> s:27 var
+R1478:1481 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1469:1473 WasmJS <> Store constr
+R1496:1499 WasmJS <> exec:28 def
+R1509:1511 WasmJS <> mem proj
+R1533:1537 WasmJS <> trace proj
+R1516:1518 WasmJS <> set def
+R1521:1523 WasmJS <> mem proj
+R1525:1525 WasmJS <> s:27 var
+R1542:1546 WasmJS <> trace proj
+R1548:1548 WasmJS <> s:27 var
+R1563:1566 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1557:1560 WasmJS <> Read constr
+R1581:1584 WasmJS <> exec:28 def
+R1594:1596 WasmJS <> mem proj
+R1608:1612 WasmJS <> trace proj
+R1601:1603 WasmJS <> mem proj
+R1605:1605 WasmJS <> s:27 var
+R1624:1627 Corelib.Init.Datatypes <> ::list_scope:x_'++'_x not
+R1617:1621 WasmJS <> trace proj
+R1623:1623 WasmJS <> s:27 var
+R1628:1628 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1642:1642 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1629:1631 WasmJS <> get def
+R1634:1636 WasmJS <> mem proj
+R1638:1638 WasmJS <> s:27 var
+R1659:1662 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1651:1656 WasmJS <> Export constr
+R1677:1680 WasmJS <> exec:28 def
+R1690:1692 WasmJS <> mem proj
+R1704:1708 WasmJS <> trace proj
+R1697:1699 WasmJS <> mem proj
+R1701:1701 WasmJS <> s:27 var
+R1720:1723 Corelib.Init.Datatypes <> ::list_scope:x_'++'_x not
+R1713:1717 WasmJS <> trace proj
+R1719:1719 WasmJS <> s:27 var
+R1724:1729 WasmJS <> prefix def
+R1734:1736 WasmJS <> mem proj
+R1738:1738 WasmJS <> s:27 var
+def 1914:1918 <> blind
+R1925:1927 Corelib.Init.Datatypes <> nat ind
+binder 1921:1921 <> k:30
+R1938:1941 Corelib.Init.Datatypes <> list ind
+R1943:1946 WasmJS <> Step ind
+binder 1931:1934 <> host:31
+R1951:1954 Corelib.Init.Datatypes <> bool ind
+R1967:1970 WasmJS <> host:31 var
+R1981:1982 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1987:1990 Corelib.Init.Datatypes <> true constr
+R2005:2008 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1996:2000 WasmJS <> Store constr
+R2014:2018 Corelib.Init.Datatypes <> false constr
+R2030:2033 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2024:2027 WasmJS <> Read constr
+R2039:2039 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R2046:2050 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R2041:2044 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R2045:2045 WasmJS <> k:30 var
+R2051:2055 WasmJS <> blind:32 def
+R2057:2057 WasmJS <> k:30 var
+R2073:2076 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2065:2070 WasmJS <> Export constr
+R2082:2082 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R2090:2094 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R2084:2088 Stdlib.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
+R2089:2089 WasmJS <> k:30 var
+R2095:2099 WasmJS <> blind:32 def
+R2101:2101 WasmJS <> k:30 var
+prf 2119:2132 <> get0_of_prefix
+binder 2145:2146 <> m0:34
+binder 2148:2149 <> m1:35
+R2177:2180 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2163:2165 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2152:2157 WasmJS <> prefix def
+R2161:2162 WasmJS <> m0:34 var
+R2166:2171 WasmJS <> prefix def
+R2175:2176 WasmJS <> m1:35 var
+R2189:2191 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2181:2183 WasmJS <> get def
+R2185:2186 WasmJS <> m0:34 var
+R2192:2194 WasmJS <> get def
+R2196:2197 WasmJS <> m1:35 var
+prf 2386:2400 <> prefix_agree_le
+binder 2413:2413 <> k:36
+binder 2415:2416 <> m0:37
+binder 2418:2419 <> m1:38
+R2432:2439 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2427:2430 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2426:2426 WasmJS <> k:36 var
+R2465:2472 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2451:2453 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2440:2445 WasmJS <> prefix def
+R2449:2450 WasmJS <> m0:37 var
+R2454:2459 WasmJS <> prefix def
+R2463:2464 WasmJS <> m1:38 var
+R2484:2486 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2473:2478 WasmJS <> prefix def
+R2480:2480 WasmJS <> k:36 var
+R2482:2483 WasmJS <> m0:37 var
+R2487:2492 WasmJS <> prefix def
+R2494:2494 WasmJS <> k:36 var
+R2496:2497 WasmJS <> m1:38 var
+R2583:2585 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+prf 2627:2636 <> blind_exec
+binder 2649:2652 <> host:39
+binder 2654:2655 <> m0:40
+binder 2657:2658 <> m1:41
+binder 2660:2661 <> tr:42
+R2687:2694 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2680:2682 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2668:2672 WasmJS <> blind def
+R2676:2679 WasmJS <> host:39 var
+R2683:2686 Corelib.Init.Datatypes <> true constr
+R2720:2727 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2706:2708 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2695:2700 WasmJS <> prefix def
+R2704:2705 WasmJS <> m0:40 var
+R2709:2714 WasmJS <> prefix def
+R2718:2719 WasmJS <> m1:41 var
+R2829:2836 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2774:2782 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2728:2732 WasmJS <> trace proj
+R2735:2738 WasmJS <> exec def
+R2740:2743 WasmJS <> host:39 var
+R2748:2750 WasmJS <> mem proj
+R2759:2763 WasmJS <> trace proj
+R2755:2756 WasmJS <> m0:40 var
+R2768:2769 WasmJS <> tr:42 var
+R2783:2787 WasmJS <> trace proj
+R2790:2793 WasmJS <> exec def
+R2795:2798 WasmJS <> host:39 var
+R2803:2805 WasmJS <> mem proj
+R2814:2818 WasmJS <> trace proj
+R2810:2811 WasmJS <> m1:41 var
+R2823:2824 WasmJS <> tr:42 var
+R2886:2893 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2881:2883 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2837:2839 WasmJS <> mem proj
+R2842:2845 WasmJS <> exec def
+R2847:2850 WasmJS <> host:39 var
+R2855:2857 WasmJS <> mem proj
+R2866:2870 WasmJS <> trace proj
+R2862:2863 WasmJS <> m0:40 var
+R2875:2876 WasmJS <> tr:42 var
+R2884:2885 WasmJS <> m0:40 var
+R2938:2940 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2894:2896 WasmJS <> mem proj
+R2899:2902 WasmJS <> exec def
+R2904:2907 WasmJS <> host:39 var
+R2912:2914 WasmJS <> mem proj
+R2923:2927 WasmJS <> trace proj
+R2919:2920 WasmJS <> m1:41 var
+R2932:2933 WasmJS <> tr:42 var
+R2941:2942 WasmJS <> m1:41 var
+R3186:3194 Corelib.Init.Datatypes <> andb_prop thm
+R3250:3259 Stdlib.Arith.PeanoNat Nat ltb_lt thm
+R3286:3288 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3354:3356 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3346:3348 WasmJS <> get def
+R3357:3359 WasmJS <> get def
+R3377:3390 WasmJS <> get0_of_prefix thm
+R3492:3500 Corelib.Init.Datatypes <> andb_prop thm
+R3556:3565 Stdlib.Arith.PeanoNat Nat leb_le thm
+R3619:3621 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3608:3613 WasmJS <> prefix def
+R3622:3627 WasmJS <> prefix def
+R3645:3659 WasmJS <> prefix_agree_le thm
+prf 3831:3847 <> blind_schedule_ni
+binder 3860:3863 <> host:43
+binder 3865:3866 <> s0:44
+binder 3868:3869 <> s1:45
+R3895:3902 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3888:3890 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3876:3880 WasmJS <> blind def
+R3884:3887 WasmJS <> host:43 var
+R3891:3894 Corelib.Init.Datatypes <> true constr
+R3942:3948 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3903:3907 WasmJS <> trace proj
+R3910:3913 WasmJS <> exec def
+R3926:3929 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R3916:3920 WasmJS <> Store constr
+R3924:3925 WasmJS <> s0:44 var
+R3930:3933 WasmJS <> host:43 var
+R3936:3940 WasmJS <> empty def
+R3949:3953 WasmJS <> trace proj
+R3956:3959 WasmJS <> exec def
+R3972:3975 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R3962:3966 WasmJS <> Store constr
+R3970:3971 WasmJS <> s1:45 var
+R3976:3979 WasmJS <> host:43 var
+R3982:3986 WasmJS <> empty def
+R4034:4038 WasmJS <> empty def
+R4091:4093 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4065:4070 WasmJS <> prefix def
+R4075:4077 WasmJS <> set def
+R4079:4079 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4081:4082 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4084:4084 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4094:4099 WasmJS <> prefix def
+R4104:4106 WasmJS <> set def
+R4108:4108 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4110:4111 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4113:4113 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4163:4172 WasmJS <> blind_exec thm
+R4180:4182 WasmJS <> set def
+R4184:4184 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4186:4187 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4189:4189 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4198:4200 WasmJS <> set def
+R4202:4202 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4204:4205 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4207:4207 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4215:4216 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+def 4275:4282 <> sched_ni
+R4292:4295 Corelib.Init.Datatypes <> list ind
+R4297:4300 WasmJS <> Step ind
+binder 4285:4288 <> host:46
+binder 4322:4323 <> s0:47
+binder 4325:4326 <> s1:48
+R4372:4378 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4333:4337 WasmJS <> trace proj
+R4340:4343 WasmJS <> exec def
+R4356:4359 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4346:4350 WasmJS <> Store constr
+R4354:4355 WasmJS <> s0:47 var
+R4360:4363 WasmJS <> host:46 var
+R4366:4370 WasmJS <> empty def
+R4379:4383 WasmJS <> trace proj
+R4386:4389 WasmJS <> exec def
+R4402:4405 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4392:4396 WasmJS <> Store constr
+R4400:4401 WasmJS <> s1:48 var
+R4406:4409 WasmJS <> host:46 var
+R4412:4416 WasmJS <> empty def
+prf 4429:4444 <> blind_implies_ni
+binder 4457:4460 <> host:49
+R4482:4485 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4475:4477 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4463:4467 WasmJS <> blind def
+R4471:4474 WasmJS <> host:49 var
+R4478:4481 Corelib.Init.Datatypes <> true constr
+R4486:4493 WasmJS <> sched_ni def
+R4495:4498 WasmJS <> host:49 var
+R4537:4553 WasmJS <> blind_schedule_ni thm
+prf 4648:4664 <> export_low_agrees
+binder 4677:4678 <> s0:50
+binder 4680:4681 <> s1:51
+R4729:4735 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4688:4692 WasmJS <> trace proj
+R4695:4698 WasmJS <> exec def
+R4700:4700 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4711:4712 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4721:4721 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4701:4705 WasmJS <> Store constr
+R4709:4710 WasmJS <> s0:50 var
+R4713:4718 WasmJS <> Export constr
+R4723:4727 WasmJS <> empty def
+R4736:4740 WasmJS <> trace proj
+R4743:4746 WasmJS <> exec def
+R4748:4748 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4759:4760 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4769:4769 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4749:4753 WasmJS <> Store constr
+R4757:4758 WasmJS <> s1:51 var
+R4761:4766 WasmJS <> Export constr
+R4771:4775 WasmJS <> empty def
+R4802:4818 WasmJS <> blind_schedule_ni thm
+prf 4917:4928 <> read1_splits
+binder 4941:4942 <> s0:52
+binder 4944:4945 <> s1:53
+R4960:4967 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4954:4957 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R4952:4953 WasmJS <> s0:52 var
+R4958:4959 WasmJS <> s1:53 var
+R5007:5014 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R4968:4972 WasmJS <> trace proj
+R4975:4978 WasmJS <> exec def
+R4980:4980 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4991:4992 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4999:4999 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4981:4985 WasmJS <> Store constr
+R4989:4990 WasmJS <> s0:52 var
+R4993:4996 WasmJS <> Read constr
+R5001:5005 WasmJS <> empty def
+R5015:5019 WasmJS <> trace proj
+R5022:5025 WasmJS <> exec def
+R5027:5027 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5038:5039 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5046:5046 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5028:5032 WasmJS <> Store constr
+R5036:5037 WasmJS <> s1:53 var
+R5040:5043 WasmJS <> Read constr
+R5048:5052 WasmJS <> empty def
+R5094:5098 WasmJS <> empty def
+prf 5146:5157 <> read1_not_ni
+R5161:5162 Corelib.Init.Logic <> ::type_scope:'~'_x not
+R5163:5170 WasmJS <> sched_ni def
+R5172:5172 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5179:5179 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5173:5176 WasmJS <> Read constr
+R5209:5220 WasmJS <> read1_splits thm
+prf 5273:5292 <> exists_buffer_attack
+R5298:5304 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5309:5314 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 5305:5308 <> host:54
+R5335:5338 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R5327:5329 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5315:5319 WasmJS <> blind def
+R5323:5326 WasmJS <> host:54 var
+R5330:5334 Corelib.Init.Datatypes <> false constr
+R5339:5340 Corelib.Init.Logic <> ::type_scope:'~'_x not
+R5341:5348 WasmJS <> sched_ni def
+R5350:5353 WasmJS <> host:54 var
+R5372:5372 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5379:5379 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5373:5376 WasmJS <> Read constr
+R5416:5427 WasmJS <> read1_not_ni thm
+prf 5533:5564 <> high_byte_not_function_of_prefix
+binder 5577:5578 <> s0:55
+binder 5580:5581 <> s1:56
+R5596:5603 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R5590:5593 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R5588:5589 WasmJS <> s0:55 var
+R5594:5595 WasmJS <> s1:56 var
+R5659:5666 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R5630:5632 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5604:5609 WasmJS <> prefix def
+R5614:5616 WasmJS <> set def
+R5618:5618 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5620:5621 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5623:5623 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5627:5628 WasmJS <> s0:55 var
+R5633:5638 WasmJS <> prefix def
+R5643:5645 WasmJS <> set def
+R5647:5647 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5649:5650 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5652:5652 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5656:5657 WasmJS <> s1:56 var
+R5690:5693 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R5667:5669 WasmJS <> get def
+R5672:5674 WasmJS <> set def
+R5676:5676 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5678:5679 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5681:5681 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5685:5686 WasmJS <> s0:55 var
+R5694:5696 WasmJS <> get def
+R5699:5701 WasmJS <> set def
+R5703:5703 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5705:5706 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5708:5708 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5712:5713 WasmJS <> s1:56 var

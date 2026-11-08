@@ -1,0 +1,15 @@
+file 'screens/02-auth.png'
+duration 2
+file 'screens/03-home.png'
+duration 2
+file 'screens/04-timeline.png'
+duration 2
+file 'screens/05-goals.png'
+duration 2
+file 'screens/06-profile.png'
+duration 2
+file 'screens/07-add-sheet.png'
+duration 2
+file 'screens/08-settings.png'
+duration 2
+file 'screens/08-settings.png'

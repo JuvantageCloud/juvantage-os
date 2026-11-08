@@ -1,0 +1,8 @@
+[package]
+name = "juv-guest"
+version = "0.1.0"
+edition = "2021"
+description = "Juvantage guest micro-core skeleton (Assignment 1 staging)"
+
+[lib]
+crate-type = ["cdylib", "rlib"]

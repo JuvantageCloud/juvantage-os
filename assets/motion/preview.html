@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juvantage Motion Preview</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+      :root {
+        --cream: #fcfbf7;
+        --ink: #0b1220;
+        --teal: #0d7a6f;
+        --muted: #6b727a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        background:
+          radial-gradient(ellipse at 20% 0%, rgba(13, 122, 111, 0.12), transparent 50%),
+          radial-gradient(ellipse at 90% 20%, rgba(45, 90, 86, 0.1), transparent 45%),
+          var(--cream);
+        color: var(--ink);
+        min-height: 100vh;
+        padding: 40px 24px 64px;
+      }
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin: 0 0 8px;
+        letter-spacing: -0.02em;
+      }
+      h2.section {
+        font-size: 1.25rem;
+        margin: 40px 0 8px;
+        font-weight: 600;
+      }
+      p.lead,
+      p.sub {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-family: system-ui, sans-serif;
+        font-size: 0.95rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        max-width: 1100px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 18px;
+        padding: 20px 16px 16px;
+        text-align: center;
+      }
+      .stage {
+        width: 180px;
+        height: 180px;
+        margin: 0 auto 12px;
+      }
+      .card h2 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .card code {
+        display: block;
+        margin-top: 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.72rem;
+        color: var(--teal);
+      }
+
+      /* Hero character showcase */
+      .hero-wrap {
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: minmax(280px, 420px) 1fr;
+        gap: 24px;
+        align-items: stretch;
+      }
+      @media (max-width: 800px) {
+        .hero-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+      .hero-stage {
+        position: relative;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 24px;
+        min-height: 480px;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .hero-stage img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+        transition:
+          opacity 0.55s ease,
+          transform 0.55s ease;
+        pointer-events: none;
+      }
+      .hero-stage img.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      .hero-controls {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 24px;
+        padding: 28px 24px;
+        font-family: system-ui, sans-serif;
+      }
+      .hero-controls h3 {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        margin: 0 0 8px;
+        font-size: 1.35rem;
+      }
+      .hero-controls p {
+        margin: 0 0 20px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .pose-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .pose-btns button {
+        appearance: none;
+        border: 1px solid rgba(13, 122, 111, 0.35);
+        background: white;
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 10px 16px;
+        font: 600 0.9rem system-ui, sans-serif;
+        cursor: pointer;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .pose-btns button:hover {
+        border-color: var(--teal);
+      }
+      .pose-btns button.active {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+      }
+      .auto {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .auto input {
+        accent-color: var(--teal);
+        width: 16px;
+        height: 16px;
+      }
+      .pose-label {
+        margin-top: 16px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.75rem;
+        color: var(--teal);
+      }
+      .pose-grid .pose-img {
+        width: 100%;
+        height: 280px;
+        object-fit: contain;
+        border-radius: 12px;
+        background: rgba(252, 251, 247, 0.9);
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Juvantage Motion</h1>
+    <p class="lead">UI Lottie + your 2D hero character — ready to drop into apps.</p>
+
+    <h2 class="section">Hero character (from your photo)</h2>
+    <p class="sub">Click a pose, or leave autoplay on to cycle idle → wave → celebrate.</p>
+
+    <div class="hero-wrap">
+      <div class="hero-stage" id="heroStage" aria-live="polite">
+        <img
+          src="characters/poses/hero-2d-idle.jpg"
+          alt="Idle"
+          data-pose="idle"
+          class="active"
+        />
+        <img src="characters/poses/hero-2d-wave.jpg" alt="Wave" data-pose="wave" />
+        <img
+          src="characters/poses/hero-2d-celebrate.jpg"
+          alt="Celebrate"
+          data-pose="celebrate"
+        />
+      </div>
+      <div class="hero-controls">
+        <h3>Red-hair hero</h3>
+        <p>
+          Converted from your 3D-style ref into flat 2D poses. This is the preview — same
+          files the apps will use.
+        </p>
+        <div class="pose-btns" id="poseBtns">
+          <button type="button" data-pose="idle" class="active">Idle</button>
+          <button type="button" data-pose="wave">Wave</button>
+          <button type="button" data-pose="celebrate">Celebrate</button>
+        </div>
+        <label class="auto">
+          <input type="checkbox" id="autoPlay" checked />
+          Auto-cycle poses
+        </label>
+        <div class="pose-label" id="poseLabel">characters/poses/hero-2d-idle.jpg</div>
+      </div>
+    </div>
+
+    <h2 class="section">All poses</h2>
+    <div class="grid pose-grid">
+      <div class="card">
+        <img class="pose-img" src="characters/poses/hero-2d-idle.jpg" alt="Idle pose" />
+        <h2>Idle</h2>
+        <code>characters/poses/hero-2d-idle.jpg</code>
+      </div>
+      <div class="card">
+        <img class="pose-img" src="characters/poses/hero-2d-wave.jpg" alt="Wave pose" />
+        <h2>Wave</h2>
+        <code>characters/poses/hero-2d-wave.jpg</code>
+      </div>
+      <div class="card">
+        <img
+          class="pose-img"
+          src="characters/poses/hero-2d-celebrate.jpg"
+          alt="Celebrate pose"
+        />
+        <h2>Celebrate</h2>
+        <code>characters/poses/hero-2d-celebrate.jpg</code>
+      </div>
+    </div>
+
+    <h2 class="section">UI Lottie</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="stage" id="loader"></div>
+        <h2>Loader</h2>
+        <code>shared/lottie/loader-dots.json</code>
+      </div>
+      <div class="card">
+        <div class="stage" id="success"></div>
+        <h2>Success</h2>
+        <code>shared/lottie/success-check.json</code>
+      </div>
+      <div class="card">
+        <div class="stage" id="empty"></div>
+        <h2>Empty state</h2>
+        <code>shared/lottie/empty-state.json</code>
+      </div>
+      <div class="card">
+        <div class="stage" id="mascot"></div>
+        <h2>Mascot idle</h2>
+        <code>characters/mascot-idle-loop.json</code>
+      </div>
+    </div>
+
+    <script>
+      const poses = ["idle", "wave", "celebrate"];
+      const files = {
+        idle: "characters/poses/hero-2d-idle.jpg",
+        wave: "characters/poses/hero-2d-wave.jpg",
+        celebrate: "characters/poses/hero-2d-celebrate.jpg",
+      };
+      let current = "idle";
+      let timer = null;
+
+      function setPose(pose) {
+        current = pose;
+        document.querySelectorAll("#heroStage img").forEach((img) => {
+          img.classList.toggle("active", img.dataset.pose === pose);
+        });
+        document.querySelectorAll("#poseBtns button").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.pose === pose);
+        });
+        document.getElementById("poseLabel").textContent = files[pose];
+      }
+
+      function nextPose() {
+        const i = (poses.indexOf(current) + 1) % poses.length;
+        setPose(poses[i]);
+      }
+
+      function syncAuto() {
+        clearInterval(timer);
+        timer = null;
+        if (document.getElementById("autoPlay").checked) {
+          timer = setInterval(nextPose, 2200);
+        }
+      }
+
+      document.querySelectorAll("#poseBtns button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          setPose(btn.dataset.pose);
+          syncAuto();
+        });
+      });
+      document.getElementById("autoPlay").addEventListener("change", syncAuto);
+      syncAuto();
+
+      const items = [
+        { id: "loader", path: "shared/lottie/loader-dots.json", loop: true },
+        { id: "success", path: "shared/lottie/success-check.json", loop: false },
+        { id: "empty", path: "shared/lottie/empty-state.json", loop: true },
+        { id: "mascot", path: "characters/mascot-idle-loop.json", loop: true },
+      ];
+      for (const item of items) {
+        const anim = lottie.loadAnimation({
+          container: document.getElementById(item.id),
+          renderer: "svg",
+          loop: item.loop,
+          autoplay: true,
+          path: item.path,
+        });
+        if (!item.loop) {
+          anim.addEventListener("complete", () => {
+            setTimeout(() => anim.goToAndPlay(0, true), 900);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

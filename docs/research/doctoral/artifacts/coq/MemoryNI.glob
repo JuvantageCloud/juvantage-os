@@ -1,0 +1,348 @@
+DIGEST c3b66bcc07b0cf8098ac171ee0361ff4
+FMemoryNI
+R978:981 Stdlib.Lists.List <> <> lib
+R991:1003 Stdlib.Lists.List ListNotations <> mod
+def 1082:1085 <> Byte
+R1090:1092 Corelib.Init.Datatypes <> nat ind
+def 1106:1108 <> Mem
+R1113:1116 Corelib.Init.Datatypes <> list ind
+R1118:1121 MemoryNI <> Byte def
+def 1134:1136 <> get
+R1143:1145 MemoryNI <> Mem def
+binder 1139:1139 <> m:1
+R1153:1155 Corelib.Init.Datatypes <> nat ind
+binder 1149:1149 <> a:2
+R1160:1163 MemoryNI <> Byte def
+R1179:1179 MemoryNI <> m:1 var
+R1176:1176 MemoryNI <> a:2 var
+R1193:1194 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1205:1205 Corelib.Init.Datatypes <> O constr
+R1209:1212 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1224:1224 Corelib.Init.Datatypes <> S constr
+R1230:1233 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1239:1241 MemoryNI <> get:3 def
+def 1343:1348 <> prefix
+R1355:1357 Corelib.Init.Datatypes <> nat ind
+binder 1351:1351 <> k:6
+R1365:1367 MemoryNI <> Mem def
+binder 1361:1361 <> m:7
+R1372:1374 MemoryNI <> Mem def
+R1390:1390 MemoryNI <> m:7 var
+R1387:1387 MemoryNI <> k:6 var
+R1401:1401 Corelib.Init.Datatypes <> O constr
+R1409:1410 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1419:1420 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1425:1426 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1432:1432 Corelib.Init.Datatypes <> S constr
+R1438:1441 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1448:1451 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1452:1457 MemoryNI <> prefix:8 def
+def 1810:1817 <> adv_read
+R1824:1826 MemoryNI <> Mem def
+binder 1820:1820 <> m:11
+R1834:1836 Corelib.Init.Datatypes <> nat ind
+binder 1830:1830 <> a:12
+R1841:1844 MemoryNI <> Byte def
+R1849:1851 MemoryNI <> get def
+R1853:1853 MemoryNI <> m:11 var
+R1855:1855 MemoryNI <> a:12 var
+def 1974:1983 <> conf_ni_at
+R1995:1998 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1992:1994 MemoryNI <> Mem def
+R2002:2005 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1999:2001 Corelib.Init.Datatypes <> nat ind
+R2006:2009 MemoryNI <> Byte def
+binder 1986:1988 <> obs:13
+R2017:2019 Corelib.Init.Datatypes <> nat ind
+binder 2013:2013 <> a:14
+R2049:2051 MemoryNI <> Mem def
+binder 2041:2042 <> m0:15
+binder 2044:2045 <> m1:16
+R2074:2077 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2062:2065 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R2054:2056 MemoryNI <> get def
+R2058:2059 MemoryNI <> m0:15 var
+R2061:2061 MemoryNI <> a:14 var
+R2066:2068 MemoryNI <> get def
+R2070:2071 MemoryNI <> m1:16 var
+R2073:2073 MemoryNI <> a:14 var
+R2086:2088 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2078:2080 MemoryNI <> obs:13 var
+R2085:2085 MemoryNI <> a:14 var
+R2082:2083 MemoryNI <> m0:15 var
+R2089:2091 MemoryNI <> obs:13 var
+R2096:2096 MemoryNI <> a:14 var
+R2093:2094 MemoryNI <> m1:16 var
+def 2215:2218 <> m_lo
+R2222:2224 MemoryNI <> Mem def
+R2229:2229 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2231:2232 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2234:2234 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+def 2248:2251 <> m_hi
+R2255:2257 MemoryNI <> Mem def
+R2262:2262 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2264:2265 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2267:2267 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+prf 2277:2289 <> prefix1_agree
+R2306:2308 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2293:2298 MemoryNI <> prefix def
+R2302:2305 MemoryNI <> m_lo def
+R2309:2314 MemoryNI <> prefix def
+R2318:2321 MemoryNI <> m_hi def
+prf 2356:2372 <> high_byte_differs
+R2386:2389 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R2376:2378 MemoryNI <> get def
+R2380:2383 MemoryNI <> m_lo def
+R2390:2392 MemoryNI <> get def
+R2394:2397 MemoryNI <> m_hi def
+prf 2522:2542 <> A1_conf_ni_impossible
+R2546:2547 Corelib.Init.Logic <> ::type_scope:'~'_x not
+R2548:2557 MemoryNI <> conf_ni_at def
+R2559:2566 MemoryNI <> adv_read def
+R2606:2609 MemoryNI <> m_lo def
+R2611:2614 MemoryNI <> m_hi def
+R2616:2632 MemoryNI <> high_byte_differs thm
+R2645:2652 MemoryNI <> adv_read def
+prf 2904:2926 <> A1_low_projection_is_ni
+R2949:2952 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2946:2948 MemoryNI <> Mem def
+R2953:2955 MemoryNI <> Mem def
+binder 2940:2942 <> obs:17
+binder 2958:2958 <> k:18
+binder 2960:2961 <> m0:19
+binder 2963:2964 <> m1:20
+R2971:2971 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3000:3008 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+binder 2979:2979 <> m:21
+R2987:2989 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2982:2984 MemoryNI <> obs:17 var
+R2986:2986 MemoryNI <> m:21 var
+R2990:2995 MemoryNI <> prefix def
+R2997:2997 MemoryNI <> k:18 var
+R2999:2999 MemoryNI <> m:21 var
+R3034:3041 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3020:3022 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3009:3014 MemoryNI <> prefix def
+R3016:3016 MemoryNI <> k:18 var
+R3018:3019 MemoryNI <> m0:19 var
+R3023:3028 MemoryNI <> prefix def
+R3030:3030 MemoryNI <> k:18 var
+R3032:3033 MemoryNI <> m1:20 var
+R3048:3050 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3042:3044 MemoryNI <> obs:17 var
+R3046:3047 MemoryNI <> m0:19 var
+R3051:3053 MemoryNI <> obs:17 var
+R3055:3056 MemoryNI <> m1:20 var
+prf 3247:3268 <> A1_split_low_vs_buffer
+R3303:3308 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R3287:3289 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3274:3279 MemoryNI <> prefix def
+R3283:3286 MemoryNI <> m_lo def
+R3290:3295 MemoryNI <> prefix def
+R3299:3302 MemoryNI <> m_hi def
+R3324:3327 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R3309:3316 MemoryNI <> adv_read def
+R3318:3321 MemoryNI <> m_lo def
+R3328:3335 MemoryNI <> adv_read def
+R3337:3340 MemoryNI <> m_hi def
+R3371:3383 MemoryNI <> prefix1_agree thm
+R3397:3404 MemoryNI <> adv_read def
+R3413:3429 MemoryNI <> high_byte_differs thm
+rec 3638:3642 <> Guest
+proj 3651:3656 <> secret
+proj 3667:3679 <> public_intent
+R3660:3662 Corelib.Init.Datatypes <> nat ind
+R3683:3685 Corelib.Init.Datatypes <> nat ind
+ind 3701:3706 <> LowMsg
+constr 3713:3716 <> Draw
+constr 3732:3735 <> Poll
+constr 3739:3749 <> StageHandle
+R3725:3727 Corelib.Init.Datatypes <> nat ind
+binder 3719:3721 <> cmd:27
+R3756:3758 Corelib.Init.Datatypes <> nat ind
+binder 3752:3752 <> h:28
+scheme 3701:3706 <> LowMsg_rect
+scheme 3701:3706 <> LowMsg_ind
+scheme 3701:3706 <> LowMsg_rec
+scheme 3701:3706 <> LowMsg_sind
+ind 3773:3775 <> Ipc
+constr 3782:3784 <> Low
+constr 3801:3806 <> Sealed
+R3791:3796 MemoryNI <> LowMsg ind
+binder 3787:3787 <> m:31
+scheme 3773:3775 <> Ipc_rect
+scheme 3773:3775 <> Ipc_ind
+scheme 3773:3775 <> Ipc_rec
+scheme 3773:3775 <> Ipc_sind
+def 3882:3885 <> proj
+R3892:3894 MemoryNI <> Ipc ind
+binder 3888:3888 <> i:32
+R3899:3904 Corelib.Init.Datatypes <> option ind
+R3906:3911 MemoryNI <> LowMsg ind
+R3924:3924 MemoryNI <> i:32 var
+R3935:3937 MemoryNI <> Low constr
+R3944:3947 Corelib.Init.Datatypes <> Some constr
+R3955:3960 MemoryNI <> Sealed constr
+R3965:3968 Corelib.Init.Datatypes <> None constr
+def 3987:3994 <> low_view
+R4002:4005 Corelib.Init.Datatypes <> list ind
+R4007:4009 MemoryNI <> Ipc ind
+binder 3997:3998 <> xs:34
+R4014:4017 Corelib.Init.Datatypes <> list ind
+R4019:4024 MemoryNI <> LowMsg ind
+R4037:4038 MemoryNI <> xs:34 var
+R4049:4050 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R4055:4056 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R4063:4066 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4084:4087 MemoryNI <> proj def
+R4104:4107 Corelib.Init.Datatypes <> Some constr
+R4115:4118 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4119:4126 MemoryNI <> low_view:35 def
+R4138:4141 Corelib.Init.Datatypes <> None constr
+R4146:4153 MemoryNI <> low_view:35 def
+def 4395:4410 <> bridge_compliant
+R4417:4421 MemoryNI <> Guest rec
+binder 4413:4413 <> g:37
+R4426:4429 Corelib.Init.Datatypes <> list ind
+R4431:4433 MemoryNI <> Ipc ind
+R4440:4440 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4469:4470 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4477:4477 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4441:4443 MemoryNI <> Low constr
+R4446:4449 MemoryNI <> Draw constr
+R4452:4464 MemoryNI <> public_intent proj
+R4466:4466 MemoryNI <> g:37 var
+R4471:4476 MemoryNI <> Sealed constr
+def 4576:4586 <> bridge_leak
+R4593:4597 MemoryNI <> Guest rec
+binder 4589:4589 <> g:38
+R4602:4605 Corelib.Init.Datatypes <> list ind
+R4607:4609 MemoryNI <> Ipc ind
+R4616:4616 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4638:4638 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4617:4619 MemoryNI <> Low constr
+R4622:4625 MemoryNI <> Draw constr
+R4628:4633 MemoryNI <> secret proj
+R4635:4635 MemoryNI <> g:38 var
+def 4653:4658 <> Bridge
+R4668:4671 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4663:4667 MemoryNI <> Guest rec
+R4672:4675 Corelib.Init.Datatypes <> list ind
+R4677:4679 MemoryNI <> Ipc ind
+def 4694:4717 <> low_determined_by_public
+R4724:4729 MemoryNI <> Bridge def
+binder 4720:4720 <> b:39
+R4759:4763 MemoryNI <> Guest rec
+binder 4751:4752 <> g0:40
+binder 4754:4755 <> g1:41
+R4805:4812 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4786:4788 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4770:4782 MemoryNI <> public_intent proj
+R4784:4785 MemoryNI <> g0:40 var
+R4789:4801 MemoryNI <> public_intent proj
+R4803:4804 MemoryNI <> g1:41 var
+R4828:4830 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4813:4820 MemoryNI <> low_view def
+R4823:4823 MemoryNI <> b:39 var
+R4825:4826 MemoryNI <> g0:40 var
+R4831:4838 MemoryNI <> low_view def
+R4841:4841 MemoryNI <> b:39 var
+R4843:4844 MemoryNI <> g1:41 var
+prf 4855:4872 <> low_view_compliant
+binder 4885:4885 <> g:42
+R4917:4919 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4888:4895 MemoryNI <> low_view def
+R4898:4913 MemoryNI <> bridge_compliant def
+R4915:4915 MemoryNI <> g:42 var
+R4920:4920 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4943:4943 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4921:4924 MemoryNI <> Draw constr
+R4927:4939 MemoryNI <> public_intent proj
+R4941:4941 MemoryNI <> g:42 var
+R4971:4978 MemoryNI <> low_view def
+R4981:4996 MemoryNI <> bridge_compliant def
+R4999:5002 MemoryNI <> proj def
+prf 5103:5120 <> A4_prociso_conf_ni
+R5124:5147 MemoryNI <> low_determined_by_public def
+R5149:5164 MemoryNI <> bridge_compliant def
+R5205:5222 MemoryNI <> low_view_compliant thm
+prf 5334:5353 <> A4_secret_irrelevant
+binder 5366:5367 <> s0:43
+binder 5369:5370 <> s1:44
+binder 5372:5372 <> p:45
+R5445:5451 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5379:5386 MemoryNI <> low_view def
+R5389:5404 MemoryNI <> bridge_compliant def
+R5409:5414 MemoryNI <> secret proj
+R5423:5435 MemoryNI <> public_intent proj
+R5419:5420 MemoryNI <> s0:43 var
+R5440:5440 MemoryNI <> p:45 var
+R5452:5459 MemoryNI <> low_view def
+R5462:5477 MemoryNI <> bridge_compliant def
+R5482:5487 MemoryNI <> secret proj
+R5496:5508 MemoryNI <> public_intent proj
+R5492:5493 MemoryNI <> s1:44 var
+R5513:5513 MemoryNI <> p:45 var
+R5543:5560 MemoryNI <> A4_prociso_conf_ni thm
+prf 5714:5730 <> A4_leak_is_not_ni
+R5734:5735 Corelib.Init.Logic <> ::type_scope:'~'_x not
+R5736:5759 MemoryNI <> low_determined_by_public def
+R5761:5771 MemoryNI <> bridge_leak def
+R5809:5814 MemoryNI <> secret proj
+R5822:5834 MemoryNI <> public_intent proj
+R5862:5867 MemoryNI <> secret proj
+R5875:5887 MemoryNI <> public_intent proj
+R5929:5931 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5913:5925 MemoryNI <> public_intent proj
+R5932:5944 MemoryNI <> public_intent proj
+R6001:6011 MemoryNI <> bridge_leak def
+R6014:6021 MemoryNI <> low_view def
+R6024:6027 MemoryNI <> proj def
+ind 6296:6300 <> Grant
+constr 6305:6309 <> Fresh
+constr 6313:6320 <> Consumed
+constr 6324:6329 <> Absent
+scheme 6296:6300 <> Grant_rect
+scheme 6296:6300 <> Grant_ind
+scheme 6296:6300 <> Grant_rec
+scheme 6296:6300 <> Grant_sind
+def 6407:6412 <> commit
+R6419:6423 MemoryNI <> Grant ind
+binder 6415:6415 <> g:48
+R6428:6433 Corelib.Init.Datatypes <> option ind
+R6435:6439 MemoryNI <> Grant ind
+R6452:6452 MemoryNI <> g:48 var
+R6463:6467 MemoryNI <> Fresh constr
+R6472:6475 Corelib.Init.Datatypes <> Some constr
+R6477:6484 MemoryNI <> Consumed constr
+R6495:6498 Corelib.Init.Datatypes <> None constr
+def 6519:6530 <> effect_count
+R6537:6541 MemoryNI <> Grant ind
+binder 6533:6533 <> g:50
+R6546:6548 Corelib.Init.Datatypes <> nat ind
+R6561:6566 MemoryNI <> commit def
+R6568:6568 MemoryNI <> g:50 var
+R6579:6582 Corelib.Init.Datatypes <> Some constr
+R6595:6598 Corelib.Init.Datatypes <> None constr
+prf 6621:6648 <> seni_no_effect_without_fresh
+binder 6661:6661 <> g:51
+R6674:6677 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R6665:6668 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R6664:6664 MemoryNI <> g:51 var
+R6669:6673 MemoryNI <> Fresh constr
+R6692:6694 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6678:6689 MemoryNI <> effect_count def
+R6691:6691 MemoryNI <> g:51 var
+prf 6804:6817 <> seni_no_replay
+binder 6830:6830 <> g:52
+binder 6832:6833 <> g':53
+R6854:6857 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R6844:6846 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6836:6841 MemoryNI <> commit def
+R6843:6843 MemoryNI <> g:52 var
+R6847:6850 Corelib.Init.Datatypes <> Some constr
+R6852:6853 MemoryNI <> g':53 var
+R6867:6869 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6858:6863 MemoryNI <> commit def
+R6865:6866 MemoryNI <> g':53 var
+R6870:6873 Corelib.Init.Datatypes <> None constr

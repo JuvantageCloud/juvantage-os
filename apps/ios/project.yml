@@ -1,0 +1,38 @@
+name: JuvantageOS
+options:
+  bundleIdPrefix: com.juvantage
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  JuvantageOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: JuvantageOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.juvantage.os
+        INFOPLIST_GENERATION_MODE: Generated
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Juvantage OS
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_NSAppTransportSecurity_AllowsLocalNetworking: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        DEVELOPMENT_TEAM: ""
+    info:
+      path: JuvantageOS/Info.plist
+      properties:
+        UILaunchScreen: {}
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+          NSAllowsArbitraryLoads: true

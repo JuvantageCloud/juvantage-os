@@ -1,0 +1,27 @@
+# Local / staging Brain — same routes as dev:os API.
+# Secrets: copy apps/api/.env.example → .env.brain (gitignored) or export env vars.
+services:
+  os-brain:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: juvantage/os-brain:0.2.0
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-file:/data/brain.db}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:?set TOKEN_ENCRYPTION_KEY}
+      DEMO_MODE: ${DEMO_MODE:-false}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      PORT: "3001"
+    volumes:
+      - brain-data:/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  brain-data:

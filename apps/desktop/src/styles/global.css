@@ -1,0 +1,111 @@
+:root {
+  /* Daylight base (paper) */
+  --bg: #f4f1ea;
+  --bg-deep: #ebe6dc;
+  --bg-well: #e3ddd2;
+  --ink: #0b1220;
+  --muted: rgba(11, 18, 32, 0.55);
+  --hair: rgba(11, 18, 32, 0.12);
+  --card: #ffffff;
+  --teal: #0d7a6f;
+  --teal-deep: #2d5a56;
+  --teal-soft: #d8ebe8;
+  --ink-soft: #1c2433;
+  --warn: #c45c26;
+  --warn-soft: #fde8e4;
+  --amber: #9a5b12;
+  --amber-soft: #fff1e0;
+
+  /* Night-cabin / instrument layer (Juvantage OS ambience) */
+  --cabin-dash: #141820;
+  --cabin-rail: #1c1914;
+  --cabin-rail-edge: rgba(18, 165, 148, 0.22);
+  --instrument: #14b8a6;
+  --instrument-dim: #0d7a6f;
+  --instrument-glow: rgba(20, 184, 166, 0.45);
+  --instrument-soft: rgba(20, 184, 166, 0.12);
+  --warm-cabin: #f7f2e8;
+
+  --edge-light: rgba(255, 255, 255, 0.78);
+  --edge-shade: rgba(11, 18, 32, 0.1);
+  --shadow: 0 12px 28px rgba(11, 18, 32, 0.14);
+  --shadow-sm: 0 1px 0 var(--edge-shade), 0 6px 16px rgba(11, 18, 32, 0.08);
+  --glow-module: 0 0 0 1px rgba(20, 184, 166, 0.08), 0 8px 24px rgba(11, 18, 32, 0.08);
+  --glow-live: 0 0 0 1px rgba(20, 184, 166, 0.5), 0 0 18px rgba(13, 122, 111, 0.35);
+  --inset-top: inset 0 1px 0 var(--edge-light);
+  --inset-well: inset 0 2px 8px rgba(11, 18, 32, 0.08);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 0.22s;
+  --radius: 6px;
+  --radius-lg: 8px;
+  --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font);
+  color: var(--ink);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration: 0.01ms;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: var(--font);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+button {
+  font-family: var(--font);
+  transition:
+    background var(--duration) var(--ease-out),
+    box-shadow var(--duration) var(--ease-out),
+    border-color var(--duration) var(--ease-out),
+    color var(--duration) var(--ease-out);
+}
+
+.app-opaque {
+  background: var(--cabin-dash);
+}
+
+@keyframes instrument-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    box-shadow: 0 0 6px var(--instrument-glow);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 14px var(--instrument-glow);
+  }
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    box-shadow: var(--glow-live);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(20, 184, 166, 0.65),
+      0 0 22px rgba(13, 122, 111, 0.45);
+  }
+}

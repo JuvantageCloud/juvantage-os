@@ -1,0 +1,6 @@
+Home Wi-Fi (DEMO)
+SSID: KeepHome-Demo
+Password: not-a-real-password
+Guest: KeepGuest / guest-demo-only
+
+Router admin: 192.168.1.1 (local)

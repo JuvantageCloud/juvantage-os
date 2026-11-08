@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juvantage OS — Desktop UX wireframes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+      :root {
+        --cream: #fcfbf7;
+        --ink: #0b1220;
+        --teal: #0d7a6f;
+        --teal-deep: #2d5a56;
+        --muted: #6b727a;
+        --card: #fff;
+        --hair: rgba(11, 18, 32, 0.1);
+        --warn: #d97706;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background: var(--cream);
+        min-height: 100vh;
+      }
+      header {
+        padding: 20px 24px 12px;
+        border-bottom: 1px solid var(--hair);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(8px);
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      h1 {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.35rem;
+        margin: 0 0 4px;
+      }
+      .lead {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        max-width: 70ch;
+      }
+      .steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .steps button {
+        appearance: none;
+        border: 1.5px solid var(--hair);
+        background: white;
+        border-radius: 999px;
+        padding: 8px 14px;
+        font: 600 0.8rem system-ui, sans-serif;
+        cursor: pointer;
+      }
+      .steps button.active {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+      }
+      .stage-wrap {
+        padding: 28px 20px 64px;
+        display: flex;
+        justify-content: center;
+      }
+      .desktop-frame {
+        width: min(960px, 100%);
+        height: min(620px, 78vh);
+        background: linear-gradient(160deg, #dfe8e6, #c5d4d1 40%, #b7c9c5);
+        border-radius: 16px;
+        border: 1px solid var(--hair);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 24px 60px rgba(11, 18, 32, 0.12);
+      }
+      .menubar {
+        height: 28px;
+        background: rgba(252, 251, 247, 0.85);
+        border-bottom: 1px solid var(--hair);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 0 12px;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .menubar .brand {
+        color: var(--teal);
+      }
+      .menubar .ghost {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .screen {
+        position: absolute;
+        inset: 28px 0 0;
+        display: none;
+      }
+      .screen.active {
+        display: block;
+      }
+      .wallpaper-hint {
+        position: absolute;
+        left: 24px;
+        bottom: 20px;
+        font-size: 0.75rem;
+        color: rgba(11, 18, 32, 0.45);
+        max-width: 240px;
+        line-height: 1.35;
+      }
+
+      /* Agent float */
+      .agent {
+        position: absolute;
+        right: 36px;
+        bottom: 48px;
+        width: 88px;
+        height: 96px;
+        cursor: pointer;
+        z-index: 5;
+        transition: transform 0.25s ease;
+      }
+      .agent:hover {
+        transform: translateY(-4px);
+      }
+      .agent.nudge {
+        animation: pulse 1.2s ease infinite;
+      }
+      .agent .badge {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 999px;
+        background: var(--warn);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* Quick sheet */
+      .sheet {
+        position: absolute;
+        right: 28px;
+        bottom: 160px;
+        width: 320px;
+        background: var(--card);
+        border-radius: 16px;
+        border: 1px solid var(--hair);
+        box-shadow: 0 16px 40px rgba(11, 18, 32, 0.16);
+        padding: 14px;
+        z-index: 6;
+      }
+      .sheet h3 {
+        margin: 0 0 4px;
+        font-size: 0.95rem;
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+      }
+      .sheet .meta {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .loop {
+        border: 1px solid var(--hair);
+        border-radius: 12px;
+        padding: 10px;
+        margin-bottom: 8px;
+        background: #fafaf8;
+      }
+      .loop .tag {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--teal);
+        margin-bottom: 4px;
+      }
+      .loop p {
+        margin: 0;
+        font-size: 0.84rem;
+        line-height: 1.35;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .actions button {
+        appearance: none;
+        border: none;
+        border-radius: 9px;
+        padding: 8px 10px;
+        font: 650 0.75rem system-ui, sans-serif;
+        cursor: pointer;
+      }
+      .btn-approve {
+        background: var(--teal);
+        color: white;
+      }
+      .btn-edit {
+        background: #e8eeed;
+        color: var(--ink);
+      }
+      .btn-snooze {
+        background: transparent;
+        border: 1px solid var(--hair) !important;
+        color: var(--muted);
+      }
+      .btn-desk {
+        width: 100%;
+        margin-top: 4px;
+        background: transparent;
+        border: 1px dashed var(--teal) !important;
+        color: var(--teal);
+      }
+
+      /* Desktop window */
+      .app-window {
+        position: absolute;
+        left: 48px;
+        top: 36px;
+        width: min(720px, calc(100% - 96px));
+        height: calc(100% - 72px);
+        background: var(--cream);
+        border-radius: 14px;
+        border: 1px solid var(--hair);
+        box-shadow: 0 20px 50px rgba(11, 18, 32, 0.18);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .app-titlebar {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--hair);
+        background: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ddd;
+      }
+      .dot.r {
+        background: #ff5f57;
+      }
+      .dot.y {
+        background: #febc2e;
+      }
+      .dot.g {
+        background: #28c840;
+      }
+      .app-body {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        flex: 1;
+        min-height: 0;
+      }
+      .nav {
+        border-right: 1px solid var(--hair);
+        padding: 12px;
+        background: white;
+      }
+      .nav button {
+        width: 100%;
+        text-align: left;
+        appearance: none;
+        border: none;
+        background: transparent;
+        padding: 9px 10px;
+        border-radius: 8px;
+        font: 600 0.8rem system-ui, sans-serif;
+        color: var(--muted);
+        cursor: pointer;
+        margin-bottom: 4px;
+      }
+      .nav button.on {
+        background: rgba(13, 122, 111, 0.12);
+        color: var(--teal);
+      }
+      .main {
+        padding: 16px;
+        overflow: auto;
+      }
+      .main h2 {
+        margin: 0 0 4px;
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.2rem;
+      }
+      .main .sub {
+        color: var(--muted);
+        font-size: 0.8rem;
+        margin-bottom: 14px;
+      }
+      .loop-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 12px;
+        border: 1px solid var(--hair);
+        border-radius: 12px;
+        background: white;
+        margin-bottom: 8px;
+      }
+      .band {
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: white;
+        background: var(--teal);
+        padding: 3px 6px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .band.imp {
+        background: var(--warn);
+      }
+      .band.bord {
+        background: var(--muted);
+      }
+      .toast {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        background: var(--ink);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 10;
+      }
+      .toast.show {
+        opacity: 1;
+      }
+      .callout {
+        margin: 0 24px 20px;
+        max-width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(13, 122, 111, 0.08);
+        border: 1px solid rgba(13, 122, 111, 0.2);
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+      .callout strong {
+        color: var(--teal-deep);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Juvantage OS — UX wireframes</h1>
+      <p class="lead">
+        Click through the modes. Solo agent = fast. Desktop = full picture. Timed nudge is the hero —
+        not a morning dump.
+      </p>
+      <div class="steps" id="steps">
+        <button type="button" class="active" data-step="1">1. Solo idle</button>
+        <button type="button" data-step="2">2. Timed nudge</button>
+        <button type="button" data-step="3">3. Quick sheet</button>
+        <button type="button" data-step="4">4. Desktop</button>
+        <button type="button" data-step="5">5. Undock agent</button>
+      </div>
+    </header>
+
+    <p class="callout" id="callout">
+      <strong>Solo Agent mode.</strong> Agent floats while you work elsewhere. Tracking runs in the
+      background. Click agent → quick sheet (not full app).
+    </p>
+
+    <div class="stage-wrap">
+      <div class="desktop-frame">
+        <div class="menubar">
+          <span class="brand">Juvantage OS</span>
+          <span class="ghost" id="menuHint">Solo · tracking on</span>
+          <span class="ghost">Check-ins 10:30 · 15:30</span>
+        </div>
+
+        <!-- Step 1: Solo idle -->
+        <div class="screen active" id="s1">
+          <p class="wallpaper-hint">Your normal Mac desktop. Agent is the only OS chrome.</p>
+          <div class="agent" id="agent1" title="Click agent">
+            <div id="lottie1" style="width: 100%; height: 100%"></div>
+          </div>
+        </div>
+
+        <!-- Step 2: Nudge -->
+        <div class="screen" id="s2">
+          <p class="wallpaper-hint">15:30 check-in — agent pulses. Something crossed a threshold.</p>
+          <div class="agent nudge" id="agent2" title="Click to open quick sheet">
+            <div id="lottie2" style="width: 100%; height: 100%"></div>
+            <span class="badge">1</span>
+          </div>
+        </div>
+
+        <!-- Step 3: Quick sheet -->
+        <div class="screen" id="s3">
+          <p class="wallpaper-hint">Quick sheet = one (or few) loops + approve gate. Stays fast.</p>
+          <div class="sheet">
+            <h3>Right now</h3>
+            <div class="meta">Triggered · aging reply · 18h open</div>
+            <div class="loop">
+              <div class="tag">Reply owed</div>
+              <p>Sam asked for the pilot timeline — still unanswered.</p>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-approve" id="approve">Approve draft</button>
+              <button type="button" class="btn-edit">Edit</button>
+              <button type="button" class="btn-snooze">Snooze</button>
+              <button type="button" class="btn-desk" id="toDesktop">Open Desktop →</button>
+            </div>
+          </div>
+          <div class="agent" id="agent3">
+            <div id="lottie3" style="width: 100%; height: 100%"></div>
+          </div>
+        </div>
+
+        <!-- Step 4: Desktop -->
+        <div class="screen" id="s4">
+          <div class="app-window">
+            <div class="app-titlebar">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span style="margin-left: 8px">Juvantage OS — Desktop</span>
+            </div>
+            <div class="app-body">
+              <div class="nav">
+                <button type="button" class="on">Open loops</button>
+                <button type="button">History</button>
+                <button type="button">Connectors</button>
+                <button type="button">Check-in times</button>
+                <button type="button" id="undockBtn">Undock agent</button>
+              </div>
+              <div class="main">
+                <h2>Open loops</h2>
+                <div class="sub">Full list. Dig into anything. Approve still required to send.</div>
+                <div class="loop-row">
+                  <span class="band imp">Important</span>
+                  <div>
+                    <strong>Reply Sam — pilot timeline</strong>
+                    <div class="sub" style="margin: 2px 0 0">Gmail · 18h</div>
+                  </div>
+                </div>
+                <div class="loop-row">
+                  <span class="band">Critical</span>
+                  <div>
+                    <strong>Confirm Thu 2pm with Jordan?</strong>
+                    <div class="sub" style="margin: 2px 0 0">Calendar ask · 2h</div>
+                  </div>
+                </div>
+                <div class="loop-row">
+                  <span class="band bord">Borderline</span>
+                  <div>
+                    <strong>Follow up on invoice PDF</strong>
+                    <div class="sub" style="margin: 2px 0 0">Todo · 3d</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Undock -->
+        <div class="screen" id="s5">
+          <p class="wallpaper-hint">
+            Desktop closed / minimized. Agent undocked back to Solo. Tracking continues.
+          </p>
+          <div class="agent" id="agent5">
+            <div id="lottie5" style="width: 100%; height: 100%"></div>
+          </div>
+        </div>
+
+        <div class="toast" id="toast">Draft ready — nothing sent until you approve.</div>
+      </div>
+    </div>
+
+    <script>
+      const callouts = {
+        1: "<strong>Solo Agent mode.</strong> Agent floats while you work elsewhere. Tracking runs in the background. Click agent → quick sheet (not full app).",
+        2: "<strong>Timed nudge.</strong> Check-in window or aging threshold. Agent animates + badge. Not a morning email dump (that can be optional later).",
+        3: "<strong>Quick sheet.</strong> Fast act: Approve / Edit / Snooze. Approve gate always on. “Open Desktop” only if you want the full list.",
+        4: "<strong>Desktop mode.</strong> All loops, connectors, check-in schedule. Heavier chrome for deeper work.",
+        5: "<strong>Undock.</strong> Leave Desktop → Solo agent keeps watching. Same symbol, lighter surface.",
+      };
+
+      const menuHints = {
+        1: "Solo · tracking on",
+        2: "Solo · nudge",
+        3: "Solo · quick sheet",
+        4: "Desktop · full app",
+        5: "Solo · undocked",
+      };
+
+      function go(step) {
+        document.querySelectorAll(".steps button").forEach((b) => {
+          b.classList.toggle("active", b.dataset.step === String(step));
+        });
+        document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+        document.getElementById("s" + step).classList.add("active");
+        document.getElementById("callout").innerHTML = callouts[step];
+        document.getElementById("menuHint").textContent = menuHints[step];
+      }
+
+      document.getElementById("steps").addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-step]");
+        if (b) go(Number(b.dataset.step));
+      });
+
+      document.getElementById("agent1").onclick = () => go(3);
+      document.getElementById("agent2").onclick = () => go(3);
+      document.getElementById("toDesktop").onclick = () => go(4);
+      document.getElementById("undockBtn").onclick = () => go(5);
+      document.getElementById("approve").onclick = () => {
+        const t = document.getElementById("toast");
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2200);
+      };
+
+      ["lottie1", "lottie2", "lottie3", "lottie5"].forEach((id) => {
+        lottie.loadAnimation({
+          container: document.getElementById(id),
+          renderer: "svg",
+          loop: true,
+          autoplay: true,
+          path: "characters/mascot-idle-loop.json",
+        });
+      });
+    </script>
+  </body>
+</html>

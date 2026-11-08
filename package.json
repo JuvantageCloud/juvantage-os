@@ -1,0 +1,34 @@
+{
+  "name": "juvantage-os",
+  "private": true,
+  "workspaces": [
+    "apps/api",
+    "apps/desktop",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @juvantage/api",
+    "dev:api": "npm run dev -w @juvantage/api",
+    "dev:desktop": "npm run build -w @juvantage/shared && npm run dev -w @juvantage/desktop",
+    "dev:ui": "npm run build -w @juvantage/shared && npm run dev:ui -w @juvantage/desktop",
+    "dev:os": "npm run build -w @juvantage/shared && concurrently -k -n api,ui -c blue,teal \"npm run dev:api\" \"npm run dev:ui -w @juvantage/desktop\"",
+    "dev:os-electron": "npm run build -w @juvantage/shared && concurrently -k -n api,desktop -c blue,magenta \"npm run dev:api\" \"npm run dev -w @juvantage/desktop\"",
+    "macos:generate": "cd apps/macos && xcodegen generate",
+    "jira:backlog": "node tools/jira/push-backlog.mjs",
+    "build": "npm run build -w @juvantage/shared && npm run build -w @juvantage/api && npm run build -w @juvantage/desktop",
+    "db:generate": "npm run db:generate -w @juvantage/api",
+    "db:push": "npm run db:push -w @juvantage/api",
+    "db:seed": "npm run db:seed -w @juvantage/api",
+    "setup": "npm install && npm run db:generate && npm run db:push && npm run db:seed",
+    "test": "npm test -w @juvantage/api",
+    "docker:brain": "docker compose build os-brain",
+    "typecheck": "npm run build -w @juvantage/shared && npm run build -w @juvantage/api && npx tsc -p apps/desktop --noEmit",
+    "investigate": "node tools/investigate-incident.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

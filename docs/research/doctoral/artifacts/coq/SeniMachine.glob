@@ -1,0 +1,534 @@
+DIGEST eee0a45f999373e83eff5dbfd5955acf
+FSeniMachine
+R814:817 Stdlib.Lists.List <> <> lib
+R819:823 Stdlib.Arith.Arith <> <> lib
+R825:827 Stdlib.micromega.Lia <> <> lib
+R829:832 Stdlib.Bool.Bool <> <> lib
+R842:854 Stdlib.Lists.List ListNotations <> mod
+rec 865:867 <> Tok
+proj 874:876 <> gid
+proj 885:889 <> nonce
+proj 898:900 <> mac
+proj 909:911 <> exp
+R880:882 Corelib.Init.Datatypes <> nat ind
+R893:895 Corelib.Init.Datatypes <> nat ind
+R904:906 Corelib.Init.Datatypes <> nat ind
+R915:917 Corelib.Init.Datatypes <> nat ind
+ind 933:935 <> GSt
+constr 940:944 <> Fresh
+constr 948:955 <> Consumed
+scheme 933:935 <> GSt_rect
+scheme 933:935 <> GSt_ind
+scheme 933:935 <> GSt_rec
+scheme 933:935 <> GSt_sind
+rec 966:970 <> Store
+proj 979:983 <> grant
+proj 1009:1015 <> effects
+proj 1026:1028 <> now
+R987:992 Corelib.Init.Datatypes <> option ind
+R998:1000 Corelib.Init.Datatypes <> ::type_scope:x_'*'_x not
+R995:997 SeniMachine <> Tok rec
+R1001:1003 SeniMachine <> GSt ind
+R1019:1021 Corelib.Init.Datatypes <> nat ind
+R1032:1034 Corelib.Init.Datatypes <> nat ind
+def 1051:1055 <> empty
+R1059:1063 SeniMachine <> Store rec
+R1071:1075 SeniMachine <> grant proj
+R1086:1092 SeniMachine <> effects proj
+R1100:1102 SeniMachine <> now proj
+R1080:1083 Corelib.Init.Datatypes <> None constr
+def 1125:1128 <> mint
+R1154:1156 Corelib.Init.Datatypes <> nat ind
+binder 1131:1133 <> key:12
+binder 1135:1138 <> gid0:13
+binder 1140:1145 <> nonce0:14
+binder 1147:1150 <> exp0:15
+R1164:1168 SeniMachine <> Store rec
+binder 1160:1160 <> s:16
+R1173:1177 SeniMachine <> Store rec
+R1196:1198 SeniMachine <> gid proj
+R1209:1213 SeniMachine <> nonce proj
+R1226:1228 SeniMachine <> mac proj
+R1254:1256 SeniMachine <> exp proj
+R1203:1206 SeniMachine <> gid0:13 var
+R1218:1223 SeniMachine <> nonce0:14 var
+R1243:1245 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1236:1238 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1233:1235 SeniMachine <> key:12 var
+R1239:1242 SeniMachine <> gid0:13 var
+R1246:1251 SeniMachine <> nonce0:14 var
+R1261:1264 SeniMachine <> exp0:15 var
+binder 1188:1188 <> t:17
+R1277:1281 SeniMachine <> grant proj
+R1303:1309 SeniMachine <> effects proj
+R1325:1327 SeniMachine <> now proj
+R1286:1289 Corelib.Init.Datatypes <> Some constr
+R1291:1291 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1293:1294 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1300:1300 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1292:1292 SeniMachine <> t:17 var
+R1295:1299 SeniMachine <> Fresh constr
+R1314:1320 SeniMachine <> effects proj
+R1322:1322 SeniMachine <> s:16 var
+R1332:1334 SeniMachine <> now proj
+R1336:1336 SeniMachine <> s:16 var
+def 1354:1359 <> accept
+R1368:1370 Corelib.Init.Datatypes <> nat ind
+binder 1362:1364 <> key:18
+R1381:1383 SeniMachine <> Tok rec
+binder 1374:1374 <> t:19
+binder 1376:1377 <> t0:20
+R1394:1396 Corelib.Init.Datatypes <> nat ind
+binder 1387:1390 <> now0:21
+R1401:1404 Corelib.Init.Datatypes <> bool ind
+R1550:1556 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1519:1525 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1484:1490 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1453:1459 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1412:1418 Stdlib.Arith.PeanoNat Nat eqb def
+R1421:1423 SeniMachine <> mac proj
+R1425:1425 SeniMachine <> t:19 var
+R1441:1443 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1432:1434 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1429:1431 SeniMachine <> key:18 var
+R1435:1437 SeniMachine <> gid proj
+R1439:1440 SeniMachine <> t0:20 var
+R1444:1448 SeniMachine <> nonce proj
+R1450:1451 SeniMachine <> t0:20 var
+R1460:1466 Stdlib.Arith.PeanoNat Nat eqb def
+R1469:1471 SeniMachine <> gid proj
+R1473:1473 SeniMachine <> t:19 var
+R1477:1479 SeniMachine <> gid proj
+R1481:1482 SeniMachine <> t0:20 var
+R1491:1497 Stdlib.Arith.PeanoNat Nat eqb def
+R1500:1504 SeniMachine <> nonce proj
+R1506:1506 SeniMachine <> t:19 var
+R1510:1514 SeniMachine <> nonce proj
+R1516:1517 SeniMachine <> t0:20 var
+R1526:1532 Stdlib.Arith.PeanoNat Nat eqb def
+R1535:1537 SeniMachine <> mac proj
+R1539:1539 SeniMachine <> t:19 var
+R1543:1545 SeniMachine <> mac proj
+R1547:1548 SeniMachine <> t0:20 var
+R1557:1563 Stdlib.Arith.PeanoNat Nat leb def
+R1565:1568 SeniMachine <> now0:21 var
+R1571:1573 SeniMachine <> exp proj
+R1575:1576 SeniMachine <> t0:20 var
+def 1598:1603 <> commit
+R1612:1614 Corelib.Init.Datatypes <> nat ind
+binder 1606:1608 <> key:22
+R1622:1624 SeniMachine <> Tok rec
+binder 1618:1618 <> t:23
+R1632:1636 SeniMachine <> Store rec
+binder 1628:1628 <> s:24
+R1641:1645 SeniMachine <> Store rec
+R1658:1662 SeniMachine <> grant proj
+R1664:1664 SeniMachine <> s:24 var
+R1675:1678 Corelib.Init.Datatypes <> Some constr
+R1680:1680 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1683:1684 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1690:1690 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1685:1689 SeniMachine <> Fresh constr
+R1704:1709 SeniMachine <> accept def
+R1711:1713 SeniMachine <> key:22 var
+R1715:1715 SeniMachine <> t:23 var
+R1721:1723 SeniMachine <> now proj
+R1725:1725 SeniMachine <> s:24 var
+R1825:1825 SeniMachine <> s:24 var
+R1742:1746 SeniMachine <> grant proj
+R1772:1778 SeniMachine <> effects proj
+R1798:1800 SeniMachine <> now proj
+R1751:1754 Corelib.Init.Datatypes <> Some constr
+R1756:1756 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1759:1760 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1769:1769 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1761:1768 SeniMachine <> Consumed constr
+R1783:1783 Corelib.Init.Datatypes <> S constr
+R1786:1792 SeniMachine <> effects proj
+R1794:1794 SeniMachine <> s:24 var
+R1805:1807 SeniMachine <> now proj
+R1809:1809 SeniMachine <> s:24 var
+R1836:1836 SeniMachine <> s:24 var
+def 1857:1860 <> tick
+R1867:1871 SeniMachine <> Store rec
+binder 1863:1863 <> s:25
+R1876:1880 SeniMachine <> Store rec
+R1890:1894 SeniMachine <> grant proj
+R1908:1914 SeniMachine <> effects proj
+R1930:1932 SeniMachine <> now proj
+R1899:1903 SeniMachine <> grant proj
+R1905:1905 SeniMachine <> s:25 var
+R1919:1925 SeniMachine <> effects proj
+R1927:1927 SeniMachine <> s:25 var
+R1937:1937 Corelib.Init.Datatypes <> S constr
+R1940:1942 SeniMachine <> now proj
+R1944:1944 SeniMachine <> s:25 var
+def 1963:1968 <> credit
+R1975:1979 SeniMachine <> Store rec
+binder 1971:1971 <> s:26
+R1984:1986 Corelib.Init.Datatypes <> nat ind
+R1999:2003 SeniMachine <> grant proj
+R2005:2005 SeniMachine <> s:26 var
+R2016:2019 Corelib.Init.Datatypes <> Some constr
+R2021:2021 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2023:2024 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2030:2030 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2025:2029 SeniMachine <> Fresh constr
+ind 2066:2068 <> Cmd
+constr 2075:2079 <> Noise
+constr 2083:2089 <> Advance
+constr 2093:2098 <> Submit
+R2105:2107 SeniMachine <> Tok rec
+binder 2101:2101 <> t:29
+scheme 2066:2068 <> Cmd_rect
+scheme 2066:2068 <> Cmd_ind
+scheme 2066:2068 <> Cmd_rec
+scheme 2066:2068 <> Cmd_sind
+def 2121:2124 <> exec
+R2133:2135 Corelib.Init.Datatypes <> nat ind
+binder 2127:2129 <> key:30
+R2146:2149 Corelib.Init.Datatypes <> list ind
+R2151:2153 SeniMachine <> Cmd ind
+binder 2139:2142 <> cmds:31
+R2161:2165 SeniMachine <> Store rec
+binder 2157:2157 <> s:32
+R2170:2174 SeniMachine <> Store rec
+R2187:2190 SeniMachine <> cmds:31 var
+R2201:2202 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R2207:2207 SeniMachine <> s:32 var
+R2218:2221 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2213:2217 SeniMachine <> Noise constr
+R2230:2233 SeniMachine <> exec:33 def
+R2244:2244 SeniMachine <> s:32 var
+R2235:2237 SeniMachine <> key:30 var
+R2257:2260 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2250:2256 SeniMachine <> Advance constr
+R2269:2272 SeniMachine <> exec:33 def
+R2284:2287 SeniMachine <> tick def
+R2289:2289 SeniMachine <> s:32 var
+R2274:2276 SeniMachine <> key:30 var
+R2304:2307 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2296:2301 SeniMachine <> Submit constr
+R2316:2319 SeniMachine <> exec:33 def
+R2331:2336 SeniMachine <> commit def
+R2338:2340 SeniMachine <> key:30 var
+R2344:2344 SeniMachine <> s:32 var
+R2321:2323 SeniMachine <> key:30 var
+prf 2361:2368 <> tick_sum
+binder 2381:2381 <> s:35
+R2418:2420 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2400:2402 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R2384:2390 SeniMachine <> effects proj
+R2393:2396 SeniMachine <> tick def
+R2398:2398 SeniMachine <> s:35 var
+R2403:2408 SeniMachine <> credit def
+R2411:2414 SeniMachine <> tick def
+R2416:2416 SeniMachine <> s:35 var
+R2430:2432 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R2421:2427 SeniMachine <> effects proj
+R2429:2429 SeniMachine <> s:35 var
+R2433:2438 SeniMachine <> credit def
+R2440:2440 SeniMachine <> s:35 var
+R2468:2471 SeniMachine <> tick def
+R2474:2479 SeniMachine <> credit def
+R2501:2505 SeniMachine <> grant proj
+prf 2559:2568 <> commit_sum
+binder 2581:2583 <> key:36
+binder 2585:2585 <> t:37
+binder 2587:2587 <> s:38
+R2644:2647 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2618:2620 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R2594:2600 SeniMachine <> effects proj
+R2603:2608 SeniMachine <> commit def
+R2610:2612 SeniMachine <> key:36 var
+R2614:2614 SeniMachine <> t:37 var
+R2616:2616 SeniMachine <> s:38 var
+R2621:2626 SeniMachine <> credit def
+R2629:2634 SeniMachine <> commit def
+R2636:2638 SeniMachine <> key:36 var
+R2640:2640 SeniMachine <> t:37 var
+R2642:2642 SeniMachine <> s:38 var
+R2657:2659 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R2648:2654 SeniMachine <> effects proj
+R2656:2656 SeniMachine <> s:38 var
+R2660:2665 SeniMachine <> credit def
+R2667:2667 SeniMachine <> s:38 var
+R2704:2709 SeniMachine <> commit def
+R2724:2728 SeniMachine <> grant proj
+R2789:2794 SeniMachine <> accept def
+R2806:2808 SeniMachine <> now proj
+R2844:2849 SeniMachine <> credit def
+R2894:2904 Stdlib.Arith.PeanoNat Nat add_0_r thm
+R2918:2928 Stdlib.Arith.PeanoNat Nat add_1_r thm
+R2937:2947 Stdlib.Arith.PeanoNat Nat le_refl thm
+R2965:2970 SeniMachine <> credit def
+R2998:3008 Stdlib.Arith.PeanoNat Nat le_refl thm
+R3024:3029 SeniMachine <> credit def
+R3057:3067 Stdlib.Arith.PeanoNat Nat le_refl thm
+R3081:3086 SeniMachine <> credit def
+R3114:3124 Stdlib.Arith.PeanoNat Nat le_refl thm
+prf 3139:3146 <> exec_sum
+binder 3159:3161 <> key:39
+binder 3163:3166 <> cmds:40
+binder 3168:3168 <> s:41
+R3227:3230 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R3200:3202 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3175:3181 SeniMachine <> effects proj
+R3184:3187 SeniMachine <> exec def
+R3189:3191 SeniMachine <> key:39 var
+R3193:3196 SeniMachine <> cmds:40 var
+R3198:3198 SeniMachine <> s:41 var
+R3203:3208 SeniMachine <> credit def
+R3211:3214 SeniMachine <> exec def
+R3216:3218 SeniMachine <> key:39 var
+R3220:3223 SeniMachine <> cmds:40 var
+R3225:3225 SeniMachine <> s:41 var
+R3240:3242 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3231:3237 SeniMachine <> effects proj
+R3239:3239 SeniMachine <> s:41 var
+R3243:3248 SeniMachine <> credit def
+R3250:3250 SeniMachine <> s:41 var
+R3341:3351 Stdlib.Arith.PeanoNat Nat le_refl thm
+R3471:3473 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3455:3461 SeniMachine <> effects proj
+R3464:3467 SeniMachine <> tick def
+R3474:3479 SeniMachine <> credit def
+R3482:3485 SeniMachine <> tick def
+R3431:3442 Stdlib.Arith.PeanoNat Nat le_trans thm
+R3526:3533 SeniMachine <> tick_sum thm
+R3542:3552 Stdlib.Arith.PeanoNat Nat le_refl thm
+R3630:3632 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3604:3610 SeniMachine <> effects proj
+R3613:3618 SeniMachine <> commit def
+R3633:3638 SeniMachine <> credit def
+R3641:3646 SeniMachine <> commit def
+R3580:3591 Stdlib.Arith.PeanoNat Nat le_trans thm
+R3693:3702 SeniMachine <> commit_sum thm
+prf 3719:3735 <> no_mint_no_effect
+binder 3748:3750 <> key:42
+binder 3752:3755 <> cmds:43
+R3787:3789 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3758:3764 SeniMachine <> effects proj
+R3767:3770 SeniMachine <> exec def
+R3772:3774 SeniMachine <> key:42 var
+R3776:3779 SeniMachine <> cmds:43 var
+R3781:3785 SeniMachine <> empty def
+R3833:3840 SeniMachine <> exec_sum thm
+R3851:3855 SeniMachine <> empty def
+R3876:3880 SeniMachine <> empty def
+R3883:3888 SeniMachine <> credit def
+R3922:3931 Stdlib.Arith.PeanoNat Nat le_0_r thm
+R3943:3954 Stdlib.Arith.PeanoNat Nat le_trans thm
+R3967:3978 Stdlib.Arith.PeanoNat Nat le_add_r thm
+prf 4011:4028 <> at_most_one_effect
+binder 4041:4043 <> key:44
+binder 4045:4048 <> cmds:45
+binder 4050:4050 <> s:46
+R4070:4077 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4066:4068 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4057:4063 SeniMachine <> effects proj
+R4065:4065 SeniMachine <> s:46 var
+R4103:4106 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R4078:4084 SeniMachine <> effects proj
+R4087:4090 SeniMachine <> exec def
+R4092:4094 SeniMachine <> key:44 var
+R4096:4099 SeniMachine <> cmds:45 var
+R4101:4101 SeniMachine <> s:46 var
+R4155:4162 SeniMachine <> exec_sum thm
+R4208:4211 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R4200:4205 SeniMachine <> credit def
+R4227:4232 SeniMachine <> credit def
+R4245:4249 SeniMachine <> grant proj
+R4289:4299 Stdlib.Arith.PeanoNat Nat le_refl thm
+R4314:4323 Stdlib.Arith.PeanoNat Nat le_0_l thm
+R4338:4347 Stdlib.Arith.PeanoNat Nat le_0_l thm
+R4382:4392 Stdlib.Arith.PeanoNat Nat add_0_l thm
+R4412:4423 Stdlib.Arith.PeanoNat Nat le_trans thm
+R4436:4447 Stdlib.Arith.PeanoNat Nat le_add_r thm
+R4461:4472 Stdlib.Arith.PeanoNat Nat le_trans thm
+prf 4511:4536 <> commit_second_adds_nothing
+binder 4549:4551 <> key:47
+binder 4553:4553 <> t:48
+binder 4555:4555 <> s:49
+R4601:4603 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4562:4568 SeniMachine <> effects proj
+R4571:4576 SeniMachine <> commit def
+R4578:4580 SeniMachine <> key:47 var
+R4582:4582 SeniMachine <> t:48 var
+R4585:4590 SeniMachine <> commit def
+R4592:4594 SeniMachine <> key:47 var
+R4596:4596 SeniMachine <> t:48 var
+R4598:4598 SeniMachine <> s:49 var
+R4604:4610 SeniMachine <> effects proj
+R4613:4618 SeniMachine <> commit def
+R4620:4622 SeniMachine <> key:47 var
+R4624:4624 SeniMachine <> t:48 var
+R4626:4626 SeniMachine <> s:49 var
+R4667:4671 SeniMachine <> grant proj
+R4714:4719 SeniMachine <> accept def
+R4731:4733 SeniMachine <> now proj
+R4767:4771 SeniMachine <> grant proj
+R4797:4803 SeniMachine <> effects proj
+R4823:4825 SeniMachine <> now proj
+R4776:4779 Corelib.Init.Datatypes <> Some constr
+R4781:4781 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4784:4785 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4794:4794 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4786:4793 SeniMachine <> Consumed constr
+R4808:4808 Corelib.Init.Datatypes <> S constr
+R4811:4817 SeniMachine <> effects proj
+R4830:4832 SeniMachine <> now proj
+R4874:4876 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4860:4865 SeniMachine <> commit def
+R4897:4902 SeniMachine <> commit def
+R4979:4984 SeniMachine <> commit def
+R5044:5046 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5030:5035 SeniMachine <> commit def
+R5066:5071 SeniMachine <> commit def
+R5187:5189 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5173:5178 SeniMachine <> commit def
+R5207:5212 SeniMachine <> commit def
+R5314:5316 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5300:5305 SeniMachine <> commit def
+R5334:5339 SeniMachine <> commit def
+prf 5424:5437 <> forge_rejected
+binder 5450:5452 <> key:50
+binder 5454:5457 <> gid0:51
+binder 5459:5464 <> nonce0:52
+binder 5466:5469 <> exp0:53
+binder 5471:5471 <> s:54
+binder 5473:5473 <> t:55
+R5508:5515 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R5485:5488 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R5480:5482 SeniMachine <> mac proj
+R5484:5484 SeniMachine <> t:55 var
+R5499:5501 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5492:5494 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5489:5491 SeniMachine <> key:50 var
+R5495:5498 SeniMachine <> gid0:51 var
+R5502:5507 SeniMachine <> nonce0:52 var
+R5568:5570 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5516:5522 SeniMachine <> effects proj
+R5525:5530 SeniMachine <> commit def
+R5532:5534 SeniMachine <> key:50 var
+R5536:5536 SeniMachine <> t:55 var
+R5539:5542 SeniMachine <> mint def
+R5544:5546 SeniMachine <> key:50 var
+R5548:5551 SeniMachine <> gid0:51 var
+R5553:5558 SeniMachine <> nonce0:52 var
+R5560:5563 SeniMachine <> exp0:53 var
+R5565:5565 SeniMachine <> s:54 var
+R5571:5577 SeniMachine <> effects proj
+R5579:5579 SeniMachine <> s:54 var
+R5642:5645 SeniMachine <> mint def
+R5695:5701 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5687:5691 SeniMachine <> grant proj
+R5702:5705 Corelib.Init.Datatypes <> Some constr
+R5707:5710 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5780:5784 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5790:5790 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R5711:5713 SeniMachine <> gid proj
+R5724:5728 SeniMachine <> nonce proj
+R5741:5743 SeniMachine <> mac proj
+R5769:5771 SeniMachine <> exp proj
+R5758:5760 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5751:5753 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5785:5789 SeniMachine <> Fresh constr
+R5809:5812 SeniMachine <> mint def
+R5839:5844 SeniMachine <> commit def
+R5913:5915 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5876:5882 Stdlib.Arith.PeanoNat Nat eqb def
+R5885:5887 SeniMachine <> mac proj
+R5903:5905 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5896:5898 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5916:5920 Corelib.Init.Datatypes <> false constr
+R5937:5947 Stdlib.Arith.PeanoNat Nat eqb_neq thm
+R5972:5977 SeniMachine <> accept def
+R6021:6024 SeniMachine <> mint def
+prf 6061:6077 <> expired_no_effect
+binder 6090:6092 <> key:56
+binder 6094:6094 <> t:57
+binder 6096:6096 <> s:58
+binder 6098:6099 <> t0:59
+R6132:6139 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R6113:6115 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6106:6110 SeniMachine <> grant proj
+R6112:6112 SeniMachine <> s:58 var
+R6116:6119 Corelib.Init.Datatypes <> Some constr
+R6121:6121 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6124:6125 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6131:6131 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6122:6123 SeniMachine <> t0:59 var
+R6126:6130 SeniMachine <> Fresh constr
+R6154:6161 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R6146:6148 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R6140:6142 SeniMachine <> exp proj
+R6144:6145 SeniMachine <> t0:59 var
+R6149:6151 SeniMachine <> now proj
+R6153:6153 SeniMachine <> s:58 var
+R6186:6188 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6162:6168 SeniMachine <> effects proj
+R6171:6176 SeniMachine <> commit def
+R6178:6180 SeniMachine <> key:56 var
+R6182:6182 SeniMachine <> t:57 var
+R6184:6184 SeniMachine <> s:58 var
+R6189:6195 SeniMachine <> effects proj
+R6197:6197 SeniMachine <> s:58 var
+R6245:6250 SeniMachine <> commit def
+R6306:6308 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6282:6288 Stdlib.Arith.PeanoNat Nat leb def
+R6291:6293 SeniMachine <> now proj
+R6299:6301 SeniMachine <> exp proj
+R6309:6313 Corelib.Init.Datatypes <> false constr
+R6330:6339 Stdlib.Arith.PeanoNat Nat leb_gt thm
+R6364:6369 SeniMachine <> accept def
+R6394:6410 Stdlib.Bool.Bool <> andb_false_r thm
+prf 6449:6468 <> stolen_once_concrete
+binder 6478:6480 <> key:60
+R6502:6505 SeniMachine <> mint def
+R6507:6509 SeniMachine <> key:60 var
+R6517:6521 SeniMachine <> empty def
+binder 6496:6497 <> s0:61
+R6534:6538 SeniMachine <> grant proj
+R6540:6541 SeniMachine <> s0:61 var
+R6552:6555 Corelib.Init.Datatypes <> Some constr
+R6557:6557 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6559:6560 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6566:6566 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6561:6565 SeniMachine <> Fresh constr
+R6587:6590 SeniMachine <> exec def
+R6592:6594 SeniMachine <> key:60 var
+R6596:6596 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6605:6606 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6615:6615 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6597:6602 SeniMachine <> Submit constr
+R6607:6612 SeniMachine <> Submit constr
+R6617:6618 SeniMachine <> s0:61 var
+binder 6581:6582 <> s2:62
+R6643:6646 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R6639:6641 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6629:6635 SeniMachine <> effects proj
+R6637:6638 SeniMachine <> s2:62 var
+R6656:6658 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6647:6652 SeniMachine <> credit def
+R6654:6655 SeniMachine <> s2:62 var
+R6670:6674 Corelib.Init.Logic <> False ind
+prf 6738:6753 <> expired_concrete
+binder 6763:6765 <> key:63
+R6787:6790 SeniMachine <> tick def
+R6793:6796 SeniMachine <> mint def
+R6798:6800 SeniMachine <> key:63 var
+R6808:6812 SeniMachine <> empty def
+binder 6781:6782 <> s0:64
+R6900:6902 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6820:6826 SeniMachine <> effects proj
+R6829:6834 SeniMachine <> commit def
+R6836:6838 SeniMachine <> key:63 var
+R6843:6845 SeniMachine <> gid proj
+R6853:6857 SeniMachine <> nonce proj
+R6865:6867 SeniMachine <> mac proj
+R6885:6887 SeniMachine <> exp proj
+R6879:6881 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R6875:6877 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R6872:6874 SeniMachine <> key:63 var
+R6897:6898 SeniMachine <> s0:64 var

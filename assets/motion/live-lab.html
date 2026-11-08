@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juvantage Live Lab</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+      :root {
+        --cream: #fcfbf7;
+        --ink: #0b1220;
+        --teal: #0d7a6f;
+        --muted: #6b727a;
+        --fox: #e07a3a;
+        --fox-deep: #c45e28;
+        --card: rgba(255, 255, 255, 0.82);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 12% 0%, rgba(13, 122, 111, 0.14), transparent 42%),
+          radial-gradient(ellipse at 90% 8%, rgba(224, 122, 58, 0.1), transparent 40%),
+          var(--cream);
+        padding: 28px 18px 80px;
+      }
+      h1 {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.85rem;
+        margin: 0 0 6px;
+      }
+      h2 {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.25rem;
+        margin: 36px 0 8px;
+      }
+      .lead,
+      .sub {
+        color: var(--muted);
+        line-height: 1.45;
+        max-width: 70ch;
+        margin: 0 0 18px;
+      }
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+      .tabs button {
+        appearance: none;
+        border: 1.5px solid rgba(11, 18, 32, 0.12);
+        background: white;
+        border-radius: 999px;
+        padding: 10px 16px;
+        font: 650 0.88rem system-ui, sans-serif;
+        cursor: pointer;
+      }
+      .tabs button.active {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+      }
+      .panel {
+        display: none;
+      }
+      .panel.active {
+        display: block;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 14px;
+        max-width: 1100px;
+      }
+      .agent-card {
+        background: var(--card);
+        border: 2px solid rgba(11, 18, 32, 0.08);
+        border-radius: 18px;
+        padding: 12px 10px 14px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .agent-card.picked {
+        border-color: var(--teal);
+      }
+      .agent-stage {
+        width: 150px;
+        height: 165px;
+        margin: 0 auto 8px;
+      }
+      .agent-card strong {
+        display: block;
+        font-size: 0.9rem;
+      }
+      .agent-card span {
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .split {
+        display: grid;
+        grid-template-columns: minmax(260px, 420px) 1fr;
+        gap: 18px;
+        max-width: 1100px;
+        align-items: start;
+      }
+      @media (max-width: 820px) {
+        .split {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stage-card,
+      .controls {
+        background: var(--card);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 20px;
+      }
+      .stage-card {
+        padding: 16px;
+        text-align: center;
+      }
+      #foxStage,
+      #avatarStage {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 16px;
+        background: #ebe7e0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      #foxStage svg,
+      #avatarStage svg {
+        width: 92%;
+        height: 92%;
+      }
+      .controls {
+        padding: 18px;
+      }
+      .controls h3 {
+        margin: 0 0 12px;
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .label {
+        width: 100%;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .controls button,
+      .swatch {
+        appearance: none;
+        border: 1.5px solid rgba(11, 18, 32, 0.12);
+        background: white;
+        border-radius: 11px;
+        padding: 9px 12px;
+        font: 600 0.84rem system-ui, sans-serif;
+        cursor: pointer;
+      }
+      .controls button.active {
+        border-color: var(--teal);
+        background: rgba(13, 122, 111, 0.1);
+        color: var(--teal);
+      }
+      .swatch {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+      }
+      .swatch.active {
+        outline: 2px solid var(--teal);
+        outline-offset: 2px;
+      }
+      .hint {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Juvantage Live Lab</h1>
+    <p class="lead">
+      Everything here is live — not static pics. OS agents are real Lottie loops. Haven fox has
+      movable pupils/brows. Profile dresser is interactive. Click around and tell me what to change.
+    </p>
+
+    <div class="tabs" id="tabs">
+      <button type="button" class="active" data-tab="os">OS agents (live)</button>
+      <button type="button" data-tab="fox">Haven fox (live)</button>
+      <button type="button" data-tab="profile">Haven profile dresser (live)</button>
+    </div>
+
+    <!-- OS AGENTS -->
+    <section class="panel active" id="tab-os">
+      <h2>OS agent — locked first idle</h2>
+      <p class="sub">
+        This is the original <code>mascot-idle-loop.json</code> you liked. Restored. Not overwritten
+        anymore.
+      </p>
+      <div class="grid" style="margin-bottom: 20px; max-width: 220px">
+        <div class="agent-card picked" style="cursor: default">
+          <div class="agent-stage" id="agent-original"></div>
+          <strong>Original idle (keep)</strong>
+          <span>characters/mascot-idle-loop.json</span>
+        </div>
+      </div>
+      <h2>Other concept Lotties (experiments)</h2>
+      <p class="sub">These are drafts — ignore if they feel off. Your lock is above.</p>
+      <div class="grid" id="agentGrid"></div>
+    </section>
+
+    <!-- HAVEN FOX -->
+    <section class="panel" id="tab-fox">
+      <h2>Haven fox — movable parts</h2>
+      <p class="sub">
+        Pupils, brows, blink, ear twitch. This is the “alive companion” direction — our own fox, not
+        Duo’s owl.
+      </p>
+      <div class="split">
+        <div class="stage-card">
+          <div id="foxStage"></div>
+          <div class="hint">Click the fox to poke (blink + bounce). Eyes idle-look on their own.</div>
+        </div>
+        <div class="controls">
+          <h3>Animate</h3>
+          <div class="row">
+            <div class="label">Look</div>
+            <button type="button" class="active" data-fox-look="center">Center</button>
+            <button type="button" data-fox-look="left">Left</button>
+            <button type="button" data-fox-look="right">Right</button>
+            <button type="button" data-fox-look="up">Up</button>
+            <button type="button" data-fox-look="down">Down</button>
+          </div>
+          <div class="row">
+            <div class="label">Brows</div>
+            <button type="button" class="active" data-fox-brow="neutral">Neutral</button>
+            <button type="button" data-fox-brow="happy">Happy</button>
+            <button type="button" data-fox-brow="curious">Curious</button>
+            <button type="button" data-fox-brow="worried">Worried</button>
+          </div>
+          <div class="row">
+            <div class="label">Mouth</div>
+            <button type="button" class="active" data-fox-mouth="smile">Smile</button>
+            <button type="button" data-fox-mouth="open">Open</button>
+            <button type="button" data-fox-mouth="smirk">Smirk</button>
+          </div>
+          <div class="row">
+            <div class="label">Actions</div>
+            <button type="button" id="foxBlink">Blink</button>
+            <button type="button" id="foxTwitch">Ear twitch</button>
+            <button type="button" id="foxWave">Tail tip</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE DRESSER -->
+    <section class="panel" id="tab-profile">
+      <h2>Haven profile — dresser (live)</h2>
+      <p class="sub">
+        Soft oval head (not Duo squircle). Skin / hair / look / mood all live. We’ll grow the catalog
+        once you like the base.
+      </p>
+      <div class="split">
+        <div class="stage-card">
+          <div id="avatarStage"></div>
+          <div class="hint">Click avatar to blink. This is YOU in Haven — separate from the fox.</div>
+        </div>
+        <div class="controls">
+          <h3>Customize</h3>
+          <div class="row">
+            <div class="label">Skin</div>
+            <button class="swatch active" data-av-skin="#c68642" style="background:#c68642"></button>
+            <button class="swatch" data-av-skin="#8d5524" style="background:#8d5524"></button>
+            <button class="swatch" data-av-skin="#f1c27d" style="background:#f1c27d"></button>
+            <button class="swatch" data-av-skin="#e0ac69" style="background:#e0ac69"></button>
+            <button class="swatch" data-av-skin="#4a312c" style="background:#4a312c"></button>
+          </div>
+          <div class="row">
+            <div class="label">Hair</div>
+            <button class="swatch active" data-av-hair="#2b1b12" style="background:#2b1b12"></button>
+            <button class="swatch" data-av-hair="#1a1a1a" style="background:#1a1a1a"></button>
+            <button class="swatch" data-av-hair="#8b3a2a" style="background:#8b3a2a"></button>
+            <button class="swatch" data-av-hair="#c4a35a" style="background:#c4a35a"></button>
+            <button class="swatch" data-av-hair="#e07a3a" style="background:#e07a3a"></button>
+          </div>
+          <div class="row">
+            <div class="label">Haircut</div>
+            <button type="button" class="active" data-av-cut="soft">Soft</button>
+            <button type="button" data-av-cut="bangs">Bangs</button>
+            <button type="button" data-av-cut="curly">Curly</button>
+            <button type="button" data-av-cut="none">None</button>
+          </div>
+          <div class="row">
+            <div class="label">Look</div>
+            <button type="button" class="active" data-av-look="center">Center</button>
+            <button type="button" data-av-look="left">Left</button>
+            <button type="button" data-av-look="right">Right</button>
+            <button type="button" data-av-look="up">Up</button>
+          </div>
+          <div class="row">
+            <div class="label">Mood brows</div>
+            <button type="button" class="active" data-av-mood="neutral">Neutral</button>
+            <button type="button" data-av-mood="happy">Happy</button>
+            <button type="button" data-av-mood="think">Think</button>
+          </div>
+          <div class="row">
+            <div class="label">Shirt</div>
+            <button type="button" class="active" data-av-shirt="#2a2a2a">Charcoal</button>
+            <button type="button" data-av-shirt="#0d7a6f">Teal</button>
+            <button type="button" data-av-shirt="#e07a3a">Fox orange</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      /* ---------- tabs ---------- */
+      const tabs = document.getElementById("tabs");
+      tabs.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-tab]");
+        if (!btn) return;
+        tabs.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+        document.querySelectorAll(".panel").forEach((p) => {
+          p.classList.toggle("active", p.id === "tab-" + btn.dataset.tab);
+        });
+      });
+
+      /* ---------- OS agents (Lottie) ---------- */
+      const agents = [
+        { id: "01", name: "Capsule", file: "characters/os-agent/lottie/os-01-capsule.json", why: "Current favorite lane" },
+        { id: "02", name: "Orb", file: "characters/os-agent/lottie/os-02-orb.json", why: "Soft marble glow" },
+        { id: "03", name: "Open Loop", file: "characters/os-agent/lottie/os-03-open-loop.json", why: "Unfinished-work metaphor" },
+        { id: "04", name: "Spark Gem", file: "characters/os-agent/lottie/os-04-spark-gem.json", why: "Insight / reward" },
+        { id: "05", name: "Droplet", file: "characters/os-agent/lottie/os-05-droplet.json", why: "Calm drop" },
+        { id: "06", name: "Pebble", file: "characters/os-agent/lottie/os-06-pebble.json", why: "Ultra simple" },
+        { id: "07", name: "Loop Keeper", file: "characters/os-agent/lottie/os-07-loop-keeper.json", why: "Catcher of loops" },
+      ];
+      lottie.loadAnimation({
+        container: document.getElementById("agent-original"),
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "characters/mascot-idle-loop.json",
+      });
+
+      const agentGrid = document.getElementById("agentGrid");
+      const savedAgent = localStorage.getItem("jv-os-agent-pick");
+      agents.forEach((a) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "agent-card" + (savedAgent === a.id ? " picked" : "");
+        card.innerHTML = `<div class="agent-stage" id="agent-${a.id}"></div><strong>${a.id}. ${a.name}</strong><span>${a.why}</span>`;
+        card.onclick = () => {
+          document.querySelectorAll(".agent-card").forEach((c) => c.classList.remove("picked"));
+          card.classList.add("picked");
+          localStorage.setItem("jv-os-agent-pick", a.id);
+        };
+        agentGrid.appendChild(card);
+        lottie.loadAnimation({
+          container: document.getElementById("agent-" + a.id),
+          renderer: "svg",
+          loop: true,
+          autoplay: true,
+          path: a.file,
+        });
+      });
+
+      /* ---------- Haven fox ---------- */
+      const fox = {
+        look: "center",
+        brow: "neutral",
+        mouth: "smile",
+        blink: false,
+        bounce: false,
+        ear: 0,
+        tail: 0,
+      };
+      const foxLook = {
+        center: [0, 0],
+        left: [-8, 1],
+        right: [8, 1],
+        up: [0, -7],
+        down: [0, 5],
+      };
+      const foxBrows = {
+        neutral: { L: "M92 118 Q110 112 126 118", R: "M154 118 Q170 112 188 118" },
+        happy: { L: "M92 122 Q110 114 126 122", R: "M154 122 Q170 114 188 122" },
+        curious: { L: "M92 124 Q110 108 126 116", R: "M154 116 Q170 108 188 124" },
+        worried: { L: "M92 114 Q110 122 126 118", R: "M154 118 Q170 122 188 114" },
+      };
+      const foxMouths = {
+        smile: "M128 178 Q140 190 152 178",
+        open: "M140 172 Q140 192 140 172",
+        smirk: "M130 180 Q145 186 155 176",
+      };
+
+      function renderFox() {
+        const [px, py] = foxLook[fox.look];
+        const eyeH = fox.blink ? 5 : 36;
+        const eyeY = fox.blink ? 146 : 132;
+        const bounce = fox.bounce ? "translate(0 -10)" : "translate(0 0)";
+        const earL = fox.ear;
+        const earR = -fox.ear;
+        const tailR = fox.tail;
+        document.getElementById("foxStage").innerHTML = `
+<svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+  <g transform="${bounce}" style="transition:transform .25s ease">
+    <!-- tail -->
+    <ellipse cx="210" cy="210" rx="34" ry="16" fill="#e07a3a" transform="rotate(${tailR} 200 200)"/>
+    <ellipse cx="228" cy="206" rx="12" ry="8" fill="#f4d7b0" transform="rotate(${tailR} 200 200)"/>
+    <!-- body -->
+    <ellipse cx="140" cy="214" rx="52" ry="34" fill="#e07a3a"/>
+    <ellipse cx="140" cy="218" rx="28" ry="18" fill="#f4d7b0"/>
+    <!-- head -->
+    <ellipse cx="140" cy="128" rx="72" ry="66" fill="#e07a3a"/>
+    <!-- snout -->
+    <ellipse cx="140" cy="155" rx="34" ry="26" fill="#f4d7b0"/>
+    <!-- ears -->
+    <g transform="rotate(${earL} 95 78)">
+      <path d="M78 95 L95 48 L118 95 Z" fill="#e07a3a"/>
+      <path d="M88 92 L95 62 L108 92 Z" fill="#f4d7b0"/>
+    </g>
+    <g transform="rotate(${earR} 185 78)">
+      <path d="M162 95 L185 48 L202 95 Z" fill="#e07a3a"/>
+      <path d="M172 92 L185 62 L192 92 Z" fill="#f4d7b0"/>
+    </g>
+    <!-- brows -->
+    <path d="${foxBrows[fox.brow].L}" fill="none" stroke="#8a3d1a" stroke-width="5" stroke-linecap="round"/>
+    <path d="${foxBrows[fox.brow].R}" fill="none" stroke="#8a3d1a" stroke-width="5" stroke-linecap="round"/>
+    <!-- eyes -->
+    <ellipse cx="112" cy="${eyeY + eyeH / 2}" rx="18" ry="${eyeH / 2}" fill="#fff"/>
+    <ellipse cx="168" cy="${eyeY + eyeH / 2}" rx="18" ry="${eyeH / 2}" fill="#fff"/>
+    ${
+      fox.blink
+        ? ""
+        : `<circle cx="${112 + px}" cy="${150 + py}" r="7" fill="#0b1220"/>
+           <circle cx="${168 + px}" cy="${150 + py}" r="7" fill="#0b1220"/>
+           <circle cx="${114 + px}" cy="${147 + py}" r="2" fill="#fff"/>
+           <circle cx="${170 + px}" cy="${147 + py}" r="2" fill="#fff"/>`
+    }
+    <!-- nose -->
+    <ellipse cx="140" cy="168" rx="8" ry="6" fill="#0b1220"/>
+    <!-- mouth -->
+    <path d="${foxMouths[fox.mouth]}" fill="none" stroke="#8a3d1a" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+</svg>`;
+      }
+
+      function foxBlink() {
+        fox.blink = true;
+        renderFox();
+        setTimeout(() => {
+          fox.blink = false;
+          renderFox();
+        }, 130);
+      }
+      function foxPoke() {
+        fox.bounce = true;
+        foxBlink();
+        setTimeout(() => {
+          fox.bounce = false;
+          renderFox();
+        }, 260);
+      }
+
+      document.getElementById("foxStage").onclick = foxPoke;
+      document.getElementById("foxBlink").onclick = foxBlink;
+      document.getElementById("foxTwitch").onclick = () => {
+        fox.ear = 14;
+        renderFox();
+        setTimeout(() => {
+          fox.ear = -8;
+          renderFox();
+        }, 120);
+        setTimeout(() => {
+          fox.ear = 0;
+          renderFox();
+        }, 260);
+      };
+      document.getElementById("foxWave").onclick = () => {
+        let t = 0;
+        const id = setInterval(() => {
+          fox.tail = Math.sin(t) * 18;
+          t += 0.6;
+          renderFox();
+          if (t > 8) {
+            clearInterval(id);
+            fox.tail = 0;
+            renderFox();
+          }
+        }, 40);
+      };
+
+      document.querySelectorAll("[data-fox-look]").forEach((b) => {
+        b.onclick = () => {
+          fox.look = b.dataset.foxLook;
+          document.querySelectorAll("[data-fox-look]").forEach((x) => x.classList.toggle("active", x === b));
+          renderFox();
+        };
+      });
+      document.querySelectorAll("[data-fox-brow]").forEach((b) => {
+        b.onclick = () => {
+          fox.brow = b.dataset.foxBrow;
+          document.querySelectorAll("[data-fox-brow]").forEach((x) => x.classList.toggle("active", x === b));
+          renderFox();
+        };
+      });
+      document.querySelectorAll("[data-fox-mouth]").forEach((b) => {
+        b.onclick = () => {
+          fox.mouth = b.dataset.foxMouth;
+          document.querySelectorAll("[data-fox-mouth]").forEach((x) => x.classList.toggle("active", x === b));
+          renderFox();
+        };
+      });
+
+      // idle eye wander
+      setInterval(() => {
+        if (document.hidden) return;
+        const opts = ["center", "left", "right", "up"];
+        fox.look = opts[Math.floor(Math.random() * opts.length)];
+        document.querySelectorAll("[data-fox-look]").forEach((x) =>
+          x.classList.toggle("active", x.dataset.foxLook === fox.look)
+        );
+        renderFox();
+        setTimeout(() => {
+          fox.look = "center";
+          document.querySelectorAll("[data-fox-look]").forEach((x) =>
+            x.classList.toggle("active", x.dataset.foxLook === "center")
+          );
+          renderFox();
+        }, 800);
+      }, 4200);
+
+      renderFox();
+
+      /* ---------- Avatar dresser (oval, not Duo squircle) ---------- */
+      const av = {
+        skin: "#c68642",
+        hair: "#2b1b12",
+        cut: "soft",
+        look: "center",
+        mood: "neutral",
+        shirt: "#2a2a2a",
+        blink: false,
+      };
+      const avLook = { center: [0, 0], left: [-7, 1], right: [7, 1], up: [0, -6] };
+      const avBrows = {
+        neutral: { L: "M95 118 Q112 112 128 118", R: "M152 118 Q168 112 185 118" },
+        happy: { L: "M95 122 Q112 114 128 122", R: "M152 122 Q168 114 185 122" },
+        think: { L: "M95 124 Q112 110 128 116", R: "M152 116 Q168 110 185 124" },
+      };
+
+      function hairPath(cut) {
+        if (cut === "none") return "";
+        if (cut === "bangs")
+          return "M78 120 C85 70 195 70 202 120 L195 125 C170 95 110 95 85 125 Z";
+        if (cut === "curly")
+          return "M70 130 C55 55 225 55 210 130 C195 95 85 95 70 130 Z";
+        return "M82 118 C95 68 185 68 198 118 C205 135 190 120 175 108 C155 90 125 90 105 108 C90 120 78 132 82 118 Z";
+      }
+
+      function renderAvatar() {
+        const [px, py] = avLook[av.look];
+        const eyeH = av.blink ? 4 : 32;
+        const eyeY = av.blink ? 148 : 134;
+        const hair = hairPath(av.cut);
+        document.getElementById("avatarStage").innerHTML = `
+<svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- shirt -->
+  <path d="M95 210 C100 188 120 176 140 176 C160 176 180 188 185 210 L190 250 L90 250 Z" fill="${av.shirt}"/>
+  <!-- neck -->
+  <rect x="128" y="198" width="24" height="20" rx="8" fill="${av.skin}"/>
+  <!-- head OVAL (not Duo square) -->
+  <ellipse cx="140" cy="130" rx="68" ry="74" fill="${av.skin}"/>
+  <!-- ears -->
+  <ellipse cx="74" cy="132" rx="11" ry="16" fill="${av.skin}"/>
+  <ellipse cx="206" cy="132" rx="11" ry="16" fill="${av.skin}"/>
+  ${hair ? `<path d="${hair}" fill="${av.hair}"/>` : ""}
+  <!-- brows -->
+  <path d="${avBrows[av.mood].L}" fill="none" stroke="${av.hair}" stroke-width="5" stroke-linecap="round"/>
+  <path d="${avBrows[av.mood].R}" fill="none" stroke="${av.hair}" stroke-width="5" stroke-linecap="round"/>
+  <!-- eyes -->
+  <ellipse cx="114" cy="${eyeY + eyeH / 2}" rx="17" ry="${eyeH / 2}" fill="#fff"/>
+  <ellipse cx="166" cy="${eyeY + eyeH / 2}" rx="17" ry="${eyeH / 2}" fill="#fff"/>
+  ${
+    av.blink
+      ? ""
+      : `<circle cx="${114 + px}" cy="${149 + py}" r="6.5" fill="#0b1220"/>
+         <circle cx="${166 + px}" cy="${149 + py}" r="6.5" fill="#0b1220"/>`
+  }
+  <!-- nose / mouth -->
+  <path d="M140 160 Q146 168 140 172" fill="none" stroke="#8a5a3a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M128 184 Q140 194 152 184" fill="none" stroke="#5a3a2a" stroke-width="3.2" stroke-linecap="round"/>
+</svg>`;
+      }
+
+      function avBlink() {
+        av.blink = true;
+        renderAvatar();
+        setTimeout(() => {
+          av.blink = false;
+          renderAvatar();
+        }, 130);
+      }
+      document.getElementById("avatarStage").onclick = avBlink;
+
+      function bindAv(attr, key) {
+        document.querySelectorAll(`[data-av-${attr}]`).forEach((el) => {
+          el.onclick = () => {
+            av[key] = el.dataset[`av${attr[0].toUpperCase()}${attr.slice(1)}`] || el.getAttribute(`data-av-${attr}`);
+            // dataset camelCase: avSkin etc
+            const dsKey = "av" + attr.charAt(0).toUpperCase() + attr.slice(1);
+            av[key] = el.dataset[dsKey];
+            document.querySelectorAll(`[data-av-${attr}]`).forEach((x) => x.classList.toggle("active", x === el));
+            renderAvatar();
+          };
+        });
+      }
+      // manual binds for clarity
+      document.querySelectorAll("[data-av-skin]").forEach((el) => {
+        el.onclick = () => {
+          av.skin = el.dataset.avSkin;
+          document.querySelectorAll("[data-av-skin]").forEach((x) => x.classList.toggle("active", x === el));
+          renderAvatar();
+        };
+      });
+      document.querySelectorAll("[data-av-hair]").forEach((el) => {
+        el.onclick = () => {
+          av.hair = el.dataset.avHair;
+          document.querySelectorAll("[data-av-hair]").forEach((x) => x.classList.toggle("active", x === el));
+          renderAvatar();
+        };
+      });
+      document.querySelectorAll("[data-av-cut]").forEach((el) => {
+        el.onclick = () => {
+          av.cut = el.dataset.avCut;
+          document.querySelectorAll("[data-av-cut]").forEach((x) => x.classList.toggle("active", x === el));
+          renderAvatar();
+        };
+      });
+      document.querySelectorAll("[data-av-look]").forEach((el) => {
+        el.onclick = () => {
+          av.look = el.dataset.avLook;
+          document.querySelectorAll("[data-av-look]").forEach((x) => x.classList.toggle("active", x === el));
+          renderAvatar();
+        };
+      });
+      document.querySelectorAll("[data-av-mood]").forEach((el) => {
+        el.onclick = () => {
+          av.mood = el.dataset.avMood;
+          document.querySelectorAll("[data-av-mood]").forEach((x) => x.classList.toggle("active", x === el));
+          renderAvatar();
+        };
+      });
+      document.querySelectorAll("[data-av-shirt]").forEach((el) => {
+        el.onclick = () => {
+          av.shirt = el.dataset.avShirt;
+          document.querySelectorAll("[data-av-shirt]").forEach((x) => x.classList.toggle("active", x === el));
+          renderAvatar();
+        };
+      });
+
+      renderAvatar();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,302 @@
+DIGEST 077c20cb759e5fc6730c01c2900499d5
+FProcIso
+R684:687 Stdlib.Lists.List <> <> lib
+R689:693 Stdlib.Arith.Arith <> <> lib
+R703:715 Stdlib.Lists.List ListNotations <> mod
+rec 726:730 <> Guest
+proj 737:742 <> secret
+proj 751:763 <> public_intent
+R746:748 Corelib.Init.Datatypes <> nat ind
+R767:769 Corelib.Init.Datatypes <> nat ind
+ind 785:789 <> Instr
+constr 796:805 <> EmitPublic
+constr 809:816 <> EmitSeal
+constr 820:828 <> EmitConst
+constr 842:851 <> EmitSecret
+R835:837 Corelib.Init.Datatypes <> nat ind
+binder 831:831 <> c:6
+scheme 785:789 <> Instr_rect
+scheme 785:789 <> Instr_ind
+scheme 785:789 <> Instr_rec
+scheme 785:789 <> Instr_sind
+ind 865:868 <> GMsg
+constr 875:878 <> MLow
+constr 902:906 <> MSeal
+R895:897 Corelib.Init.Datatypes <> nat ind
+binder 881:883 <> tag:9
+binder 885:891 <> payload:10
+R919:921 Corelib.Init.Datatypes <> nat ind
+binder 909:915 <> payload:11
+scheme 865:868 <> GMsg_rect
+scheme 865:868 <> GMsg_ind
+scheme 865:868 <> GMsg_rec
+scheme 865:868 <> GMsg_sind
+def 935:938 <> runp
+R945:949 ProcIso <> Guest rec
+binder 941:941 <> g:12
+R957:960 Corelib.Init.Datatypes <> list ind
+R962:966 ProcIso <> Instr ind
+binder 953:953 <> p:13
+R971:974 Corelib.Init.Datatypes <> list ind
+R976:979 ProcIso <> GMsg ind
+R992:992 ProcIso <> p:13 var
+R1003:1004 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1009:1010 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1026:1029 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1016:1025 ProcIso <> EmitPublic constr
+R1059:1062 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1035:1038 ProcIso <> MLow constr
+R1043:1055 ProcIso <> public_intent proj
+R1057:1057 ProcIso <> g:12 var
+R1063:1066 ProcIso <> runp:14 def
+R1068:1068 ProcIso <> g:12 var
+R1084:1087 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1076:1083 ProcIso <> EmitSeal constr
+R1109:1112 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1093:1097 ProcIso <> MSeal constr
+R1100:1105 ProcIso <> secret proj
+R1107:1107 ProcIso <> g:12 var
+R1113:1116 ProcIso <> runp:14 def
+R1118:1118 ProcIso <> g:12 var
+R1137:1140 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1126:1134 ProcIso <> EmitConst constr
+R1154:1157 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1146:1149 ProcIso <> MLow constr
+R1158:1161 ProcIso <> runp:14 def
+R1163:1163 ProcIso <> g:12 var
+R1181:1184 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1171:1180 ProcIso <> EmitSecret constr
+R1207:1210 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1190:1193 ProcIso <> MLow constr
+R1198:1203 ProcIso <> secret proj
+R1205:1205 ProcIso <> g:12 var
+R1211:1214 ProcIso <> runp:14 def
+R1216:1216 ProcIso <> g:12 var
+def 1239:1242 <> obs1
+R1249:1252 ProcIso <> GMsg ind
+binder 1245:1245 <> m:16
+R1257:1260 Corelib.Init.Datatypes <> list ind
+R1266:1268 Corelib.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1263:1265 Corelib.Init.Datatypes <> nat ind
+R1269:1271 Corelib.Init.Datatypes <> nat ind
+R1285:1285 ProcIso <> m:16 var
+R1296:1299 ProcIso <> MLow constr
+R1316:1316 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1331:1331 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R1317:1317 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1321:1322 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1330:1330 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1337:1341 ProcIso <> MSeal constr
+R1348:1349 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+def 1370:1376 <> observe
+R1384:1387 Corelib.Init.Datatypes <> list ind
+R1389:1392 ProcIso <> GMsg ind
+binder 1379:1380 <> ms:18
+R1397:1400 Corelib.Init.Datatypes <> list ind
+R1406:1408 Corelib.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1403:1405 Corelib.Init.Datatypes <> nat ind
+R1409:1411 Corelib.Init.Datatypes <> nat ind
+R1417:1424 Stdlib.Lists.List <> flat_map def
+R1431:1432 ProcIso <> ms:18 var
+R1426:1429 ProcIso <> obs1 def
+def 1445:1453 <> compliant
+R1460:1463 Corelib.Init.Datatypes <> list ind
+R1465:1469 ProcIso <> Instr ind
+binder 1456:1456 <> p:19
+R1474:1477 Corelib.Init.Datatypes <> bool ind
+R1490:1490 ProcIso <> p:19 var
+R1501:1502 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R1507:1510 Corelib.Init.Datatypes <> true constr
+R1526:1529 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1516:1525 ProcIso <> EmitSecret constr
+R1535:1539 Corelib.Init.Datatypes <> false constr
+R1546:1549 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1555:1563 ProcIso <> compliant:20 def
+prf 1581:1592 <> observe_cons
+binder 1605:1605 <> m:22
+binder 1607:1608 <> ms:23
+R1628:1630 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1611:1617 ProcIso <> observe def
+R1621:1624 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1620:1620 ProcIso <> m:22 var
+R1625:1626 ProcIso <> ms:23 var
+R1637:1640 Corelib.Init.Datatypes <> ::list_scope:x_'++'_x not
+R1631:1634 ProcIso <> obs1 def
+R1636:1636 ProcIso <> m:22 var
+R1641:1647 ProcIso <> observe def
+R1649:1650 ProcIso <> ms:23 var
+R1677:1683 ProcIso <> observe def
+prf 1720:1731 <> compliant_ni
+binder 1744:1744 <> p:24
+binder 1746:1747 <> g0:25
+binder 1749:1750 <> g1:26
+R1775:1782 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1768:1770 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1757:1765 ProcIso <> compliant def
+R1767:1767 ProcIso <> p:24 var
+R1771:1774 Corelib.Init.Datatypes <> true constr
+R1818:1825 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1799:1801 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1783:1795 ProcIso <> public_intent proj
+R1797:1798 ProcIso <> g0:25 var
+R1802:1814 ProcIso <> public_intent proj
+R1816:1817 ProcIso <> g1:26 var
+R1845:1847 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1826:1832 ProcIso <> observe def
+R1835:1838 ProcIso <> runp def
+R1840:1841 ProcIso <> g0:25 var
+R1843:1843 ProcIso <> p:24 var
+R1848:1854 ProcIso <> observe def
+R1857:1860 ProcIso <> runp def
+R1862:1863 ProcIso <> g1:26 var
+R1865:1865 ProcIso <> p:24 var
+R1984:1987 ProcIso <> runp def
+R2006:2017 ProcIso <> observe_cons thm
+R2025:2028 ProcIso <> obs1 def
+R2030:2032 Corelib.Init.Datatypes <> app def
+R2123:2134 ProcIso <> observe_cons thm
+R2142:2145 ProcIso <> obs1 def
+R2147:2149 Corelib.Init.Datatypes <> app def
+R2190:2201 ProcIso <> observe_cons thm
+R2209:2212 ProcIso <> obs1 def
+R2214:2216 Corelib.Init.Datatypes <> app def
+prf 2289:2301 <> compliant_app
+binder 2314:2315 <> p1:27
+binder 2317:2318 <> p2:28
+R2344:2351 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2337:2339 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2325:2333 ProcIso <> compliant def
+R2335:2336 ProcIso <> p1:27 var
+R2340:2343 Corelib.Init.Datatypes <> true constr
+R2371:2378 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2364:2366 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2352:2360 ProcIso <> compliant def
+R2362:2363 ProcIso <> p2:28 var
+R2367:2370 Corelib.Init.Datatypes <> true constr
+R2399:2401 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2379:2387 ProcIso <> compliant def
+R2392:2395 Corelib.Init.Datatypes <> ::list_scope:x_'++'_x not
+R2390:2391 ProcIso <> p1:27 var
+R2396:2397 ProcIso <> p2:28 var
+R2402:2405 Corelib.Init.Datatypes <> true constr
+prf 2557:2575 <> compliant_concat_ni
+binder 2588:2589 <> p1:29
+binder 2591:2592 <> p2:30
+binder 2594:2595 <> g0:31
+binder 2597:2598 <> g1:32
+R2624:2631 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2617:2619 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2605:2613 ProcIso <> compliant def
+R2615:2616 ProcIso <> p1:29 var
+R2620:2623 Corelib.Init.Datatypes <> true constr
+R2651:2658 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2644:2646 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2632:2640 ProcIso <> compliant def
+R2642:2643 ProcIso <> p2:30 var
+R2647:2650 Corelib.Init.Datatypes <> true constr
+R2694:2701 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2675:2677 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2659:2671 ProcIso <> public_intent proj
+R2673:2674 ProcIso <> g0:31 var
+R2678:2690 ProcIso <> public_intent proj
+R2692:2693 ProcIso <> g1:32 var
+R2730:2732 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2702:2708 ProcIso <> observe def
+R2711:2714 ProcIso <> runp def
+R2716:2717 ProcIso <> g0:31 var
+R2722:2725 Corelib.Init.Datatypes <> ::list_scope:x_'++'_x not
+R2720:2721 ProcIso <> p1:29 var
+R2726:2727 ProcIso <> p2:30 var
+R2733:2739 ProcIso <> observe def
+R2742:2745 ProcIso <> runp def
+R2747:2748 ProcIso <> g1:32 var
+R2753:2756 Corelib.Init.Datatypes <> ::list_scope:x_'++'_x not
+R2751:2752 ProcIso <> p1:29 var
+R2757:2758 ProcIso <> p2:30 var
+R2809:2820 ProcIso <> compliant_ni thm
+R2833:2845 ProcIso <> compliant_app thm
+prf 2971:2987 <> seal_hides_secret
+binder 3000:3001 <> s0:33
+binder 3003:3004 <> s1:34
+binder 3006:3006 <> p:35
+R3148:3155 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R3077:3083 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3013:3019 ProcIso <> observe def
+R3022:3025 ProcIso <> runp def
+R3030:3035 ProcIso <> secret proj
+R3044:3056 ProcIso <> public_intent proj
+R3040:3041 ProcIso <> s0:33 var
+R3061:3061 ProcIso <> p:35 var
+R3066:3066 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3075:3075 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3067:3074 ProcIso <> EmitSeal constr
+R3084:3090 ProcIso <> observe def
+R3093:3096 ProcIso <> runp def
+R3101:3106 ProcIso <> secret proj
+R3115:3127 ProcIso <> public_intent proj
+R3111:3112 ProcIso <> s1:34 var
+R3132:3132 ProcIso <> p:35 var
+R3137:3137 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3146:3146 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3138:3145 ProcIso <> EmitSeal constr
+R3229:3236 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R3210:3218 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3156:3159 ProcIso <> runp def
+R3164:3169 ProcIso <> secret proj
+R3178:3190 ProcIso <> public_intent proj
+R3174:3175 ProcIso <> s0:33 var
+R3195:3195 ProcIso <> p:35 var
+R3200:3200 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3209:3209 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3201:3208 ProcIso <> EmitSeal constr
+R3219:3219 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3228:3228 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3220:3224 ProcIso <> MSeal constr
+R3226:3227 ProcIso <> s0:33 var
+R3291:3299 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3237:3240 ProcIso <> runp def
+R3245:3250 ProcIso <> secret proj
+R3259:3271 ProcIso <> public_intent proj
+R3255:3256 ProcIso <> s1:34 var
+R3276:3276 ProcIso <> p:35 var
+R3281:3281 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3290:3290 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3282:3289 ProcIso <> EmitSeal constr
+R3300:3300 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3309:3309 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3301:3305 ProcIso <> MSeal constr
+R3307:3308 ProcIso <> s1:34 var
+prf 3390:3407 <> leak_not_compliant
+R3433:3435 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3411:3419 ProcIso <> compliant def
+R3421:3421 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3432:3432 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3422:3431 ProcIso <> EmitSecret constr
+R3436:3440 Corelib.Init.Datatypes <> false constr
+prf 3477:3487 <> leak_not_ni
+binder 3500:3501 <> s0:36
+binder 3503:3504 <> s1:37
+binder 3506:3506 <> p:38
+R3521:3528 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3515:3518 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R3513:3514 ProcIso <> s0:36 var
+R3519:3520 ProcIso <> s1:37 var
+R3595:3602 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R3529:3535 ProcIso <> observe def
+R3538:3541 ProcIso <> runp def
+R3546:3551 ProcIso <> secret proj
+R3560:3572 ProcIso <> public_intent proj
+R3556:3557 ProcIso <> s0:36 var
+R3577:3577 ProcIso <> p:38 var
+R3582:3582 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3593:3593 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3583:3592 ProcIso <> EmitSecret constr
+R3603:3609 ProcIso <> observe def
+R3612:3615 ProcIso <> runp def
+R3620:3625 ProcIso <> secret proj
+R3634:3646 ProcIso <> public_intent proj
+R3630:3631 ProcIso <> s1:37 var
+R3651:3651 ProcIso <> p:38 var
+R3656:3656 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3667:3667 Stdlib.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3657:3666 ProcIso <> EmitSecret constr

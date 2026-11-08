@@ -1,0 +1,25 @@
+{
+  "1_surname": "UJA",
+  "2_surname_at_birth": "UJA",
+  "3_first_names": "CHIJIOKE / John",
+  "4_date_of_birth": "10-07-2001",
+  "5_place_of_birth": "Lagos",
+  "6_country_of_birth": "Nigeria",
+  "7_current_nationality": "Nigeria",
+  "7_nationality_at_birth": "Nigeria",
+  "7_other_nationalities": "",
+  "8_sex": "Male",
+  "9_civil_status": "Single",
+  "10_parental_authority": "N/A",
+  "11_national_identity_number": "N/A",
+
+  "12_travel_document_type": "Ordinary passport",
+  "13_travel_document_number": "TODO",
+  "14_date_of_issue": "TODO — July (day/year unknown)",
+  "15_valid_until": "TODO",
+  "16_issued_by_country": "Nigeria (issued in Canada — confirm)",
+
+  "17_18_eu_family_member": "TODO — confirm if applying as family of EU/EEA/CH/UK person, else N/A",
+
+  "_status": "paused — user retrieving passport details"
+}

@@ -1,0 +1,149 @@
+/* Shared ModalityHost + evidence drawer (Desktop + Quick sheet) */
+.evidence-drawer {
+  margin: 10px 12px 0;
+  border: 1px solid var(--hair, #e5e2db);
+  border-radius: 8px;
+  background: #faf9f6;
+}
+
+.evidence-drawer-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  font: 500 0.72rem var(--font, system-ui);
+  color: var(--teal-deep, #0f3d38);
+  cursor: pointer;
+}
+
+.evidence-lines {
+  margin: 0;
+  padding: 0 10px 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.evidence-line {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 8px;
+  font-size: 0.72rem;
+}
+
+.evidence-line dt {
+  margin: 0;
+  color: var(--muted, #6b6560);
+  font-weight: 500;
+}
+
+.evidence-line dd {
+  margin: 0;
+  color: var(--ink, #1a1a18);
+  word-break: break-word;
+}
+
+.evidence-empty {
+  margin: 0;
+  padding: 0 10px 10px;
+  font-size: 0.72rem;
+  color: var(--muted, #6b6560);
+}
+
+.modality-surface {
+  margin: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(15, 45, 40, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+}
+
+.modality-surface-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hair, #e5e2db);
+  background: linear-gradient(180deg, #f7f6f2 0%, #fff 100%);
+}
+
+.modality-badge {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--teal-soft, #e8f5f2);
+  color: var(--teal-deep, #0f3d38);
+}
+
+.modality-surface-title {
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.modality-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 0;
+  font-size: 0.68rem;
+  color: var(--muted, #6b6560);
+}
+
+.modality-field--grow {
+  flex: 1;
+  padding-bottom: 10px;
+}
+
+.modality-field input,
+.modality-field textarea {
+  border: 1px solid var(--hair, #e5e2db);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: 400 0.82rem/1.45 var(--font, system-ui);
+  color: var(--ink, #1a1a18);
+  background: #fffdf8;
+}
+
+.modality-field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.modality-foot {
+  margin-top: auto;
+  padding: 10px 12px;
+  font-size: 0.68rem;
+  color: var(--teal-deep, #0f3d38);
+  border-top: 1px solid var(--hair, #e5e2db);
+  background: #f4faf8;
+}
+
+.modality-foot--muted {
+  color: var(--muted, #6b6560);
+}
+
+.modality-surface--empty {
+  padding-bottom: 12px;
+}
+
+.modality-empty-copy {
+  margin: 0;
+  padding: 12px;
+  font-size: 0.78rem;
+  color: var(--muted, #6b6560);
+}
+
+.modality-surface--blocked {
+  padding: 12px;
+  font-size: 0.78rem;
+  color: var(--muted, #6b6560);
+}

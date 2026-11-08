@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Shared build
+        run: npm run build -w @juvantage/shared
+
+      - name: Prisma generate
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./ci.db"
+        run: npx prisma generate
+
+      - name: API unit tests
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./ci.db"
+          JWT_SECRET: "ci-jwt-secret-not-for-production"
+          TOKEN_ENCRYPTION_KEY: "ci-token-encryption-key"
+          DEMO_MODE: "true"
+          PORT: "3001"
+        run: npm test
+
+      - name: API HTTP integration (demo close loop)
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./harness.db"
+          JWT_SECRET: "ci-jwt-secret-not-for-production"
+          TOKEN_ENCRYPTION_KEY: "ci-token-encryption-key"
+          DEMO_MODE: "true"
+          PORT: "3001"
+        run: npm run test:integration
+
+      - name: API typecheck / build
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./ci.db"
+        run: npm run build
+
+      - name: Desktop typecheck
+        working-directory: apps/desktop
+        run: npx tsc --noEmit
+
+      - name: Build os-brain Docker image
+        run: docker build -f apps/api/Dockerfile -t juvantage/os-brain:ci .
+
+      - name: Prisma schema validate
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./ci.db"
+        run: npx prisma validate

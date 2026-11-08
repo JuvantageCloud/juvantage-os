@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juvantage Avatar Lab</title>
+    <style>
+      :root {
+        --cream: #fcfbf7;
+        --ink: #0b1220;
+        --teal: #0d7a6f;
+        --muted: #6b727a;
+        --card: rgba(255, 255, 255, 0.78);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 15% 0%, rgba(13, 122, 111, 0.14), transparent 45%),
+          radial-gradient(ellipse at 90% 10%, rgba(45, 90, 86, 0.1), transparent 40%),
+          var(--cream);
+        min-height: 100vh;
+        padding: 28px 20px 64px;
+      }
+      h1 {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.9rem;
+        margin: 0 0 6px;
+      }
+      .lead {
+        color: var(--muted);
+        margin: 0 0 28px;
+        max-width: 60ch;
+        line-height: 1.45;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 420px) 1fr;
+        gap: 22px;
+        max-width: 1100px;
+      }
+      @media (max-width: 860px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stage-card,
+      .panel {
+        background: var(--card);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 22px;
+      }
+      .stage-card {
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      #stage {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 18px;
+        background: #e8e8e8;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      #stage svg {
+        width: 88%;
+        height: 88%;
+      }
+      .hint {
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-align: center;
+      }
+      .panel {
+        padding: 22px 20px;
+      }
+      .panel h2 {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.15rem;
+        margin: 0 0 14px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .label {
+        width: 100%;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 2px;
+      }
+      button,
+      .swatch {
+        appearance: none;
+        border: 1.5px solid rgba(11, 18, 32, 0.12);
+        background: white;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font: 600 0.85rem system-ui, sans-serif;
+        cursor: pointer;
+      }
+      button.active {
+        border-color: var(--teal);
+        background: rgba(13, 122, 111, 0.1);
+        color: var(--teal);
+      }
+      .swatch {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border-radius: 10px;
+      }
+      .swatch.active {
+        outline: 2px solid var(--teal);
+        outline-offset: 2px;
+      }
+      .section-title {
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: 1.35rem;
+        margin: 40px 0 10px;
+        max-width: 1100px;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 16px;
+        max-width: 1100px;
+      }
+      .iters {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+        max-width: 1100px;
+      }
+      .iter {
+        background: var(--card);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 16px;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s ease;
+      }
+      .iter:hover,
+      .iter.picked {
+        border-color: var(--teal);
+      }
+      .iter img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 12px;
+        display: block;
+        margin-bottom: 8px;
+        background: #eee;
+      }
+      .iter strong {
+        display: block;
+        font-size: 0.85rem;
+      }
+      .iter span {
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .map {
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .map article {
+        background: var(--card);
+        border: 1px solid rgba(11, 18, 32, 0.08);
+        border-radius: 16px;
+        padding: 16px;
+      }
+      .map h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+      .map p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Juvantage Avatar Lab</h1>
+    <p class="lead">
+      Modular character — eyes, brows, and look direction actually move. This is the Haven-style
+      customizer direction (Duolingo-inspired, our own design). Pick a style iteration below.
+    </p>
+
+    <div class="layout">
+      <div class="stage-card">
+        <div id="stage"></div>
+        <div class="hint">Click the avatar to poke it (blink + bounce). Agent vibes for OS too.</div>
+      </div>
+      <div class="panel">
+        <h2>Customize</h2>
+        <div class="row">
+          <div class="label">Skin</div>
+          <button class="swatch active" data-skin="#c68642" style="background:#c68642" title="Tan"></button>
+          <button class="swatch" data-skin="#8d5524" style="background:#8d5524" title="Brown"></button>
+          <button class="swatch" data-skin="#f1c27d" style="background:#f1c27d" title="Light"></button>
+          <button class="swatch" data-skin="#e0ac69" style="background:#e0ac69" title="Warm"></button>
+          <button class="swatch" data-skin="#4a312c" style="background:#4a312c" title="Deep"></button>
+        </div>
+        <div class="row">
+          <div class="label">Hair</div>
+          <button class="swatch active" data-hair="#3b2314" style="background:#3b2314"></button>
+          <button class="swatch" data-hair="#1a1a1a" style="background:#1a1a1a"></button>
+          <button class="swatch" data-hair="#8b3a2a" style="background:#8b3a2a"></button>
+          <button class="swatch" data-hair="#c4a35a" style="background:#c4a35a"></button>
+          <button class="swatch" data-hair="#0d7a6f" style="background:#0d7a6f"></button>
+        </div>
+        <div class="row">
+          <div class="label">Haircut</div>
+          <button type="button" class="active" data-cut="wavy">Wavy</button>
+          <button type="button" data-cut="short">Short</button>
+          <button type="button" data-cut="afro">Afro</button>
+          <button type="button" data-cut="bald">Bald</button>
+        </div>
+        <div class="row">
+          <div class="label">Look</div>
+          <button type="button" class="active" data-look="center">Center</button>
+          <button type="button" data-look="left">Left</button>
+          <button type="button" data-look="right">Right</button>
+          <button type="button" data-look="up">Up</button>
+        </div>
+        <div class="row">
+          <div class="label">Brows / mood</div>
+          <button type="button" class="active" data-mood="neutral">Neutral</button>
+          <button type="button" data-mood="happy">Happy</button>
+          <button type="button" data-mood="think">Think</button>
+          <button type="button" data-mood="wow">Wow</button>
+        </div>
+        <div class="row">
+          <div class="label">Body</div>
+          <button type="button" class="active" data-body="#2a2a2a">Charcoal</button>
+          <button type="button" data-body="#0d7a6f">Teal</button>
+          <button type="button" data-body="#1e3a5f">Navy</button>
+        </div>
+        <div class="row">
+          <div class="label">Actions</div>
+          <button type="button" id="blinkBtn">Blink</button>
+          <button type="button" id="speakBtn">Talk tip</button>
+          <button type="button" id="resetBtn">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">7 style iterations — pick a favorite</h2>
+    <p class="sub">These are art-direction options. The live lab above is the modular system we’ll ship.</p>
+    <div class="iters" id="iters"></div>
+
+    <h2 class="section-title">Where each thing lives</h2>
+    <div class="map">
+      <article>
+        <h3>Juvantage OS — Agent mascot</h3>
+        <p>
+          Small teal companion. Tap → blink → sheet pops with “your unfinished loops.” One fixed
+          character, light personality. Not a full dresser.
+        </p>
+      </article>
+      <article>
+        <h3>Haven — Customizable avatar</h3>
+        <p>
+          Duolingo-style “Pick your look”: skin, hair, eyes, clothes, accessories. Saved to profile.
+          This lab is the prototype for that catalog.
+        </p>
+      </article>
+      <article>
+        <h3>Lottie / Rive — realistic uses</h3>
+        <p>
+          Empty states, success pops, onboarding, agent reactions, streak celebrations. Not a full
+          game engine — interactive moments inside the apps. Suits & costumes = layered assets on
+          the same face rig.
+        </p>
+      </article>
+    </div>
+
+    <script>
+      const stage = document.getElementById("stage");
+
+      const state = {
+        skin: "#c68642",
+        hair: "#3b2314",
+        cut: "wavy",
+        look: "center",
+        mood: "neutral",
+        body: "#2a2a2a",
+        blink: false,
+        bounce: false,
+      };
+
+      const lookOffset = {
+        center: [0, 0],
+        left: [-7, 1],
+        right: [7, 1],
+        up: [0, -6],
+      };
+
+      const browPaths = {
+        neutral: { L: "M78 118 Q95 112 112 118", R: "M168 118 Q185 112 202 118" },
+        happy: { L: "M78 122 Q95 114 112 122", R: "M168 122 Q185 114 202 122" },
+        think: { L: "M78 124 Q95 110 112 116", R: "M168 116 Q185 110 202 124" },
+        wow: { L: "M78 112 Q95 104 112 112", R: "M168 112 Q185 104 202 112" },
+      };
+
+      const mouthPaths = {
+        neutral: "M128 178 Q140 186 152 178",
+        happy: "M122 176 Q140 196 158 176",
+        think: "M130 180 Q140 178 150 182",
+        wow: "M140 176 Q140 192 140 176",
+      };
+
+      function hairPath(cut) {
+        if (cut === "bald") return "";
+        if (cut === "short") {
+          return "M78 92 C90 58 190 58 202 92 L198 108 C180 88 100 88 82 108 Z";
+        }
+        if (cut === "afro") {
+          return "M70 120 C55 40 225 40 210 120 C200 95 80 95 70 120 Z";
+        }
+        // wavy
+        return "M76 100 C88 48 120 42 140 50 C160 42 192 48 204 100 C210 118 198 108 190 100 C175 78 105 78 90 100 C82 108 78 118 76 100 Z";
+      }
+
+      function render() {
+        const [px, py] = lookOffset[state.look];
+        const eyeH = state.blink ? 4 : 34;
+        const eyeY = state.blink ? 148 : 133;
+        const bounce = state.bounce ? "translate(0 -8)" : "translate(0 0)";
+        const hair = hairPath(state.cut);
+        const brows = browPaths[state.mood];
+        const mouth = mouthPaths[state.mood];
+
+        stage.innerHTML = `
+<svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+  <g id="avatar" style="transition: transform .25s ease" transform="${bounce}">
+    <!-- body -->
+    <path d="M95 220 C95 200 110 188 140 188 C170 188 185 200 185 220 L185 250 L95 250 Z" fill="${state.body}"/>
+    <!-- neck -->
+    <rect x="128" y="200" width="24" height="22" rx="6" fill="${state.skin}"/>
+    <!-- head -->
+    <rect id="head" x="70" y="70" width="140" height="140" rx="36" fill="${state.skin}"/>
+    <!-- ears -->
+    <ellipse cx="70" cy="140" rx="12" ry="16" fill="${state.skin}"/>
+    <ellipse cx="210" cy="140" rx="12" ry="16" fill="${state.skin}"/>
+    <!-- hair -->
+    ${hair ? `<path id="hair" d="${hair}" fill="${state.hair}"/>` : ""}
+    <!-- brows -->
+    <path d="${brows.L}" fill="none" stroke="${state.hair}" stroke-width="5" stroke-linecap="round"/>
+    <path d="${brows.R}" fill="none" stroke="${state.hair}" stroke-width="5" stroke-linecap="round"/>
+    <!-- eyes white -->
+    <rect x="92" y="${eyeY}" width="40" height="${eyeH}" rx="16" fill="#fff"/>
+    <rect x="148" y="${eyeY}" width="40" height="${eyeH}" rx="16" fill="#fff"/>
+    <!-- pupils -->
+    ${
+      state.blink
+        ? ""
+        : `<circle cx="${112 + px}" cy="${150 + py}" r="7" fill="#0b1220"/>
+           <circle cx="${168 + px}" cy="${150 + py}" r="7" fill="#0b1220"/>`
+    }
+    <!-- nose -->
+    <path d="M140 162 Q146 170 140 174" fill="none" stroke="${shade(state.skin, -40)}" stroke-width="3" stroke-linecap="round"/>
+    <!-- mouth -->
+    <path d="${mouth}" fill="none" stroke="#5a3a2a" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+</svg>`;
+      }
+
+      function shade(hex, amt) {
+        const n = hex.replace("#", "");
+        const num = parseInt(n, 16);
+        let r = (num >> 16) + amt;
+        let g = ((num >> 8) & 0xff) + amt;
+        let b = (num & 0xff) + amt;
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+        return "#" + ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0");
+      }
+
+      function blink() {
+        state.blink = true;
+        render();
+        setTimeout(() => {
+          state.blink = false;
+          render();
+        }, 140);
+      }
+
+      function poke() {
+        state.bounce = true;
+        blink();
+        setTimeout(() => {
+          state.bounce = false;
+          render();
+        }, 280);
+      }
+
+      stage.addEventListener("click", poke);
+      document.getElementById("blinkBtn").onclick = blink;
+      document.getElementById("speakBtn").onclick = () => {
+        state.mood = "happy";
+        poke();
+        setTimeout(() => alert("Agent tip: You’ve got 2 unfinished loops. Want me to surface them?"), 320);
+      };
+      document.getElementById("resetBtn").onclick = () => {
+        Object.assign(state, {
+          skin: "#c68642",
+          hair: "#3b2314",
+          cut: "wavy",
+          look: "center",
+          mood: "neutral",
+          body: "#2a2a2a",
+        });
+        syncButtons();
+        render();
+      };
+
+      function syncButtons() {
+        document.querySelectorAll("[data-skin]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.skin === state.skin);
+        });
+        document.querySelectorAll("[data-hair]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.hair === state.hair);
+        });
+        document.querySelectorAll("[data-cut]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.cut === state.cut);
+        });
+        document.querySelectorAll("[data-look]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.look === state.look);
+        });
+        document.querySelectorAll("[data-mood]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.mood === state.mood);
+        });
+        document.querySelectorAll("[data-body]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.body === state.body);
+        });
+      }
+
+      document.querySelectorAll("[data-skin]").forEach((el) => {
+        el.onclick = () => {
+          state.skin = el.dataset.skin;
+          syncButtons();
+          render();
+        };
+      });
+      document.querySelectorAll("[data-hair]").forEach((el) => {
+        el.onclick = () => {
+          state.hair = el.dataset.hair;
+          syncButtons();
+          render();
+        };
+      });
+      document.querySelectorAll("[data-cut]").forEach((el) => {
+        el.onclick = () => {
+          state.cut = el.dataset.cut;
+          syncButtons();
+          render();
+        };
+      });
+      document.querySelectorAll("[data-look]").forEach((el) => {
+        el.onclick = () => {
+          state.look = el.dataset.look;
+          syncButtons();
+          render();
+        };
+      });
+      document.querySelectorAll("[data-mood]").forEach((el) => {
+        el.onclick = () => {
+          state.mood = el.dataset.mood;
+          syncButtons();
+          render();
+        };
+      });
+      document.querySelectorAll("[data-body]").forEach((el) => {
+        el.onclick = () => {
+          state.body = el.dataset.body;
+          syncButtons();
+          render();
+        };
+      });
+
+      const iterations = [
+        { id: "01", name: "Squircle Soft", file: "avatars/iterations/iter-01-squircle-soft.jpg", note: "Closest to Duo modular" },
+        { id: "02", name: "Round Buddy", file: "avatars/iterations/iter-02-round-buddy.jpg", note: "Friendlier circle" },
+        { id: "03", name: "Bean Capsule", file: "avatars/iterations/iter-03-bean-capsule.jpg", note: "Tall / calm" },
+        { id: "04", name: "Soft Hex", file: "avatars/iterations/iter-04-soft-hex.jpg", note: "Glasses-ready" },
+        { id: "05", name: "Pixel Soft", file: "avatars/iterations/iter-05-pixel-soft.jpg", note: "Slightly blocky" },
+        { id: "06", name: "Wide Smile", file: "avatars/iterations/iter-06-wide-smile.jpg", note: "Big brows / emotion" },
+        { id: "07", name: "Teal Agent", file: "avatars/iterations/iter-07-teal-agent.jpg", note: "OS companion vibe" },
+      ];
+
+      const itersEl = document.getElementById("iters");
+      iterations.forEach((it) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "iter";
+        card.innerHTML = `<img src="${it.file}" alt="${it.name}"/><strong>${it.id}. ${it.name}</strong><span>${it.note}</span>`;
+        card.onclick = () => {
+          document.querySelectorAll(".iter").forEach((c) => c.classList.remove("picked"));
+          card.classList.add("picked");
+          localStorage.setItem("jv-avatar-pick", it.id);
+          blink();
+        };
+        itersEl.appendChild(card);
+      });
+
+      const saved = localStorage.getItem("jv-avatar-pick");
+      if (saved) {
+        const match = [...itersEl.children].find((c) => c.textContent.includes(saved + "."));
+        if (match) match.classList.add("picked");
+      }
+
+      render();
+      // gentle idle look shift
+      setInterval(() => {
+        if (document.hidden) return;
+        const opts = ["center", "left", "right", "up"];
+        state.look = opts[Math.floor(Math.random() * opts.length)];
+        syncButtons();
+        render();
+        setTimeout(() => {
+          state.look = "center";
+          syncButtons();
+          render();
+        }, 900);
+      }, 4500);
+    </script>
+  </body>
+</html>

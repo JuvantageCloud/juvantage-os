@@ -1,0 +1,36 @@
+name: JuvantageOSMac
+options:
+  bundleIdPrefix: com.juvantage
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  JuvantageOSMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: JuvantageOSMac
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.juvantage.os.mac
+        INFOPLIST_GENERATION_MODE: Generated
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Juvantage OS
+        INFOPLIST_KEY_LSUIElement: NO
+        INFOPLIST_KEY_NSAppTransportSecurity_AllowsLocalNetworking: YES
+        DEVELOPMENT_TEAM: ""
+    info:
+      path: JuvantageOSMac/Info.plist
+      properties:
+        LSUIElement: true
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+        NSAppleEventsUsageDescription: Juvantage OS reads the front window title to fuse work context (ambient sampling). Nothing sends without your approve.
+        NSMicrophoneUsageDescription: Hold fn to talk — Juvantage OS listens only while fn is held, then drafts for your approval.
+        NSSpeechRecognitionUsageDescription: Your fn-held speech is transcribed (on-device when available) into a draft. Nothing sends without your approve.

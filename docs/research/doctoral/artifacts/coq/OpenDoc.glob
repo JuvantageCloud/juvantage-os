@@ -1,0 +1,342 @@
+DIGEST 8a321941fd50cf5aa24460af0add71ad
+FOpenDoc
+R827:830 Stdlib.Lists.List <> <> lib
+R832:836 Stdlib.Arith.Arith <> <> lib
+R838:841 Stdlib.Bool.Bool <> <> lib
+R851:863 Stdlib.Lists.List ListNotations <> mod
+ind 935:938 <> Role
+constr 943:948 <> Tenant
+constr 952:960 <> Emergency
+scheme 935:938 <> Role_rect
+scheme 935:938 <> Role_ind
+scheme 935:938 <> Role_rec
+scheme 935:938 <> Role_sind
+rec 971:973 <> Doc
+proj 980:983 <> role
+proj 993:995 <> box
+proj 1004:1006 <> ink
+R987:990 OpenDoc <> Role ind
+R999:1001 Corelib.Init.Datatypes <> nat ind
+R1010:1012 Corelib.Init.Datatypes <> nat ind
+def 1029:1039 <> layout_view
+R1046:1048 OpenDoc <> Doc rec
+binder 1042:1042 <> d:7
+R1056:1058 Corelib.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1053:1055 Corelib.Init.Datatypes <> nat ind
+R1059:1061 Corelib.Init.Datatypes <> nat ind
+R1066:1066 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1072:1073 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1079:1079 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1067:1069 OpenDoc <> box proj
+R1071:1071 OpenDoc <> d:7 var
+R1074:1076 OpenDoc <> ink proj
+R1078:1078 OpenDoc <> d:7 var
+def 1094:1107 <> obligation_met
+R1114:1116 OpenDoc <> Doc rec
+binder 1110:1110 <> d:8
+R1121:1124 Corelib.Init.Datatypes <> bool ind
+R1137:1140 OpenDoc <> role proj
+R1142:1142 OpenDoc <> d:8 var
+R1153:1161 OpenDoc <> Emergency constr
+R1166:1172 Stdlib.Arith.PeanoNat Nat eqb def
+R1175:1177 OpenDoc <> ink proj
+R1179:1179 OpenDoc <> d:8 var
+R1188:1193 OpenDoc <> Tenant constr
+R1198:1202 Corelib.Init.Datatypes <> false constr
+def 1223:1226 <> d_em
+R1230:1232 OpenDoc <> Doc rec
+R1240:1243 OpenDoc <> role proj
+R1259:1261 OpenDoc <> box proj
+R1269:1271 OpenDoc <> ink proj
+R1248:1256 OpenDoc <> Emergency constr
+def 1293:1296 <> d_tn
+R1300:1302 OpenDoc <> Doc rec
+R1310:1313 OpenDoc <> role proj
+R1326:1328 OpenDoc <> box proj
+R1336:1338 OpenDoc <> ink proj
+R1318:1323 OpenDoc <> Tenant constr
+prf 1358:1376 <> iii1_counterexample
+R1417:1422 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R1398:1400 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1382:1392 OpenDoc <> layout_view def
+R1394:1397 OpenDoc <> d_em def
+R1401:1411 OpenDoc <> layout_view def
+R1413:1416 OpenDoc <> d_tn def
+R1449:1454 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R1442:1444 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1423:1436 OpenDoc <> obligation_met def
+R1438:1441 OpenDoc <> d_em def
+R1445:1448 Corelib.Init.Datatypes <> true constr
+R1474:1476 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1455:1468 OpenDoc <> obligation_met def
+R1470:1473 OpenDoc <> d_tn def
+R1477:1481 Corelib.Init.Datatypes <> false constr
+R1500:1503 OpenDoc <> d_em def
+R1506:1509 OpenDoc <> d_tn def
+R1512:1522 OpenDoc <> layout_view def
+R1525:1538 OpenDoc <> obligation_met def
+prf 1591:1612 <> iii1_no_layout_decider
+R1634:1634 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1644:1648 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1638:1640 Corelib.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1635:1637 Corelib.Init.Datatypes <> nat ind
+R1641:1643 Corelib.Init.Datatypes <> nat ind
+R1649:1652 Corelib.Init.Datatypes <> bool ind
+binder 1625:1630 <> decide:9
+R1659:1661 Corelib.Init.Logic <> ::type_scope:'~'_x not
+R1713:1713 Corelib.Init.Logic <> ::type_scope:'~'_x not
+binder 1669:1669 <> d:10
+R1694:1696 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1672:1677 OpenDoc <> decide:9 var
+R1680:1690 OpenDoc <> layout_view def
+R1692:1692 OpenDoc <> d:10 var
+R1697:1710 OpenDoc <> obligation_met def
+R1712:1712 OpenDoc <> d:10 var
+R1753:1771 OpenDoc <> iii1_counterexample thm
+R1810:1813 OpenDoc <> d_em def
+R1839:1842 OpenDoc <> d_tn def
+prf 1962:1994 <> geometry_does_not_determine_close
+R2000:2006 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R2012:2017 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 2007:2008 <> d1:11
+binder 2010:2011 <> d2:12
+R2049:2056 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2032:2034 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2018:2028 OpenDoc <> layout_view def
+R2030:2031 OpenDoc <> d1:11 var
+R2035:2045 OpenDoc <> layout_view def
+R2047:2048 OpenDoc <> d2:12 var
+R2074:2077 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R2057:2070 OpenDoc <> obligation_met def
+R2072:2073 OpenDoc <> d1:11 var
+R2078:2091 OpenDoc <> obligation_met def
+R2093:2094 OpenDoc <> d2:12 var
+R2113:2116 OpenDoc <> d_em def
+R2119:2122 OpenDoc <> d_tn def
+R2136:2154 OpenDoc <> iii1_counterexample thm
+def 2322:2330 <> sdo_close
+R2337:2339 OpenDoc <> Doc rec
+binder 2333:2333 <> d:13
+R2344:2347 Corelib.Init.Datatypes <> bool ind
+R2352:2365 OpenDoc <> obligation_met def
+R2367:2367 OpenDoc <> d:13 var
+prf 2379:2404 <> sdo_separates_layout_twins
+R2431:2436 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2424:2426 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2410:2418 OpenDoc <> sdo_close def
+R2420:2423 OpenDoc <> d_em def
+R2427:2430 Corelib.Init.Datatypes <> true constr
+R2459:2464 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2451:2453 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2437:2445 OpenDoc <> sdo_close def
+R2447:2450 OpenDoc <> d_tn def
+R2454:2458 Corelib.Init.Datatypes <> false constr
+R2481:2483 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2465:2475 OpenDoc <> layout_view def
+R2477:2480 OpenDoc <> d_em def
+R2484:2494 OpenDoc <> layout_view def
+R2496:2499 OpenDoc <> d_tn def
+R2520:2538 OpenDoc <> iii1_counterexample thm
+prf 2625:2641 <> close_ignores_box
+binder 2654:2655 <> d1:14
+binder 2657:2658 <> d2:15
+R2682:2689 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2672:2674 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2665:2668 OpenDoc <> role proj
+R2670:2671 OpenDoc <> d1:14 var
+R2675:2678 OpenDoc <> role proj
+R2680:2681 OpenDoc <> d2:15 var
+R2705:2712 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2696:2698 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2690:2692 OpenDoc <> ink proj
+R2694:2695 OpenDoc <> d1:14 var
+R2699:2701 OpenDoc <> ink proj
+R2703:2704 OpenDoc <> d2:15 var
+R2730:2732 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2713:2726 OpenDoc <> obligation_met def
+R2728:2729 OpenDoc <> d1:14 var
+R2733:2746 OpenDoc <> obligation_met def
+R2748:2749 OpenDoc <> d2:15 var
+R2788:2801 OpenDoc <> obligation_met def
+prf 2847:2867 <> box_change_same_close
+R2931:2935 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2873:2886 OpenDoc <> obligation_met def
+R2891:2894 OpenDoc <> role proj
+R2910:2912 OpenDoc <> box proj
+R2920:2922 OpenDoc <> ink proj
+R2899:2907 OpenDoc <> Emergency constr
+R2936:2949 OpenDoc <> obligation_met def
+R2954:2957 OpenDoc <> role proj
+R2973:2975 OpenDoc <> box proj
+R2983:2985 OpenDoc <> ink proj
+R2962:2970 OpenDoc <> Emergency constr
+def 3086:3090 <> Field
+R3095:3097 Corelib.Init.Datatypes <> nat ind
+def 3111:3113 <> Val
+R3123:3126 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3118:3122 OpenDoc <> Field def
+R3127:3130 Corelib.Init.Datatypes <> bool ind
+def 3143:3156 <> forallb_fields
+R3165:3168 Corelib.Init.Datatypes <> list ind
+R3170:3174 OpenDoc <> Field def
+binder 3159:3161 <> req:16
+R3182:3184 OpenDoc <> Val def
+binder 3178:3178 <> v:17
+R3189:3192 Corelib.Init.Datatypes <> bool ind
+R3205:3207 OpenDoc <> req:16 var
+R3218:3219 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R3224:3227 Corelib.Init.Datatypes <> true constr
+R3234:3237 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R3247:3250 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R3244:3244 OpenDoc <> v:17 var
+R3251:3264 OpenDoc <> forallb_fields:18 def
+R3268:3268 OpenDoc <> v:17 var
+def 3295:3302 <> v_except
+R3311:3315 OpenDoc <> Field def
+binder 3305:3305 <> f:20
+binder 3307:3307 <> g:21
+R3320:3323 Corelib.Init.Datatypes <> bool ind
+R3333:3339 Stdlib.Arith.PeanoNat Nat eqb def
+R3341:3341 OpenDoc <> g:21 var
+R3343:3343 OpenDoc <> f:20 var
+R3361:3364 Corelib.Init.Datatypes <> true constr
+R3350:3354 Corelib.Init.Datatypes <> false constr
+prf 3374:3390 <> forallb_hit_false
+binder 3403:3405 <> req:22
+binder 3407:3407 <> v:23
+binder 3409:3409 <> f:24
+R3420:3423 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3412:3413 Stdlib.Lists.List <> In def
+R3417:3419 OpenDoc <> req:22 var
+R3415:3415 OpenDoc <> f:24 var
+R3435:3438 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3427:3429 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3424:3424 OpenDoc <> v:23 var
+R3426:3426 OpenDoc <> f:24 var
+R3430:3434 Corelib.Init.Datatypes <> false constr
+R3459:3461 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3439:3452 OpenDoc <> forallb_fields def
+R3454:3456 OpenDoc <> req:22 var
+R3458:3458 OpenDoc <> v:23 var
+R3462:3466 Corelib.Init.Datatypes <> false constr
+prf 3720:3738 <> forallb_true_of_all
+binder 3751:3753 <> req:25
+binder 3755:3755 <> v:26
+R3762:3762 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3795:3803 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+binder 3770:3770 <> f:27
+R3781:3784 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3773:3774 Stdlib.Lists.List <> In def
+R3778:3780 OpenDoc <> req:25 var
+R3776:3776 OpenDoc <> f:27 var
+R3788:3790 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3785:3785 OpenDoc <> v:26 var
+R3787:3787 OpenDoc <> f:27 var
+R3791:3794 Corelib.Init.Datatypes <> true constr
+R3824:3826 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3804:3817 OpenDoc <> forallb_fields def
+R3819:3821 OpenDoc <> req:25 var
+R3823:3823 OpenDoc <> v:26 var
+R3827:3830 Corelib.Init.Datatypes <> true constr
+prf 4028:4047 <> forallb_false_exists
+binder 4060:4062 <> req:28
+binder 4064:4064 <> v:29
+R4095:4098 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4087:4089 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4067:4080 OpenDoc <> forallb_fields def
+R4082:4084 OpenDoc <> req:28 var
+R4086:4086 OpenDoc <> v:29 var
+R4090:4094 Corelib.Init.Datatypes <> false constr
+R4099:4105 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R4107:4108 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 4106:4106 <> f:30
+R4117:4120 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R4109:4110 Stdlib.Lists.List <> In def
+R4114:4116 OpenDoc <> req:28 var
+R4112:4112 OpenDoc <> f:30 var
+R4124:4126 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4121:4121 OpenDoc <> v:29 var
+R4123:4123 OpenDoc <> f:30 var
+R4127:4131 Corelib.Init.Datatypes <> false constr
+prf 4412:4423 <> only_f_false
+binder 4436:4436 <> f:31
+binder 4438:4438 <> g:32
+R4461:4464 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4453:4455 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4441:4448 OpenDoc <> v_except def
+R4450:4450 OpenDoc <> f:31 var
+R4452:4452 OpenDoc <> g:32 var
+R4456:4460 Corelib.Init.Datatypes <> false constr
+R4466:4468 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4465:4465 OpenDoc <> g:32 var
+R4469:4469 OpenDoc <> f:31 var
+R4502:4509 OpenDoc <> v_except def
+R4529:4535 Stdlib.Arith.PeanoNat Nat eqb def
+R4559:4568 Stdlib.Arith.PeanoNat Nat eqb_eq thm
+prf 4610:4622 <> v_except_self
+binder 4633:4633 <> f:33
+R4648:4650 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4636:4643 OpenDoc <> v_except def
+R4645:4645 OpenDoc <> f:33 var
+R4647:4647 OpenDoc <> f:33 var
+R4651:4655 Corelib.Init.Datatypes <> false constr
+R4683:4690 OpenDoc <> v_except def
+R4701:4712 Stdlib.Arith.PeanoNat Nat eqb_refl thm
+prf 4740:4754 <> subset_required
+binder 4767:4768 <> r1:34
+binder 4770:4771 <> r2:35
+R4778:4778 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4830:4838 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+binder 4786:4786 <> v:36
+R4808:4810 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4789:4802 OpenDoc <> forallb_fields def
+R4804:4805 OpenDoc <> r1:34 var
+R4807:4807 OpenDoc <> v:36 var
+R4811:4824 OpenDoc <> forallb_fields def
+R4826:4827 OpenDoc <> r2:35 var
+R4829:4829 OpenDoc <> v:36 var
+binder 4846:4846 <> f:37
+R4856:4859 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4849:4850 Stdlib.Lists.List <> In def
+R4854:4855 OpenDoc <> r1:34 var
+R4852:4852 OpenDoc <> f:37 var
+R4860:4861 Stdlib.Lists.List <> In def
+R4865:4866 OpenDoc <> r2:35 var
+R4863:4863 OpenDoc <> f:37 var
+R4950:4952 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4920:4933 OpenDoc <> forallb_fields def
+R4939:4946 OpenDoc <> v_except def
+R4953:4957 Corelib.Init.Datatypes <> false constr
+R4972:4988 OpenDoc <> forallb_hit_false thm
+R4994:5001 OpenDoc <> v_except def
+R5020:5032 OpenDoc <> v_except_self thm
+R5082:5084 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5052:5065 OpenDoc <> forallb_fields def
+R5071:5078 OpenDoc <> v_except def
+R5085:5089 Corelib.Init.Datatypes <> false constr
+R5140:5159 OpenDoc <> forallb_false_exists thm
+R5165:5172 OpenDoc <> v_except def
+R5205:5216 OpenDoc <> only_f_false thm
+prf 5258:5274 <> same_required_set
+binder 5287:5288 <> r1:38
+binder 5290:5291 <> r2:39
+R5298:5298 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R5350:5358 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+binder 5306:5306 <> v:40
+R5328:5330 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5309:5322 OpenDoc <> forallb_fields def
+R5324:5325 OpenDoc <> r1:38 var
+R5327:5327 OpenDoc <> v:40 var
+R5331:5344 OpenDoc <> forallb_fields def
+R5346:5347 OpenDoc <> r2:39 var
+R5349:5349 OpenDoc <> v:40 var
+binder 5366:5366 <> f:41
+R5376:5380 Corelib.Init.Logic <> ::type_scope:x_'<->'_x not
+R5369:5370 Stdlib.Lists.List <> In def
+R5374:5375 OpenDoc <> r1:38 var
+R5372:5372 OpenDoc <> f:41 var
+R5381:5382 Stdlib.Lists.List <> In def
+R5386:5387 OpenDoc <> r2:39 var
+R5384:5384 OpenDoc <> f:41 var
+R5435:5449 OpenDoc <> subset_required thm
+R5471:5485 OpenDoc <> subset_required thm

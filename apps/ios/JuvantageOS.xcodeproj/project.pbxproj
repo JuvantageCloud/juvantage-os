@@ -1,0 +1,525 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01B13CB82475085495D94596 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD23A2C4C19E0DC7DC84EA15 /* AppConfig.swift */; };
+		184BA15514D35E18D16DA9B5 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCF749E93764222871D1E3D /* SplashView.swift */; };
+		36525F6DFF284C6BC6A16DF4 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB2E4DC9F6B8B1E0133E7D /* APIClient.swift */; };
+		587E17BA50678489918834FA /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1E26C277E3B7D8263DAE16 /* AppModel.swift */; };
+		596F847936CD418D7906F504 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E858FA1F9EB291F764AE8 /* CalendarView.swift */; };
+		71321F06AD1737CF276D740B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E0009B076866773514250A /* Models.swift */; };
+		74DA2F252187FE43A99F0589 /* BusinessViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232C945A2DA58B2C2EAC4713 /* BusinessViews.swift */; };
+		79E813A072BCA817A3FAA944 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5ECD26312E15C924AEB444D /* Assets.xcassets */; };
+		7CE69577E76F0ED5C64723AA /* JuvantageOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99865CEB068188AC2D46489 /* JuvantageOSApp.swift */; };
+		90549F0F182B8D2BE2F43AEC /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C191F6A6F557FA9B7A1978 /* AuthView.swift */; };
+		977FB9F57DB7AEA7F0B3A6C5 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC041EB5451D1AB5AB06EC2A /* MainTabView.swift */; };
+		A04A710BB7A56A11D858A1C5 /* SocialViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B444EA1D10C086F0FAA8D3E /* SocialViews.swift */; };
+		B5E52FC224ACB49EC5543FA3 /* SharedUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224D92E0DCE18E2CEB39D616 /* SharedUI.swift */; };
+		C01EEC1EE129E2C50A43B7A5 /* AgentsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64504B5429205181830A624F /* AgentsViews.swift */; };
+		C3EFCD44F46E09E20ADA84BE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E152452056ACA0671B4E7A6 /* SettingsView.swift */; };
+		C5A905EF5F3649BF8F174EE5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FF81013DBE52FC51DFE9E2 /* OnboardingView.swift */; };
+		D21548AE41F013942FAA1354 /* ConnectionsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00F49F13481492E1FAD86F7 /* ConnectionsViews.swift */; };
+		D4A863556B63BDE42ACCAB4B /* JVTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FB6FE4F8932E5DD8E85655 /* JVTheme.swift */; };
+		DEDC22E371DE4F172BDC0FC6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DDCF3DFCD419FB3778DE53 /* HomeView.swift */; };
+		FA4D0C47DB9151B23DDACCA1 /* AlertsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453AD685E67E102FAB3B907 /* AlertsViews.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		01C191F6A6F557FA9B7A1978 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		0B444EA1D10C086F0FAA8D3E /* SocialViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialViews.swift; sourceTree = "<group>"; };
+		10FF81013DBE52FC51DFE9E2 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		1F1E26C277E3B7D8263DAE16 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		224D92E0DCE18E2CEB39D616 /* SharedUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUI.swift; sourceTree = "<group>"; };
+		232C945A2DA58B2C2EAC4713 /* BusinessViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessViews.swift; sourceTree = "<group>"; };
+		51DDCF3DFCD419FB3778DE53 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		64504B5429205181830A624F /* AgentsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentsViews.swift; sourceTree = "<group>"; };
+		6E152452056ACA0671B4E7A6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7FCF749E93764222871D1E3D /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		8453AD685E67E102FAB3B907 /* AlertsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsViews.swift; sourceTree = "<group>"; };
+		9FEB2E4DC9F6B8B1E0133E7D /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		A167ECCC10B0BEC6528E807B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B4E0009B076866773514250A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		C00F49F13481492E1FAD86F7 /* ConnectionsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsViews.swift; sourceTree = "<group>"; };
+		DE4E858FA1F9EB291F764AE8 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		E5ECD26312E15C924AEB444D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E99865CEB068188AC2D46489 /* JuvantageOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuvantageOSApp.swift; sourceTree = "<group>"; };
+		E9FB6FE4F8932E5DD8E85655 /* JVTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JVTheme.swift; sourceTree = "<group>"; };
+		EB950C4B98755173DBDE12D2 /* JuvantageOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuvantageOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC041EB5451D1AB5AB06EC2A /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		FD23A2C4C19E0DC7DC84EA15 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0469EEAEBF3A706D2576C34D /* Social */ = {
+			isa = PBXGroup;
+			children = (
+				0B444EA1D10C086F0FAA8D3E /* SocialViews.swift */,
+			);
+			path = Social;
+			sourceTree = "<group>";
+		};
+		0738A53B2263E9BE6F56D67A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				224D92E0DCE18E2CEB39D616 /* SharedUI.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		08B104223D73A5E01B93A275 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				E9FB6FE4F8932E5DD8E85655 /* JVTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		13D9B5D728D8AB0721FA34E2 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				01C191F6A6F557FA9B7A1978 /* AuthView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		191BD6A1E8B481AADDD8A48F /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				DE4E858FA1F9EB291F764AE8 /* CalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		1C7AAD56EB1C4275D2723F00 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B4E0009B076866773514250A /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3DCFD3E457BC8985CAC4ACB0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FD23A2C4C19E0DC7DC84EA15 /* AppConfig.swift */,
+				1F1E26C277E3B7D8263DAE16 /* AppModel.swift */,
+				E99865CEB068188AC2D46489 /* JuvantageOSApp.swift */,
+				FC041EB5451D1AB5AB06EC2A /* MainTabView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5EDF690B0925A412F8F53231 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				D26612CCB44BE16973A9800F /* Agents */,
+				DA069598E7C17B4F2896530F /* Alerts */,
+				13D9B5D728D8AB0721FA34E2 /* Auth */,
+				CAF0FFB46D198270A3D3DD72 /* Businesses */,
+				191BD6A1E8B481AADDD8A48F /* Calendar */,
+				6E29020C635D2356C9108E2B /* Connections */,
+				7785B589B02A96AF1E547156 /* Home */,
+				8710749AF019B233C27301F9 /* Onboarding */,
+				EF464A65EA93E823186CBD94 /* Settings */,
+				0469EEAEBF3A706D2576C34D /* Social */,
+				8860023A97A7D81D199E4DF5 /* Splash */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		6E29020C635D2356C9108E2B /* Connections */ = {
+			isa = PBXGroup;
+			children = (
+				C00F49F13481492E1FAD86F7 /* ConnectionsViews.swift */,
+			);
+			path = Connections;
+			sourceTree = "<group>";
+		};
+		7785B589B02A96AF1E547156 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				51DDCF3DFCD419FB3778DE53 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		8710749AF019B233C27301F9 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				10FF81013DBE52FC51DFE9E2 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		8860023A97A7D81D199E4DF5 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				7FCF749E93764222871D1E3D /* SplashView.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		8DDEC0B2C15632D80A57B59B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9FEB2E4DC9F6B8B1E0133E7D /* APIClient.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		926FE001C3F1054E986FC40A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EB950C4B98755173DBDE12D2 /* JuvantageOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		98C57A94EBBDDECB96845500 = {
+			isa = PBXGroup;
+			children = (
+				CD6144DBC695708E78D8E77C /* JuvantageOS */,
+				926FE001C3F1054E986FC40A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CAF0FFB46D198270A3D3DD72 /* Businesses */ = {
+			isa = PBXGroup;
+			children = (
+				232C945A2DA58B2C2EAC4713 /* BusinessViews.swift */,
+			);
+			path = Businesses;
+			sourceTree = "<group>";
+		};
+		CD6144DBC695708E78D8E77C /* JuvantageOS */ = {
+			isa = PBXGroup;
+			children = (
+				E5ECD26312E15C924AEB444D /* Assets.xcassets */,
+				A167ECCC10B0BEC6528E807B /* Info.plist */,
+				3DCFD3E457BC8985CAC4ACB0 /* App */,
+				0738A53B2263E9BE6F56D67A /* Components */,
+				5EDF690B0925A412F8F53231 /* Features */,
+				1C7AAD56EB1C4275D2723F00 /* Models */,
+				8DDEC0B2C15632D80A57B59B /* Services */,
+				08B104223D73A5E01B93A275 /* Theme */,
+			);
+			path = JuvantageOS;
+			sourceTree = "<group>";
+		};
+		D26612CCB44BE16973A9800F /* Agents */ = {
+			isa = PBXGroup;
+			children = (
+				64504B5429205181830A624F /* AgentsViews.swift */,
+			);
+			path = Agents;
+			sourceTree = "<group>";
+		};
+		DA069598E7C17B4F2896530F /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				8453AD685E67E102FAB3B907 /* AlertsViews.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
+		EF464A65EA93E823186CBD94 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				6E152452056ACA0671B4E7A6 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1868784993DB7195C9F668C5 /* JuvantageOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B60479258FEC06DE536E6832 /* Build configuration list for PBXNativeTarget "JuvantageOS" */;
+			buildPhases = (
+				D852A594D8F31BE086988273 /* Sources */,
+				B8047CBCC8B9F0BBE3F9C752 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JuvantageOS;
+			packageProductDependencies = (
+			);
+			productName = JuvantageOS;
+			productReference = EB950C4B98755173DBDE12D2 /* JuvantageOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A540BD5823669F101EE462B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = AA458CDD08633C9CF5D1B885 /* Build configuration list for PBXProject "JuvantageOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 98C57A94EBBDDECB96845500;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 926FE001C3F1054E986FC40A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1868784993DB7195C9F668C5 /* JuvantageOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B8047CBCC8B9F0BBE3F9C752 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79E813A072BCA817A3FAA944 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D852A594D8F31BE086988273 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36525F6DFF284C6BC6A16DF4 /* APIClient.swift in Sources */,
+				C01EEC1EE129E2C50A43B7A5 /* AgentsViews.swift in Sources */,
+				FA4D0C47DB9151B23DDACCA1 /* AlertsViews.swift in Sources */,
+				01B13CB82475085495D94596 /* AppConfig.swift in Sources */,
+				587E17BA50678489918834FA /* AppModel.swift in Sources */,
+				90549F0F182B8D2BE2F43AEC /* AuthView.swift in Sources */,
+				74DA2F252187FE43A99F0589 /* BusinessViews.swift in Sources */,
+				596F847936CD418D7906F504 /* CalendarView.swift in Sources */,
+				D21548AE41F013942FAA1354 /* ConnectionsViews.swift in Sources */,
+				DEDC22E371DE4F172BDC0FC6 /* HomeView.swift in Sources */,
+				D4A863556B63BDE42ACCAB4B /* JVTheme.swift in Sources */,
+				7CE69577E76F0ED5C64723AA /* JuvantageOSApp.swift in Sources */,
+				977FB9F57DB7AEA7F0B3A6C5 /* MainTabView.swift in Sources */,
+				71321F06AD1737CF276D740B /* Models.swift in Sources */,
+				C5A905EF5F3649BF8F174EE5 /* OnboardingView.swift in Sources */,
+				C3EFCD44F46E09E20ADA84BE /* SettingsView.swift in Sources */,
+				B5E52FC224ACB49EC5543FA3 /* SharedUI.swift in Sources */,
+				A04A710BB7A56A11D858A1C5 /* SocialViews.swift in Sources */,
+				184BA15514D35E18D16DA9B5 /* SplashView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1410C60F6497CA0F122FC7AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		2093F04D03583DA233154B35 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = BWC2VJDMH9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JuvantageOS/Info.plist;
+				INFOPLIST_GENERATION_MODE = Generated;
+				INFOPLIST_KEY_CFBundleDisplayName = "Juvantage OS";
+				INFOPLIST_KEY_NSAppTransportSecurity_AllowsLocalNetworking = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.juvantage.os;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		794E1425DCB44428ABBF07F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		AD93081D474D75B086BEF9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = BWC2VJDMH9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JuvantageOS/Info.plist;
+				INFOPLIST_GENERATION_MODE = Generated;
+				INFOPLIST_KEY_CFBundleDisplayName = "Juvantage OS";
+				INFOPLIST_KEY_NSAppTransportSecurity_AllowsLocalNetworking = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.juvantage.os;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA458CDD08633C9CF5D1B885 /* Build configuration list for PBXProject "JuvantageOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1410C60F6497CA0F122FC7AC /* Debug */,
+				794E1425DCB44428ABBF07F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B60479258FEC06DE536E6832 /* Build configuration list for PBXNativeTarget "JuvantageOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD93081D474D75B086BEF9FB /* Debug */,
+				2093F04D03583DA233154B35 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A540BD5823669F101EE462B /* Project object */;
+}
