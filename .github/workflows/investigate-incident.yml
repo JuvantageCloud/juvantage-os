@@ -19,6 +19,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: read
 
 concurrency:
   group: investigate-incident
@@ -59,6 +60,15 @@ jobs:
       - name: Generate investigation proposal
         if: env.skip != 'true'
         run: node tools/investigate-incident.mjs --input .ci/pending-incident.json --out .ci/incident-proposal.md
+
+      - name: Comment / ensure Jira link (dedupe by fingerprint)
+        if: env.skip != 'true'
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT_KEY }}
+        run: node tools/jira/incident-jira-note.mjs --input .ci/pending-incident.json --proposal .ci/incident-proposal.md
 
       - name: Create draft pull request
         if: env.skip != 'true'
