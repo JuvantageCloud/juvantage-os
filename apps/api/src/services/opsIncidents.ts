@@ -41,36 +41,42 @@ function normalizeMessage(message: string) {
 export async function recordIncident(input: IncidentInput) {
   const fingerprint = fingerprintIncident(input);
   const existing = await prisma.opsIncident.findUnique({ where: { fingerprint } });
-  if (existing) {
-    return prisma.opsIncident.update({
-      where: { id: existing.id },
-      data: {
-        occurrenceCount: { increment: 1 },
-        lastSeenAt: new Date(),
-        message: input.message.slice(0, 2000),
-        stack: input.stack?.slice(0, 8000) ?? existing.stack,
-        contextJson: input.context
-          ? JSON.stringify(input.context).slice(0, 8000)
-          : existing.contextJson,
-        status: existing.status === "resolved" ? "open" : existing.status,
-      },
-    });
-  }
-  return prisma.opsIncident.create({
-    data: {
-      fingerprint,
-      source: input.source ?? "api",
-      method: input.method ?? null,
-      path: input.path ? normalizePath(input.path) : null,
-      statusCode: input.statusCode ?? null,
-      message: input.message.slice(0, 2000),
-      stack: input.stack?.slice(0, 8000) ?? null,
-      contextJson: input.context
-        ? JSON.stringify(input.context).slice(0, 8000)
-        : null,
-      userId: input.userId ?? null,
-    },
-  });
+  const row = existing
+    ? await prisma.opsIncident.update({
+        where: { id: existing.id },
+        data: {
+          occurrenceCount: { increment: 1 },
+          lastSeenAt: new Date(),
+          message: input.message.slice(0, 2000),
+          stack: input.stack?.slice(0, 8000) ?? existing.stack,
+          contextJson: input.context
+            ? JSON.stringify(input.context).slice(0, 8000)
+            : existing.contextJson,
+          status: existing.status === "resolved" ? "open" : existing.status,
+        },
+      })
+    : await prisma.opsIncident.create({
+        data: {
+          fingerprint,
+          source: input.source ?? "api",
+          method: input.method ?? null,
+          path: input.path ? normalizePath(input.path) : null,
+          statusCode: input.statusCode ?? null,
+          message: input.message.slice(0, 2000),
+          stack: input.stack?.slice(0, 8000) ?? null,
+          contextJson: input.context
+            ? JSON.stringify(input.context).slice(0, 8000)
+            : null,
+          userId: input.userId ?? null,
+        },
+      });
+
+  // Escalate async — never block the request path.
+  void import("./opsEscalate.js")
+    .then(({ escalateIfNeeded }) => escalateIfNeeded(row))
+    .catch((e) => console.error("incident escalate failed", e));
+
+  return row;
 }
 
 export async function listOpenIncidents(limit = 20) {
