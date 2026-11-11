@@ -33,6 +33,12 @@ jobs:
       - name: Shared build
         run: npm run build -w @juvantage/shared
 
+      - name: Prisma generate
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./ci.db"
+        run: npx prisma generate
+
       - name: API tests
         working-directory: apps/api
         env:
@@ -55,7 +61,6 @@ jobs:
 
       - name: Docker build smoke
         run: docker build -f apps/api/Dockerfile -t juvantage/os-brain:ci-${{ github.sha }} .
-
   publish-ghcr:
     name: Publish Brain image (GHCR)
     needs: validate
