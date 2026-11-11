@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Strip Cursor attribution trailers from commit messages.
+msg_file="$1"
+tmp="$(mktemp)"
+grep -v -E '^[[:space:]]*(Co-authored-by:[[:space:]]*Cursor[[:space:]]*<cursoragent@cursor\.com>|Made with[[:space:]]+Cursor|Made-with:[[:space:]]*Cursor)' "$msg_file" > "$tmp" || true
+# Drop trailing blank lines
+awk 'NF {p=1} p' "$tmp" | awk 'BEGIN{b=0} {if(NF){for(i=1;i<=b;i++)print ""; print; b=0} else b++}' > "$msg_file"
+rm -f "$tmp"
