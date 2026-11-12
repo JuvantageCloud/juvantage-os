@@ -68,7 +68,24 @@ function sourceFriendly(source: string | null | undefined): string {
   if (source === "gmail") return "Mail";
   if (source === "google_calendar") return "Calendar";
   if (source === "clip") return "Clip";
+  if (source === "voice") return "Voice";
   return source;
+}
+
+function kindFriendly(kind: string): string {
+  if (kind === "reply_owed") return "Reply owed";
+  if (kind === "appointment") return "Confirm meeting";
+  if (kind === "ask") return "Open ask";
+  if (kind === "todo") return "To-do";
+  return kind.replace(/_/g, " ");
+}
+
+function bandFriendly(band: string): string {
+  if (band === "critical") return "Urgent";
+  if (band === "high") return "Soon";
+  if (band === "normal") return "Normal";
+  if (band === "quiet") return "Quiet";
+  return band;
 }
 
 function senderShortLabel(fromAddr: string | null): string {
@@ -114,7 +131,7 @@ export function Desktop() {
   const [loops, setLoops] = useState<LoopWithProposal[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(loopIdFromHash());
   const [band, setBand] = useState<BandFilter>("all");
-  const [sourceFilter, setSourceFilter] = useState<SourceFilter>("mail");
+  const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   /** When Source=All, clips stay collapsed until expanded (mail stays front). */
   const [clipsExpanded, setClipsExpanded] = useState(false);
   const [proposal, setProposal] = useState<Proposal | null>(null);
@@ -177,15 +194,25 @@ export function Desktop() {
       notify(formatApiError(err, "Load connectors"), "error"),
     );
     refreshLoops(loopIdFromHash()).catch((err: Error) =>
-      notify(formatApiError(err, "Load loops"), "error"),
+      notify(formatApiError(err, "Load Work"), "error"),
     );
   }, [authed, notify, refreshConnectors, refreshLoops]);
 
   useEffect(() => {
     if (!authed) return;
     const onFocus = () => {
-      void refreshConnectors().catch(() => undefined);
-      void refreshLoops().catch(() => undefined);
+      void (async () => {
+        try {
+          await refreshConnectors();
+          await refreshLoops();
+          // Clear sticky “finish Google in browser” once OAuth landed.
+          setMessage((prev) =>
+            prev?.includes("Finish Google in the browser") ? null : prev,
+          );
+        } catch {
+          /* ignore focus refresh errors */
+        }
+      })();
     };
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
@@ -298,7 +325,7 @@ export function Desktop() {
       await refreshLoops();
       setNav("loops");
       notify(
-        `Demo connected · ${res.summary.mailCount} threads · loops ready`,
+        `Demo linked · ${res.summary.mailCount} sample messages · check Work`,
         "success",
       );
     } catch (err) {
@@ -316,11 +343,11 @@ export function Desktop() {
       setNav("loops");
       setSourceFilter("mail");
       notify(
-        `Test mail sent to ${res.to} · ${res.extractedCount} new loop(s). Open Work → Mail → ${res.subject.slice(0, 32)}…`,
+        `Test mail in your inbox · open Work → “${res.subject.slice(0, 36)}…” → Draft → Approve`,
         "success",
       );
     } catch (err) {
-      notify(formatApiError(err, "P0.1 test mail"), "error");
+      notify(formatApiError(err, "Test mail"), "error");
     } finally {
       setBusy(null);
     }
@@ -332,9 +359,14 @@ export function Desktop() {
       const res = await extractOsLoops();
       await refreshLoops();
       setNav("loops");
-      notify(`Extracted ${res.createdCount} · ${res.loops.length} open`, "success");
+      notify(
+        res.createdCount
+          ? `Found ${res.createdCount} new · ${res.loops.length} to close`
+          : `No new unfinished work · ${res.loops.length} still open`,
+        "success",
+      );
     } catch (err) {
-      notify(formatApiError(err, "Extract loops"), "error");
+      notify(formatApiError(err, "Find unfinished"), "error");
     } finally {
       setBusy(null);
     }
@@ -418,13 +450,13 @@ export function Desktop() {
         notify("Sent via Gmail — check Sent mail for the thread.", "success");
       } else if (selected.source === "clip" || selected.objectType === "clip") {
         notify(
-          "Clip closed locally — this was not a Gmail send. Use Source → Mail for P0.1.",
+          "Clip closed locally — no email sent. Use From → Mail for a real send.",
           "info",
         );
       } else if (mode === "local" || selected.objectType !== "mail") {
         notify("Marked done locally — no email was sent.", "info");
       } else {
-        notify("Approved → executed → verified", "success");
+        notify("Closed — draft approved and finished.", "success");
       }
       await refreshLoops();
     } catch (err) {
@@ -442,7 +474,10 @@ export function Desktop() {
         </div>
         <div className="sign-gate">
           <h1>Sign in</h1>
-          <p className="page-sub">Desktop opens on Loops after auth — same close engine as Solo.</p>
+          <p className="page-sub">
+            Jos catches unfinished work and helps you close it — nothing sends
+            without your Approve.
+          </p>
           <form className="auth-form" onSubmit={onLogin}>
             <label>
               Email
@@ -501,54 +536,63 @@ export function Desktop() {
         <nav className="desk-nav" aria-label="Desktop">
           <button type="button" className={nav === "loops" ? "on" : ""} onClick={() => setNav("loops")}>
             <span className="nav-label">Work</span>
-            <span className="nav-sub">Ranked obligations</span>
+            <span className="nav-sub">What you still owe</span>
           </button>
           <button type="button" className={nav === "inbox" ? "on" : ""} onClick={() => setNav("inbox")}>
-            <span className="nav-label">Inbox</span>
-            <span className="nav-sub">Debug mirror</span>
+            <span className="nav-label">Synced</span>
+            <span className="nav-sub">Mail &amp; calendar feed</span>
           </button>
           <div className="sep" />
           <button type="button" className={nav === "connect" ? "on" : ""} onClick={() => setNav("connect")}>
-            <span className="nav-label">Connect</span>
-            <span className="nav-sub">Wire accounts</span>
+            <span className="nav-label">Google</span>
+            <span className="nav-sub">{gmailLive ? "Linked" : "Sign in once"}</span>
           </button>
           <button type="button" className={nav === "settings" ? "on" : ""} onClick={() => setNav("settings")}>
             <span className="nav-label">Settings</span>
-            <span className="nav-sub">Brain &amp; metrics</span>
+            <span className="nav-sub">Privacy &amp; metrics</span>
           </button>
         </nav>
 
         <main className="desk-main">
           {nav === "loops" ? (
             <>
-              <h1>Work</h1>
+              <h1>What you still owe</h1>
               <p className="page-sub loops-one-liner">
-                Fused context → editable proposal → Approve. Nothing executes without you.
+                Jos finds unfinished work → you get a draft → you Approve → it
+                sends or books. Nothing goes out without you.
                 {userLabel ? ` · ${userLabel}` : null}
               </p>
               {loops.length ? (
                 <div className="status-strip" aria-live="polite">
                   <span>
-                    <strong>{loops.length}</strong> open loop{loops.length === 1 ? "" : "s"}
+                    <strong>{loops.length}</strong> to close
                   </span>
                   <span className="status-strip-dot" aria-hidden />
-                  <span>{summary?.mailCount ?? 0} threads synced</span>
-                  <span className="status-strip-hint">Draft → Approve to send</span>
+                  <span>{summary?.mailCount ?? 0} mail synced</span>
+                  <span className="status-strip-hint">Edit the draft, then Approve</span>
                 </div>
               ) : null}
               <div className="chips">
-                <span className="chip-label">Band</span>
-                {(["all", "critical", "high", "normal", "quiet"] as BandFilter[]).map((b) => (
+                <span className="chip-label">Urgency</span>
+                {(
+                  [
+                    ["all", "All"],
+                    ["critical", "Urgent"],
+                    ["high", "Soon"],
+                    ["normal", "Normal"],
+                    ["quiet", "Quiet"],
+                  ] as const
+                ).map(([id, label]) => (
                   <button
-                    key={b}
+                    key={id}
                     type="button"
-                    className={`chip ${band === b ? "on" : ""}`}
-                    onClick={() => setBand(b)}
+                    className={`chip ${band === id ? "on" : ""}`}
+                    onClick={() => setBand(id)}
                   >
-                    {b}
+                    {label}
                   </button>
                 ))}
-                <span className="chip-label">Source</span>
+                <span className="chip-label">From</span>
                 {(
                   [
                     ["all", "All"],
@@ -567,36 +611,36 @@ export function Desktop() {
                   </button>
                 ))}
                 <button type="button" className="btn accent" onClick={() => void onExtract()} disabled={Boolean(busy)}>
-                  {busy === "extract" ? "Extracting…" : "Extract"}
+                  {busy === "extract" ? "Looking…" : "Find unfinished"}
                 </button>
               </div>
 
               {!filtered.length && loops.length > 0 ? (
                 <div className="empty-panel">
-                  <strong>No loops match these filters.</strong> Try <strong>All</strong> under Source, or switch
-                  band.
+                  <strong>Nothing matches these filters.</strong> Tap <strong>All</strong> under
+                  From / Urgency.
                 </div>
               ) : null}
               {!loops.length ? (
                 <div className="empty-panel empty-panel--guide">
                   <p>
-                    <strong>Nothing in your close queue yet.</strong>
+                    <strong>You’re caught up — or Jos hasn’t found unfinished work yet.</strong>
                   </p>
                   {!gmailConnected ? (
                     <p>
-                      Go to <button type="button" className="inline-link" onClick={() => setNav("connect")}>
-                        Connect
-                      </button>{" "}
-                      to sign in to Google, then run <strong>Sync</strong> and <strong>Extract loops</strong>.
+                      First link Google under{" "}
+                      <button type="button" className="inline-link" onClick={() => setNav("connect")}>
+                        Google
+                      </button>
+                      . Then come back here — Jos looks for replies you owe and
+                      meetings to confirm.
                     </p>
                   ) : (
                     <p>
-                      On{" "}
-                      <button type="button" className="inline-link" onClick={() => setNav("connect")}>
-                        Connect
-                      </button>
-                      , tap <strong>Sync</strong> then <strong>Extract loops</strong>. Or press{" "}
-                      <strong>⌘⇧L</strong> to clip context from another app.
+                      Newsletters are ignored on purpose. Press{" "}
+                      <strong>⌘⇧L</strong> on something you owe, or under Google
+                      tap <strong>Send me a test to close</strong> to walk the
+                      full draft → Approve path.
                     </p>
                   )}
                 </div>
@@ -611,10 +655,10 @@ export function Desktop() {
                         className={`loop-row ${selectedId === loop.id ? "selected" : ""}`}
                         onClick={() => selectLoop(loop)}
                       >
-                        <span className={`band-pill ${loop.band}`}>{loop.band}</span>
+                        <span className={`band-pill ${loop.band}`}>{bandFriendly(loop.band)}</span>
                         <strong>{loop.title}</strong>
                         <span className="muted">
-                          {loop.kind.replace("_", " ")}
+                          {kindFriendly(loop.kind)}
                           {loop.source ? ` · ${sourceFriendly(loop.source)}` : ""}
                         </span>
                       </button>
@@ -648,14 +692,14 @@ export function Desktop() {
                     {selected ? (
                       <>
                         <div className="detail-top">
-                          <span className={`band-pill ${selected.band}`}>{selected.band}</span>
-                          {selected.objectType ? (
+                          <span className={`band-pill ${selected.band}`}>{bandFriendly(selected.band)}</span>
+                          {selected.source ? (
                             <span className="band-pill" style={{ marginLeft: 6 }}>
-                              {selected.objectType}
+                              {sourceFriendly(selected.source)}
                             </span>
                           ) : null}
                           <h2>{selected.title}</h2>
-                          <p>{selected.summary || "No summary"}</p>
+                          <p>{selected.summary || kindFriendly(selected.kind)}</p>
                         </div>
                         <EvidenceDrawer
                           loop={selected}
@@ -686,7 +730,7 @@ export function Desktop() {
                             title={
                               isClosableObjectType(selected.objectType)
                                 ? "Sends only after you approve — one-time send grant"
-                                : "Can’t send this type (e.g. clip) — choose Mail or Calendar loop"
+                                : "This item can’t send — pick a Mail or Calendar item"
                             }
                           >
                             {busy === "send"
@@ -746,7 +790,7 @@ export function Desktop() {
                       </>
                     ) : (
                       <div className="empty-panel" style={{ margin: 16 }}>
-                        Select a loop
+                        Pick something on the left to draft and Approve.
                       </div>
                     )}
                   </div>
@@ -757,10 +801,18 @@ export function Desktop() {
 
           {nav === "inbox" ? (
             <>
-              <h1>Inbox</h1>
-              <p className="page-sub">Synced raw store — act on Loops, not here.</p>
+              <h1>Synced from Google</h1>
+              <p className="page-sub">
+                This is the raw feed Jos reads. You don’t act here — unfinished
+                work shows up under <strong>Work</strong>.{" "}
+                <strong>Mail</strong> = replies you may owe.{" "}
+                <strong>Calendar</strong> = upcoming events; tentative ones can
+                become “confirm this meeting” on Approve (creates/locks the event).
+              </p>
               {!summary ? (
-                <div className="empty-panel">Connect + sync first.</div>
+                <div className="empty-panel">
+                  Link Google first, then Jos can sync mail and calendar.
+                </div>
               ) : (
                 <>
                   <div className="status-strip">
@@ -771,7 +823,7 @@ export function Desktop() {
                     <span>
                       <strong>{summary.calCount}</strong> events
                     </span>
-                    <span className="status-strip-hint">Read-only mirror · close work lives in Loops</span>
+                    <span className="status-strip-hint">Close work lives in Work</span>
                   </div>
                   <div className="sync-grid">
                     <section className="feed-well feed-well--mail">
@@ -822,9 +874,10 @@ export function Desktop() {
 
           {nav === "connect" ? (
             <>
-              <h1>Connect</h1>
+              <h1>Google</h1>
               <p className="page-sub">
-                Sign in to Google, sync mail, then Extract — that feeds Loops.
+                Link once so Jos can read mail &amp; calendar, then draft
+                replies and create events — only after you Approve.
               </p>
 
               <div className="connector-grid">
@@ -835,87 +888,84 @@ export function Desktop() {
 
               {gmailConnected && !gmailLive ? (
                 <div className="empty-panel" style={{ marginBottom: 12, borderColor: "#c44" }}>
-                  <strong>Demo mode — not real Gmail.</strong> P0.1 and live send are off until
-                  you click <strong>1 · Connect Google</strong>. Do not use{" "}
-                  <strong>Demo connect</strong> for the proof.
+                  <strong>Demo mode — not real Gmail.</strong> Tap{" "}
+                  <strong>Sign in with Google</strong> for live send.
                 </div>
               ) : null}
 
-              <section className="panel panel-actions" aria-label="Connector actions">
-                <h2>Pipeline</h2>
-                <p className="page-sub" style={{ marginTop: 0 }}>
-                  Run in order once: connect → sync → extract → switch to Loops.
-                </p>
+              <section className="panel panel-actions" aria-label="Google actions">
+                {gmailLive ? (
+                  <p className="ok" style={{ marginTop: 0 }}>
+                    Google is linked. Jos can sync and close work from{" "}
+                    <strong>Work</strong>.
+                  </p>
+                ) : (
+                  <p className="page-sub" style={{ marginTop: 0 }}>
+                    One sign-in covers Gmail + Calendar.
+                  </p>
+                )}
                 <div className="btn-row">
                   <button type="button" className="btn primary" onClick={onConnectGoogle} disabled={Boolean(busy)}>
-                    1 · Connect Google
+                    {gmailLive ? "Reconnect Google" : "Sign in with Google"}
                   </button>
-                  <button type="button" className="btn" onClick={onSync} disabled={Boolean(busy)}>
-                    2 · Sync
+                  <button type="button" className="btn" onClick={onSync} disabled={Boolean(busy) || !gmailConnected}>
+                    {busy === "sync" ? "Syncing…" : "Refresh mail & calendar"}
                   </button>
-                  <button type="button" className="btn accent" onClick={onExtract} disabled={Boolean(busy)}>
-                    3 · Extract loops
+                  <button type="button" className="btn accent" onClick={() => setNav("loops")}>
+                    Go to Work →
                   </button>
+                </div>
+                <div className="btn-row" style={{ marginTop: 10 }}>
                   <button
                     type="button"
-                    className="btn primary"
+                    className="btn"
                     onClick={() => void onP01Seed()}
                     disabled={Boolean(busy) || !gmailLive}
-                    title="Real Google OAuth only — emails you, syncs, extracts a mail loop"
+                    title="Emails you a fake ‘need your reply’ so you can practice Approve & send"
                   >
-                    {busy === "p01" ? "Sending…" : "4 · P0.1 test → my inbox"}
+                    {busy === "p01" ? "Sending…" : "Send me a test to close"}
                   </button>
                 </div>
-                <p className="page-sub" style={{ marginTop: 8 }}>
-                  <strong>P0.1:</strong> Step 4 → <strong>Work → Mail</strong> →{" "}
-                  <code>[Juvantage P0.1]</code> → Draft → Approve &amp; send → Gmail Sent.
-                </p>
-                <div className="btn-row">
-                  <button type="button" className="btn ghost dark" onClick={onDemoConnect} disabled={Boolean(busy)}>
-                    Demo connect
-                  </button>
-                  <button
-                    type="button"
-                    className="btn ghost dark"
-                    onClick={() =>
-                      refreshConnectors()
-                        .then(() => notify("Status refreshed", "success"))
-                        .catch((err: Error) =>
-                          notify(formatApiError(err, "Refresh status"), "error"),
-                        )
-                    }
-                  >
-                    Refresh status
-                  </button>
-                  <button type="button" className="btn ghost dark" onClick={() => setNav("loops")}>
-                    Open Loops →
-                  </button>
-                </div>
-              </section>
-
-              {googleConfigured && googleRedirectUri ? (
-                <details className="oauth-advanced">
-                  <summary>Google Cloud redirect URI (setup)</summary>
-                  <p className="page-sub">
-                    Authorized redirect URIs must include exactly:{" "}
-                    <code>{googleRedirectUri}</code>
-                  </p>
+                <details className="oauth-advanced" style={{ marginTop: 16 }}>
+                  <summary>Advanced / dogfood</summary>
+                  <div className="btn-row" style={{ marginTop: 10 }}>
+                    <button type="button" className="btn ghost dark" onClick={onExtract} disabled={Boolean(busy)}>
+                      Find unfinished now
+                    </button>
+                    <button type="button" className="btn ghost dark" onClick={onDemoConnect} disabled={Boolean(busy)}>
+                      Demo connect (fake data)
+                    </button>
+                  </div>
+                  {googleConfigured && googleRedirectUri ? (
+                    <p className="page-sub">
+                      Redirect URI: <code>{googleRedirectUri}</code>
+                    </p>
+                  ) : null}
                 </details>
-              ) : null}
+              </section>
             </>
           ) : null}
 
           {nav === "settings" ? (
             <>
               <h1>Settings</h1>
-              <p className="page-sub">Dogfood metrics · quiet · privacy.</p>
+              <p className="page-sub">What Jos can see · privacy · dogfood metrics.</p>
               <div className="panel">
-                <h2>Brain</h2>
+                <h2>What Jos can see today</h2>
+                <p className="page-sub" style={{ marginTop: 0 }}>
+                  <strong>On:</strong> Gmail + Calendar (when linked), frontmost
+                  app / window title while you’re present, and clips you mark with{" "}
+                  <strong>⌘⇧L</strong>.
+                  <br />
+                  <strong>Not yet:</strong> full screen OCR / pixel reading — that’s
+                  V2 episodic eyes in the plan, not this build. We won’t pretend it’s
+                  here.
+                </p>
                 <p className="meta-mono">{apiBaseUrl()}</p>
                 {health.status === "ok" ? (
                   <p className="ok">
-                    Connected · {health.service}
-                    {health.llm ? " · LLM ready" : " · demo LLM"}
+                    Brain up · {health.service}
+                    {health.llm ? " · LLM ready" : " · template drafts (no LLM key)"}
                   </p>
                 ) : null}
                 {health.status === "error" ? <p className="err">{health.message}</p> : null}
@@ -994,7 +1044,10 @@ export function Desktop() {
                 <h2>Privacy</h2>
                 <div className="form-row"><span>Eyes pause when idle ≥90s</span><span className="ok">On</span></div>
                 <div className="form-row"><span>Raw ambient purge</span><span className="page-sub" style={{ margin: 0 }}>≤24h</span></div>
-                <p className="page-sub">We keep Loops + approvals — not a searchable journal.</p>
+                <p className="page-sub">
+                  We keep unfinished work + approvals — not a searchable screen journal
+                  (that’s Reyn’s category).
+                </p>
               </div>
               <div className="panel">
                 <h2>Account</h2>
