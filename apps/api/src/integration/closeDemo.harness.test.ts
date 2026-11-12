@@ -104,6 +104,68 @@ describe("HTTP harness — demo approve-send close loop", () => {
     assert.equal(closed.result?.simulatedSend, true);
   });
 
+  it("demo calendar appointment → propose → approve-send → loop done", async () => {
+    const { token } = await json<{ token: string }>(
+      await app.request("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "john@juvantage.com", password: "demo1234" }),
+      }),
+    );
+    const auth = { Authorization: `Bearer ${token}` };
+
+    await json(
+      await app.request("/os/connectors/demo", {
+        method: "POST",
+        headers: { ...auth, "Content-Type": "application/json" },
+        body: "{}",
+      }),
+    );
+    await json(
+      await app.request("/os/loops/extract", {
+        method: "POST",
+        headers: auth,
+        body: "{}",
+      }),
+    );
+
+    const { loops } = await json<{
+      loops: Array<{ id: string; source: string | null; kind?: string; status: string }>;
+    }>(await app.request("/os/loops?limit=20", { headers: auth }));
+
+    const appt =
+      loops.find((l) => l.source === "google_calendar") ??
+      loops.find((l) => l.kind === "appointment");
+    assert.ok(appt, "expected a calendar/appointment loop after demo extract");
+
+    const { proposal } = await json<{ proposal: { id: string; kind: string } }>(
+      await app.request(`/os/loops/${appt.id}/propose`, {
+        method: "POST",
+        headers: auth,
+        body: "{}",
+      }),
+    );
+    assert.equal(proposal.kind, "event");
+
+    const closed = await json<{
+      verified: boolean;
+      loop: { status: string };
+      result: { mode?: string; created?: boolean; channel?: string };
+    }>(
+      await app.request(`/os/proposals/${proposal.id}/approve-send`, {
+        method: "POST",
+        headers: auth,
+        body: "{}",
+      }),
+    );
+
+    assert.equal(closed.verified, true);
+    assert.equal(closed.loop.status, "done");
+    assert.equal(closed.result?.channel, "google_calendar");
+    assert.equal(closed.result?.mode, "demo");
+    assert.equal(closed.result?.created, true);
+  });
+
   it("hold-fn voice → high loop + draft → approve-close", async () => {
     const { token } = await json<{ token: string }>(
       await app.request("/auth/login", {

@@ -60,7 +60,7 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 
 - [x] Auth account (reuse API `/auth/login` + Desktop session token)
 - [x] Gmail OAuth (official `gmail.readonly`; Personal OS routes under `/os`)
-- [x] Calendar OAuth (bundled consent with Gmail; `calendar.readonly`)
+- [x] Calendar OAuth (bundled consent with Gmail; `calendar.readonly` + `calendar.events` for approve→create)
 - [x] Connector status in Desktop prefs (Connect Google / Demo / Sync)
 - [x] Encrypt tokens at rest (AES-256-GCM via `TOKEN_ENCRYPTION_KEY`)
 - [x] Sync cache: `OsMailThread` + `OsCalendarItem` (+ demo fixtures)
