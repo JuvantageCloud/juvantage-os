@@ -10,6 +10,8 @@ const OS_GOOGLE_SCOPES = [
   "https://www.googleapis.com/auth/gmail.readonly",
   "https://www.googleapis.com/auth/gmail.send",
   "https://www.googleapis.com/auth/calendar.readonly",
+  // events.insert on approve (calendar.readonly alone cannot create)
+  "https://www.googleapis.com/auth/calendar.events",
   "openid",
   "email",
 ].join(" ");
@@ -22,6 +24,12 @@ export function scopesIncludeGmailSend(scopeStr: string): boolean {
   return /gmail\.send|gmail\.compose/.test(scopeStr);
 }
 
+export function scopesIncludeCalendarEvents(scopeStr: string): boolean {
+  if (/calendar\.events/.test(scopeStr)) return true;
+  // Full calendar scope only — not calendar.readonly
+  return /\/auth\/calendar([?\s"]|$)/.test(scopeStr);
+}
+
 export async function userHasGmailSendScope(userId: string): Promise<boolean> {
   const row = await prisma.connection.findFirst({
     where: { userId, provider: "gmail", businessId: null, enabled: true },
@@ -30,6 +38,16 @@ export async function userHasGmailSendScope(userId: string): Promise<boolean> {
   const meta = safeJson(row.metadata);
   if (meta.mode === "demo") return true;
   return scopesIncludeGmailSend(String(meta.scopes ?? ""));
+}
+
+export async function userHasCalendarEventsScope(userId: string): Promise<boolean> {
+  const row = await prisma.connection.findFirst({
+    where: { userId, provider: "google_calendar", businessId: null, enabled: true },
+  });
+  if (!row) return false;
+  const meta = safeJson(row.metadata);
+  if (meta.mode === "demo") return true;
+  return scopesIncludeCalendarEvents(String(meta.scopes ?? ""));
 }
 
 const LABELS: Record<OsProvider, string> = {
@@ -150,9 +168,11 @@ export async function upsertOsOAuthTokens(
         refreshToken: refresh ?? existing.refreshToken,
         tokenExpiresAt: expiresAt,
         lastSyncAt: new Date(),
-        detail: scopesIncludeGmailSend(grantedScope)
-          ? "OAuth connected (read + send on approve)"
-          : "OAuth connected (reconnect for send scope)",
+        detail:
+          scopesIncludeGmailSend(grantedScope) &&
+          scopesIncludeCalendarEvents(grantedScope)
+            ? "OAuth connected (mail send + calendar create on approve)"
+            : "OAuth connected (reconnect if send/calendar create missing)",
         metadata: JSON.stringify({ mode: "oauth", scopes: grantedScope }),
       },
     });

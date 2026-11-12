@@ -116,7 +116,14 @@ export async function extractLoopsFromSync(userId: string) {
         summary: `Starts ${ev.startsAt.toISOString()}`,
         source: "google_calendar",
         sourceRef,
-        evidenceJson: JSON.stringify({ startsAt: ev.startsAt.toISOString() }),
+        objectType: "calendar",
+        routerConf: 0.9,
+        evidenceJson: JSON.stringify({
+          startsAt: ev.startsAt.toISOString(),
+          endsAt: ev.endsAt.toISOString(),
+          title: ev.title,
+          externalId: ev.externalId,
+        }),
         dueAt: ev.startsAt,
       },
     });

@@ -1,7 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { prisma } from "../db/client.js";
 import { env, hasLiveLlm } from "../lib/env.js";
-import { getValidOsAccessToken, userHasGmailSendScope } from "./osConnectors.js";
+import {
+  calendarEventSummary,
+  insertCalendarEvent,
+  resolveEventTiming,
+} from "./osCalendarCreate.js";
+import {
+  getValidOsAccessToken,
+  userHasCalendarEventsScope,
+  userHasGmailSendScope,
+} from "./osConnectors.js";
 import { parseReplyToAddress, sendGmailReply } from "./osGmailSend.js";
 import { serializeLoop } from "./osLoops.js";
 import {
@@ -355,6 +364,7 @@ export async function executeProposal(userId: string, proposalId: string) {
 
   const loop = await requireLoop(userId, proposal.loopId);
   const gmail = await getValidOsAccessToken(userId, "gmail");
+  const calendar = await getValidOsAccessToken(userId, "google_calendar");
 
   if (
     (proposal.kind === "reply" || proposal.kind === "note") &&
@@ -378,6 +388,15 @@ export async function executeProposal(userId: string, proposalId: string) {
     }
     if (!parseReplyToAddress(evidence.fromAddr)) {
       throw new OsCloseError("Cannot parse reply address from loop evidence", 409);
+    }
+  }
+
+  if (proposal.kind === "event" && calendar?.mode === "oauth") {
+    if (!(await userHasCalendarEventsScope(userId))) {
+      throw new OsCloseError(
+        "Calendar events scope missing — open Desktop → Connect and sign in to Google again (consent includes calendar create on approve).",
+        403,
+      );
     }
   }
 
@@ -444,13 +463,52 @@ export async function executeProposal(userId: string, proposalId: string) {
       };
     }
   } else if (proposal.kind === "event") {
-    result = {
-      channel: "google_calendar",
-      mode: gmail?.mode === "oauth" ? "oauth_local" : "demo",
-      created: gmail?.mode !== "oauth",
-      title: proposal.title,
-      at: new Date().toISOString(),
-    };
+    if (!calendar || calendar.mode === "demo") {
+      result = {
+        channel: "google_calendar",
+        mode: "demo",
+        created: true,
+        title: proposal.title,
+        at: new Date().toISOString(),
+      };
+    } else {
+      const evidence = safeJson(loop.evidenceJson) as {
+        startsAt?: string;
+        endsAt?: string;
+        title?: string;
+      } | null;
+      const timing = resolveEventTiming(evidence);
+      let created;
+      try {
+        created = await insertCalendarEvent({
+          accessToken: calendar.token,
+          summary: calendarEventSummary(proposal.title),
+          description: proposal.body,
+          startIso: timing.startIso,
+          endIso: timing.endIso,
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        if (/401|UNAUTHENTICATED|invalid authentication/i.test(msg)) {
+          throw new OsCloseError(
+            "Calendar session expired — Connect → Connect Google, then Approve & send again.",
+            401,
+          );
+        }
+        throw err;
+      }
+      result = {
+        channel: "google_calendar",
+        mode: "calendar_live",
+        created: true,
+        eventId: created.eventId,
+        htmlLink: created.htmlLink,
+        title: proposal.title,
+        start: timing.startIso,
+        end: timing.endIso,
+        at: new Date().toISOString(),
+      };
+    }
   } else {
     result = {
       channel: "local",
