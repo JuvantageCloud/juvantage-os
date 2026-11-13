@@ -2,10 +2,20 @@ import type { OsConnector, OsSyncSummary } from "@juvantage/shared";
 
 const META: Record<
   OsConnector["provider"],
-  { glyph: string; unit: string; count: (s: OsSyncSummary | null) => number }
+  { glyph: string; blurb: string; count: (s: OsSyncSummary | null) => number; unit: string }
 > = {
-  gmail: { glyph: "✉", unit: "threads", count: (s) => s?.mailCount ?? 0 },
-  google_calendar: { glyph: "◷", unit: "events", count: (s) => s?.calCount ?? 0 },
+  gmail: {
+    glyph: "✉",
+    blurb: "Finds replies you still owe. Sends only after Approve.",
+    count: (s) => s?.mailCount ?? 0,
+    unit: "messages synced",
+  },
+  google_calendar: {
+    glyph: "◷",
+    blurb: "Spots meetings to confirm. Can create/lock events on Approve.",
+    count: (s) => s?.calCount ?? 0,
+    unit: "events synced",
+  },
 };
 
 export function ConnectorTile({
@@ -28,18 +38,15 @@ export function ConnectorTile({
         <header>
           <h2>{connector.label}</h2>
           <span className={`pill ${live ? "pill--live" : ""}`}>
-            {live ? "Live" : connector.status}
+            {live ? (connector.mode === "demo" ? "Demo" : "Linked") : "Not linked"}
           </span>
         </header>
+        <p className="connector-tile-detail">{meta.blurb}</p>
         <dl className="connector-tile-stats">
           <div>
-            <dt>In store</dt>
+            <dt>Synced</dt>
             <dd>{live ? count : "—"}</dd>
             <dd className="unit">{meta.unit}</dd>
-          </div>
-          <div>
-            <dt>Mode</dt>
-            <dd>{connector.mode ?? "—"}</dd>
           </div>
           <div>
             <dt>Last sync</dt>
@@ -55,9 +62,8 @@ export function ConnectorTile({
             </dd>
           </div>
         </dl>
-        <p className="connector-tile-detail">{connector.detail ?? "Not wired yet"}</p>
         {connector.hasToken ? (
-          <span className="connector-tile-badge">Token encrypted</span>
+          <span className="connector-tile-badge">Tokens encrypted</span>
         ) : null}
       </div>
     </article>
