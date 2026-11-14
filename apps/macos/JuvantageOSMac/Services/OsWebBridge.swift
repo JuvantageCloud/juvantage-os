@@ -39,9 +39,12 @@ enum OsWebViewRegistry {
         }
     }
 
+    /// Clip hotkey → quick sheet only (one owner). Desktop must not also create loops.
     static func broadcastClipHotkey() {
+        sheetViews.removeAll { $0.webView == nil }
         views.removeAll { $0.webView == nil }
-        for box in views {
+        let targets = sheetViews.isEmpty ? views : sheetViews
+        for box in targets {
             box.webView?.evaluateJavaScript(
                 "window.dispatchEvent(new Event('juv-os-clip-hotkey'));",
                 completionHandler: nil

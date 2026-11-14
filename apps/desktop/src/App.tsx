@@ -19,7 +19,8 @@ export function App() {
 
   return (
     <>
-      <OsSensors />
+      {/* JOS-3: sensors own clip/ambient in exactly one surface — quick sheet (or Electron agent). */}
+      {route === "sheet" || route === "agent" ? <OsSensors /> : null}
       {route === "sheet" ? <QuickSheet /> : null}
       {route === "desktop" ? <Desktop /> : null}
       {route === "agent" ? <AgentFloat /> : null}

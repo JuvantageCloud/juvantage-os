@@ -33,7 +33,8 @@ export function ModalityHost({
           <span className="modality-badge">{draftKindLabel(null)}</span>
         </header>
         <p className="modality-empty-copy">
-          Tap <strong>Draft</strong> — Brain fuses connector + ambient context and opens the right editor here.
+          Tap <strong>Preview</strong> — Jos opens the best tool here to close this
+          context. Refine, then Approve.
         </p>
       </div>
     );

@@ -1,54 +1,44 @@
-# Next sprint — UX clarity + P0.1 proof
+# Next sprint — float-first close context
 
-**Goal:** You can explain the product in one breath and **send one real Gmail reply** through Approve.
+**Goal:** The floating agent + quick sheet *is* the product. Desktop is secondary.
 
-## Mental model (locked copy)
+## Mental model (locked)
 
-| Tab | What it is | What you do |
-|-----|------------|-------------|
-| **Connect** | Wires (Gmail, Calendar) + pipeline | OAuth → Sync → Extract |
-| **Inbox** | Raw mirror of synced mail/events | Read-only; don’t work here |
-| **Loops** | Close queue | Draft → Approve & send → verify |
-| **Context** | Ambient ledger (≤24h) | Glance; clip with ⌘⇧L |
-| **Settings** | Brain URL + dogfood metrics | Refresh metrics weekly |
+| Surface | What it is | What you do |
+|---------|------------|-------------|
+| **Float** | Nudge that something needs closing | Click → suggestion sheet |
+| **Suggestion sheet** | Preview + OS tool for this context | Refine → **Approve** closes context |
+| **Desktop → Work** | Wider list of open contexts | Same close engine |
+| **Desktop → Google** | Link accounts once | Sign in / refresh |
+| **Desktop → Synced** | Raw mail/calendar feed | Glance only |
 
-**Connectors** = accounts/tokens. **Loops** = obligations built from sync + rules + clips.
+**Approve** = close this context (send / book / note) — not “always Gmail.”  
+Jos picks the **internal tool** (ModalityHost) from object type.
 
 ---
 
-## Build order (this week)
+## Build order
 
-### A · Proof (human gate — blocks 14-day clock)
+### A · Float-first (this PR)
 
-1. [x] Loops → filter **Mail** → pick real thread → Draft → **Approve & send**
-2. [x] Confirm in Gmail; log Day 1 in [`DOGFOOD_JOURNAL.md`](./DOGFOOD_JOURNAL.md) — clock started 2026-11-08
-3. [ ] Quiet junk clips (Norton/Cursor noise) with **wrong band** / **not actionable**
+1. [x] Quick sheet as “Suggestion” — one hero context + tool surface
+2. [x] Plain-English Approve closes context
+3. [x] JOS-3: clip/ambient owned by sheet only (not Desktop too)
 
-### B · UX (in repo now + next)
+### B · Next
 
-- [x] Connect as **tiles** + numbered pipeline (not paragraph text)
-- [x] Flow strip Connect ↔ Loops
-- [x] Close engine as **modules** in draft cockpit
-- [x] Loops **Source** filter (Mail / Clips / Calendar)
-- [x] Nav subtitles + short Loops one-liner (no global “how it works” panel)
-- [~] macOS float: idle bob + pulse (Lottie JSON wire-up still pending SPM)
-- [ ] Quick sheet SwiftUI parity with Desktop approve gate
-- [x] Collapse clip loops by default (Source=All) + cap new clip band at **normal**
+1. [ ] Bias sheet to **1** suggestion (ranker)
+2. [ ] Success pulse on float after Approve
+3. [ ] JOS-8/9/10 security before wider dogfood
+4. [ ] Episodic OCR (V2) — after float path feels right
 
-### C · Harden
+### C · Dogfood
 
-- [x] OAuth token refresh before send
-- [x] Tighter mail extract (skip Quora/digest)
-- [ ] Git remote + CI before beta invites (`OS_BUILD_ROADMAP` P2.4)
-
-### D · After P0.1 (V1.5 polish)
-
-- Ranker bias to **1** loop on quick sheet
-- Success Lottie on verify
-- Privacy one-pager for OAuth testers
+1. [x] Live Gmail Approve once
+2. [ ] Days 2–14 journal
 
 ---
 
 ## Done when
 
-You say: *“Connect wires my mail; Loops is where I close; nothing sent without Approve”* — and you’ve done it once on live Gmail.
+You say: *“Float nudges me → I preview → Jos opens the right tool → Approve closes the context.”*

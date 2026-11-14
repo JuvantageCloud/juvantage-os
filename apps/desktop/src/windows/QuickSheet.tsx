@@ -26,6 +26,30 @@ const QUIET_REASONS: { id: QuietReason; label: string }[] = [
   { id: "other", label: "Just quiet" },
 ];
 
+function sourceLabel(source: string | null | undefined): string {
+  if (source === "gmail") return "Mail";
+  if (source === "google_calendar") return "Calendar";
+  if (source === "clip") return "Clip";
+  if (source === "voice") return "Voice";
+  return source ?? "Context";
+}
+
+function kindLabel(kind: string): string {
+  if (kind === "reply_owed") return "Reply owed";
+  if (kind === "appointment") return "Confirm meeting";
+  if (kind === "ask") return "Open ask";
+  if (kind === "todo") return "To-do";
+  return kind.replace(/_/g, " ");
+}
+
+function toolHint(objectType: string | null | undefined): string {
+  if (objectType === "mail") return "Jos opened Mail compose — edit, then Approve to send.";
+  if (objectType === "calendar") return "Jos opened Calendar — edit, then Approve to book/confirm.";
+  if (objectType === "voice") return "Jos drafted from your voice — edit, then Approve to close.";
+  if (objectType === "clip") return "Jos captured a clip — refine the note, then Approve to close.";
+  return "Jos picked a tool for this context — edit, then Approve to close it.";
+}
+
 export function QuickSheet() {
   const [loops, setLoops] = useState<LoopWithProposal[]>([]);
   const [proposal, setProposal] = useState<Proposal | null>(null);
@@ -94,8 +118,8 @@ export function QuickSheet() {
         report(
           true,
           said?.intent === "email"
-            ? `Got it. Drafted an email to ${said.recipient ?? "them"} — review & approve`
-            : "Got it. Draft ready — review & approve",
+            ? `Got it. Drafted an email to ${said.recipient ?? "them"} — review & Approve`
+            : "Got it. Draft ready — review & Approve",
         );
       } catch (err) {
         report(false, err instanceof Error ? err.message : "Voice draft failed");
@@ -119,8 +143,10 @@ export function QuickSheet() {
   }
 
   const top = loops.find((l) => l.id === focusId) ?? loops[0] ?? null;
+  const others = top ? loops.filter((l) => l.id !== top.id) : [];
   const canApprove = top ? isClosableObjectType(top.objectType) : false;
-  const approveLabel = top?.objectType === "mail" ? "Approve & send" : "Approve & close";
+  const approveLabel =
+    top?.objectType === "mail" ? "Approve & send" : "Approve & close context";
 
   async function onDraft() {
     if (!top) {
@@ -138,7 +164,7 @@ export function QuickSheet() {
           l.id === res.loop.id ? { ...res.loop, proposal: res.proposal } : l,
         ),
       );
-      flash("Draft ready — edit, then Approve & send");
+      flash("Preview ready — refine, then Approve to close");
     } catch (err) {
       flash(err instanceof Error ? err.message : "Draft failed");
     } finally {
@@ -182,20 +208,18 @@ export function QuickSheet() {
         res.result && typeof res.result === "object" && "mode" in res.result
           ? String((res.result as { mode?: string }).mode)
           : "";
-      const messageId =
-        res.result && typeof res.result === "object" && "messageId" in res.result
-          ? String((res.result as { messageId?: string }).messageId)
-          : "";
       flash(
         mode === "demo"
-          ? "Approved → sent (demo) → verified closed"
+          ? "Context closed (demo)"
           : mode === "gmail_live"
-            ? `Sent · id ${messageId.slice(0, 8)}… → closed`
-            : "Approved → executed → verified",
+            ? "Sent — context closed"
+            : mode === "calendar_live"
+              ? "Booked — context closed"
+              : "Context closed",
       );
       await refresh();
     } catch (err) {
-      flash(err instanceof Error ? err.message : "Approve/send failed");
+      flash(err instanceof Error ? err.message : "Approve failed");
     } finally {
       setBusy(null);
     }
@@ -234,8 +258,10 @@ export function QuickSheet() {
     setLoops(res.loops as LoopWithProposal[]);
     flash(
       res.createdCount
-        ? `Extracted ${res.createdCount} new loop(s)`
-        : `Showing ${res.loops.length} open loop(s)`,
+        ? `Found ${res.createdCount} new — pick one below`
+        : res.loops.length
+          ? `${res.loops.length} still open`
+          : "Nothing unfinished matched yet",
     );
   }
 
@@ -243,13 +269,13 @@ export function QuickSheet() {
     <div className="sheet-shell">
       <header className="sheet-header">
         <div>
-          <h1>Quick sheet</h1>
+          <h1>Suggestion</h1>
           <p className="meta">
             {loading
-              ? "Loading…"
+              ? "Looking…"
               : top
-                ? `${loops.length} open · ${top.band} · ${top.status}`
-                : "No open loops — extract from synced mail"}
+                ? `From ${sourceLabel(top.source)} · ${kindLabel(top.kind)}`
+                : "Catch across context → preview → Approve closes it"}
           </p>
         </div>
         <button
@@ -264,53 +290,67 @@ export function QuickSheet() {
 
       {top ? (
         <div className="sheet-loops">
-          {loops.map((loop) => (
-            <article
-              key={loop.id}
-              className={`loop-card ${loop.id === top.id ? "focus" : ""}`}
-              onClick={() => focusLoop(loop)}
-            >
-              <div className="loop-meta">
-                <span className={`band ${loop.band}`}>{loop.band}</span>
-                <span className="kind">{loop.kind.replace("_", " ")}</span>
-                {loop.objectType ? (
-                  <span className="kind">{loop.objectType}</span>
-                ) : null}
-              </div>
-              <h2>{loop.title}</h2>
-              {loop.summary ? <p>{loop.summary}</p> : null}
-              {loop.source ? <p className="loop-source">via {loop.source}</p> : null}
-            </article>
-          ))}
+          <article className="loop-card focus sheet-hero">
+            <div className="loop-meta">
+              <span className={`band ${top.band}`}>
+                {top.band === "critical"
+                  ? "Urgent"
+                  : top.band === "high"
+                    ? "Soon"
+                    : top.band}
+              </span>
+              <span className="kind">{sourceLabel(top.source)}</span>
+              <span className="kind">{kindLabel(top.kind)}</span>
+            </div>
+            <h2>{top.title}</h2>
+            {top.summary ? <p>{top.summary}</p> : null}
+            <p className="loop-source">{toolHint(top.objectType)}</p>
+          </article>
 
-          {top ? (
-            <EvidenceDrawer
-              loop={top}
-              open={evidenceOpen}
-              onToggle={() => setEvidenceOpen((v) => !v)}
-            />
-          ) : null}
-          {top ? (
-            <ModalityHost
-              loop={top}
-              proposal={proposal}
-              draftTitle={draftTitle}
-              draftBody={draftBody}
-              onTitleChange={setDraftTitle}
-              onBodyChange={setDraftBody}
-              busy={busy !== null}
-            />
+          <EvidenceDrawer
+            loop={top}
+            open={evidenceOpen}
+            onToggle={() => setEvidenceOpen((v) => !v)}
+          />
+          <ModalityHost
+            loop={top}
+            proposal={proposal}
+            draftTitle={draftTitle}
+            draftBody={draftBody}
+            onTitleChange={setDraftTitle}
+            onBodyChange={setDraftBody}
+            busy={busy !== null}
+          />
+
+          {others.length > 0 ? (
+            <div className="sheet-more" aria-label="Other suggestions">
+              <p className="quiet-label">Also open</p>
+              {others.map((loop) => (
+                <button
+                  key={loop.id}
+                  type="button"
+                  className="loop-card sheet-more-item"
+                  onClick={() => focusLoop(loop)}
+                >
+                  <strong>{loop.title}</strong>
+                  <span className="muted">
+                    {sourceLabel(loop.source)} · {kindLabel(loop.kind)}
+                  </span>
+                </button>
+              ))}
+            </div>
           ) : null}
         </div>
       ) : (
         <div className="sheet-empty">
-          <p className="empty-title">All clear</p>
+          <p className="empty-title">Nothing to close right now</p>
           <p className="empty-body">
-            Sign in on Desktop, Demo connect, then Extract — hold <kbd>fn</kbd> to
-            talk, or press <kbd>⌘⇧L</kbd> to clip.
+            Link Google on Desktop, hold <kbd>fn</kbd> to talk, or press{" "}
+            <kbd>⌘⇧L</kbd> to clip something you owe. Jos will suggest a close
+            here.
           </p>
           <button type="button" className="btn-extract" onClick={() => void onExtract()}>
-            Extract loops now
+            Find unfinished
           </button>
         </div>
       )}
@@ -322,7 +362,7 @@ export function QuickSheet() {
           disabled={!top || busy !== null}
           onClick={() => void onDraft()}
         >
-          {busy === "draft" ? "Drafting…" : "Draft"}
+          {busy === "draft" ? "Drafting…" : proposal ? "Re-draft" : "Preview"}
         </button>
         <button
           type="button"
@@ -330,12 +370,12 @@ export function QuickSheet() {
           disabled={!top || busy !== null || !canApprove}
           title={
             canApprove
-              ? "Approve then execute (SENI grant)"
-              : "Not a closable object type"
+              ? "Approve closes this context with the tool Jos opened"
+              : "Not closable yet — try Preview or pick Mail/Calendar"
           }
           onClick={() => void onApproveSend()}
         >
-          {busy === "send" ? "Sending…" : approveLabel}
+          {busy === "send" ? "Closing…" : approveLabel}
         </button>
         <button
           type="button"

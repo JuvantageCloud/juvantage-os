@@ -84,6 +84,31 @@
   gap: 7px;
 }
 
+.sheet-hero {
+  box-shadow: 0 1px 0 rgba(13, 122, 111, 0.08);
+}
+
+.sheet-more {
+  display: grid;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.sheet-more-item {
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  width: 100%;
+  display: grid;
+  gap: 2px;
+}
+
+.sheet-more-item .muted {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: var(--font);
+}
+
 .loop-card {
   border: 1px solid var(--hair);
   border-radius: var(--radius);

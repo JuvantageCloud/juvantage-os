@@ -41,8 +41,8 @@ export function AgentFloat() {
       <button
         type="button"
         className="agent-hit"
-        title={nudge ? `${count} open loop(s)` : "Juvantage OS"}
-        aria-label="Open quick sheet"
+        title={nudge ? `${count} to close — open suggestion` : "Juvantage OS — open suggestion"}
+        aria-label="Open suggestion sheet"
         onClick={() => void window.juvantageOs?.toggleSheet()}
       >
         <AgentLottie />
