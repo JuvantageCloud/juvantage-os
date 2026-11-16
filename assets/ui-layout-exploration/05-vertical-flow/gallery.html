@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Vertical flow — layout pack</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 13px/1.45 system-ui, -apple-system, sans-serif; color: #e8eaed; background: #0f1117; }
+    .top { position: sticky; top: 0; z-index: 3; padding: 20px 28px; background: #141820; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .top h1 { margin: 0 0 6px; font-size: 1.4rem; }
+    .top p { margin: 0; color: #9aa0a6; max-width: 72ch; line-height: 1.5; }
+    .stack { max-width: 1080px; margin: 0 auto; padding: 28px 16px 96px; display: flex; flex-direction: column; gap: 56px; }
+    figcaption { margin-top: 10px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 12px; font-weight: 700; color: #9aa0a6; }
+    figcaption code { font-weight: 500; }
+    .mac { background: #181b24; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.35); flex-shrink: 0; font-size: 12px; color: #e8eaed; }
+    .mac.desktop, .mac.bridge { width: 980px; height: 680px; }
+    .mac.sheet { width: 340px; height: 560px; margin: 0 auto; }
+    .mac.solo { width: 1024px; height: 640px; }
+    .mac.tray { width: 280px; height: 320px; margin: 0 auto; }
+    @media (max-width: 1020px) { .mac.desktop, .mac.solo, .mac.bridge { transform: scale(0.92); transform-origin: top left; margin-bottom: -40px; } }
+    .titlebar { height: 36px; display: flex; align-items: center; gap: 10px; padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,.08); background: #1c1f28; font-weight: 600; font-size: 12px; }
+    .win-title { flex: 1; text-align: center; }
+    .win-actions { color: #9aa0a6; font-size: 11px; }
+    .traffic i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+    .traffic .r { background: #ff5f57; } .traffic .y { background: #febc2e; } .traffic .g { background: #28c840; }
+    .desk-body { display: grid; grid-template-columns: 168px 1fr; height: calc(100% - 36px); }
+    .desk-nav { background: #141820; border-right: 1px solid rgba(255,255,255,.08); padding: 12px 8px; display: flex; flex-direction: column; gap: 4px; }
+    .nav-item { border: none; background: transparent; color: #ccc; text-align: left; padding: 8px; border-radius: 8px; font: inherit; width: 100%; cursor: default; }
+    .nav-item.on { background: #252a36; color: #6ee7d8; }
+    .nav-label { display: block; font-weight: 700; font-size: 12px; }
+    .nav-sub { display: block; font-size: 10px; color: #888; }
+    .nav-sep { height: 1px; background: rgba(255,255,255,.08); margin: 6px 4px; border: none; }
+    .main { background: #181b24; overflow: auto; }
+    .main.pad { padding: 18px 20px; }
+    .main.split { display: grid; grid-template-columns: 1fr 1.15fr; gap: 12px; padding: 14px; height: calc(100% - 36px); }
+    .loop-list { display: flex; flex-direction: column; gap: 8px; }
+    .loop { border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 10px; }
+    .loop.on { border-color: #6ee7d8; background: rgba(110,231,216,.08); }
+    .loop.dim { border-style: dashed; color: #888; }
+    .meta { color: #9aa0a6; font-size: 11px; }
+    .pill { font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 3px 7px; border-radius: 999px; margin-right: 4px; display: inline-block; }
+    .pill.warn { background: #f87171; color: #fff; }
+    .pill.soon { background: rgba(110,231,216,.2); color: #6ee7d8; }
+    .lbl { display: block; font-size: 10px; font-weight: 700; margin-top: 8px; }
+    input, textarea { width: 100%; margin-top: 4px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: #0f1117; color: #eee; padding: 8px; font: inherit; }
+    textarea { min-height: 80px; resize: none; }
+    .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .btn { border: 1px solid rgba(255,255,255,.15); background: transparent; color: #eee; padding: 8px 12px; border-radius: 8px; font-weight: 600; font-size: 11px; cursor: default; }
+    .btn.primary { background: #6ee7d8; color: #0b1220; border-color: #6ee7d8; }
+    .btn.block { width: 100%; margin-top: 8px; }
+    .top-tabs { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.08); background: #141820; }
+    .top-tabs button { border: none; background: transparent; color: #888; padding: 6px 10px; border-radius: 6px; font-weight: 600; cursor: default; }
+    .top-tabs button.on { background: #252a36; color: #6ee7d8; }
+    .top-tabs .spacer { flex: 1; }
+    .inbox-split { display: grid; grid-template-columns: 300px 1fr; height: calc(100% - 72px); }
+    .threads { border-right: 1px solid rgba(255,255,255,.08); padding: 12px; overflow: auto; }
+    .threads h3 { font-size: 10px; text-transform: uppercase; color: #888; margin: 12px 0 6px; }
+    .thread { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .thread.on { background: rgba(110,231,216,.06); margin: 0 -12px; padding-left: 12px; }
+    .compose { padding: 16px; }
+    .hero-wrap { height: calc(100% - 36px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+    .hero-card { width: min(520px, 100%); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px; background: #1c1f28; }
+    .center { text-align: center; }
+    .callout { border: 1px dashed #6ee7d8; border-radius: 10px; padding: 12px; margin-top: 12px; color: #6ee7d8; }
+    .flow { padding: 20px; height: calc(100% - 36px); overflow: auto; }
+    .vflow { list-style: none; margin: 0; padding: 0; }
+    .vflow li { display: grid; grid-template-columns: 32px 1fr; gap: 12px; margin-bottom: 16px; }
+    .vflow li span { width: 28px; height: 28px; border-radius: 50%; background: #333; display: grid; place-items: center; font-weight: 800; }
+    .vflow li.active span { background: #6ee7d8; color: #0b1220; }
+    .vflow li.done span { background: #333; color: #888; }
+    .rail-body { display: grid; grid-template-columns: 52px 1fr 220px; height: calc(100% - 36px); }
+    .icon-rail { background: #141820; border-right: 1px solid rgba(255,255,255,.08); display: flex; flex-direction: column; gap: 8px; padding: 10px 6px; align-items: center; }
+    .ir { width: 36px; height: 36px; border: none; border-radius: 8px; background: transparent; color: #aaa; font-size: 16px; cursor: default; }
+    .ir.on { background: #252a36; color: #6ee7d8; }
+    .ctx-rail { border-left: 1px solid rgba(255,255,255,.08); padding: 14px; font-size: 11px; overflow: auto; }
+    .ctx-rail dl { display: grid; grid-template-columns: 64px 1fr; gap: 4px; }
+    .ctx-rail dt { color: #888; }
+    .compose { overflow: auto; padding: 16px; }
+    .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px; height: calc(100% - 80px); }
+    .hub-card { border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 16px; }
+    .hub-card.hot { border-color: #6ee7d8; }
+    .hub-card.wide { grid-column: span 3; }
+    .hub-card .big { font-size: 2rem; font-weight: 800; margin: 4px 0; }
+    .hub-footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,.08); font-size: 12px; }
+    .signin { height: calc(100% - 36px); display: grid; place-items: center; }
+    .signin-card { width: 320px; padding: 20px; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; background: #1c1f28; }
+    .eyebrow { font-size: 10px; font-weight: 800; color: #6ee7d8; text-transform: uppercase; }
+    .conn { border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+    .conn.on { border-color: #6ee7d8; }
+    .ok { color: #6ee7d8; font-weight: 700; font-size: 11px; }
+    .sheet { padding: 14px; height: calc(100% - 36px); display: flex; flex-direction: column; gap: 6px; overflow: auto; }
+    .toast { background: rgba(110,231,216,.15); color: #6ee7d8; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; }
+    .solo { height: 100%; background: linear-gradient(160deg,#3a4a48,#1a2220); position: relative; }
+    .menubar { position: absolute; top: 0; left: 0; right: 0; height: 24px; background: rgba(0,0,0,.2); font-size: 11px; padding: 4px 10px; }
+    .menubar.slim { position: relative; }
+    .agent { position: absolute; right: 40px; bottom: 50px; width: 72px; height: 80px; border-radius: 18px; background: #0d7a6f; box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+    .agent.nudge { animation: bob 1.2s ease infinite; }
+    .abadge { position: absolute; top: -6px; right: -6px; background: #f87171; color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+    @keyframes bob { 50% { transform: translateY(-8px); } }
+    .solo-note { position: absolute; left: 20px; bottom: 20px; font-size: 11px; color: rgba(255,255,255,.5); max-width: 260px; }
+    .bridge { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; padding: 40px; height: calc(100% - 36px); }
+    .mini-sheet, .mini-desk { border: 1px solid rgba(255,255,255,.15); border-radius: 12px; padding: 20px; min-height: 200px; }
+    .arrow { color: #6ee7d8; font-weight: 800; }
+    .timeline { list-style: none; padding: 0; }
+    .timeline li { display: grid; grid-template-columns: 48px 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .row-set { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .evidence { background: rgba(110,231,216,.08); padding: 12px; border-radius: 8px; }
+    .evidence dl { display: grid; grid-template-columns: 90px 1fr; gap: 4px; font-size: 11px; }
+    .audit { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .audit th, .audit td { border-bottom: 1px solid rgba(255,255,255,.08); text-align: left; padding: 6px; }
+    .tray-wrap { height: 100%; background: linear-gradient(160deg,#3a4a48,#222); padding-top: 8px; }
+    .tray { width: 220px; margin: 0 auto; background: rgba(30,30,30,.95); border-radius: 10px; padding: 6px; color: #fff; }
+    .tray p { margin: 0; padding: 8px 10px; border-radius: 6px; }
+    .tray hr { border: none; border-top: 1px solid rgba(255,255,255,.15); margin: 4px 0; }
+    .link { background: none; border: none; color: #6ee7d8; font: inherit; padding: 0; text-align: left; cursor: default; }
+    h1, h2, h3 { margin: 0 0 8px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>Vertical flow</h1>
+    <p>Step spine: connect → find → draft → approve. Full product map: sign-in, agent, sheet (mail/voice/screen), bridge, work, evidence, context, synced, connectors, settings, privacy, audit, tray. <strong>Neutral chrome</strong> — layout only. Export: <code>npm run ui:layout:png</code></p>
+  </header>
+  <main class="stack">
+  <figure>
+    <div class="mac desktop" id="25-sign-in" data-export="25-sign-in">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Juvantage OS — Desktop</span><span class="win-actions">Undock</span></div>
+<div class="signin"><div class="signin-card"><p class="eyebrow">25 · Sign-in</p><h1>Welcome</h1><p class="meta">Brain JWT · shell cannot forge grants</p>
+<label class="lbl">Email<input readonly value="john@juvantage.com" /></label>
+<label class="lbl">Password<input readonly type="password" value="••••" /></label>
+<button class="btn primary block" type="button">Sign in</button></div></div>
+    </div>
+    <figcaption>
+      <span>UI map 25 · Sign-in gate</span>
+      <code>980×680 · 25-sign-in.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="16-connect" data-export="16-connect">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Connect</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item on"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h1>16 · Google hands</h1>
+      <div class="conn on"><strong>Gmail</strong><span class="ok">demo connected</span><button class="btn" type="button">Sync</button></div>
+      <div class="conn on"><strong>Calendar</strong><span class="ok">connected</span></div>
+      <button class="btn primary" type="button">Send test to close</button>
+      <p class="meta">Scopes: read + send on approve · encrypt tokens at rest</p></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 16 · Connectors (Google)</span>
+      <code>980×680 · 16-connect.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac solo" id="01-agent-idle" data-export="01-agent-idle">
+      <div class="solo"><div class="menubar">Juvantage OS · File · Edit</div>
+    <div class="agent "></div>
+    <p class="solo-note">01–02 · Float 112×128 · Lottie Jos · click → sheet</p></div>
+    </div>
+    <figcaption>
+      <span>UI map 01 · Agent idle</span>
+      <code>1024×640 · 01-agent-idle.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac solo" id="02-agent-nudge" data-export="02-agent-nudge">
+      <div class="solo"><div class="menubar">Juvantage OS · File · Edit</div>
+    <div class="agent nudge"><span class="abadge">1</span></div>
+    <p class="solo-note">01–02 · Float 112×128 · Lottie Jos · click → sheet</p></div>
+    </div>
+    <figcaption>
+      <span>UI map 02 · Agent nudge</span>
+      <code>1024×640 · 02-agent-nudge.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac sheet" id="03-sheet-empty" data-export="03-sheet-empty">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Quick sheet</span><span class="win-actions">Undock</span></div><div class="sheet"><h2>All clear</h2><p class="meta">No open loops</p><button class="btn primary block" type="button">Find unfinished</button><button class="btn block" type="button">Open Desktop</button></div>
+    </div>
+    <figcaption>
+      <span>UI map 03 · Quick sheet empty</span>
+      <code>340×560 · 03-sheet-empty.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac sheet" id="05-sheet-draft" data-export="05-sheet-draft">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Quick sheet</span><span class="win-actions">Undock</span></div><div class="sheet"><span class="pill warn">Urgent</span><span class="pill soon">Mail</span><h2>Maya · pilot</h2><label class="lbl">Title<input readonly value="Re: Q3 pilot pack" /></label>
+<label class="lbl">Draft<textarea readonly>Hi Maya — Thursday works for the pilot pack.</textarea></label>
+<div class="actions"><button class="btn primary" type="button">Approve &amp; send</button><button class="btn" type="button">Quiet</button><button class="btn" type="button">Snooze</button></div><button class="btn block" type="button">Open Desktop</button></div>
+    </div>
+    <figcaption>
+      <span>UI map 05 · Quick sheet draft</span>
+      <code>340×560 · 05-sheet-draft.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac sheet" id="06-sheet-closed" data-export="06-sheet-closed">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Quick sheet</span><span class="win-actions">Undock</span></div><div class="sheet"><div class="toast">Sent · verified closed</div><p class="meta">Next: Thu standup</p><label class="lbl">Title<input readonly value="Re: Q3 pilot pack" /></label>
+<label class="lbl">Draft<textarea readonly>Hi Maya — Thursday works for the pilot pack.</textarea></label>
+<div class="actions"><button class="btn primary" type="button">Approve &amp; send</button><button class="btn" type="button">Quiet</button><button class="btn" type="button">Snooze</button></div></div>
+    </div>
+    <figcaption>
+      <span>UI map 06 · Sheet closed</span>
+      <code>340×560 · 06-sheet-closed.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac bridge" id="07-bridge" data-export="07-bridge">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">07 · Bridge</span><span class="win-actions">Undock</span></div>
+<div class="bridge"><div class="mini-sheet"><p class="meta">Sheet</p><strong>Maya pilot</strong></div>
+<div class="arrow">same loopId →</div>
+<div class="mini-desk"><p class="meta">Desktop Loops</p><strong selected>highlighted draft</strong></div></div>
+    </div>
+    <figcaption>
+      <span>UI map 07 · Bridge sheet → Desktop</span>
+      <code>980×680 · 07-bridge.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="08-work-home" data-export="08-work-home">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Close loop</span><span class="win-actions">Undock</span></div>
+<div class="flow">
+  <ul class="vflow">
+    <li class="done"><span>1</span><div><strong>Google linked</strong><p class="meta">20 mail · 18 events synced</p></div></li>
+    <li class="done"><span>2</span><div><strong>Found obligation</strong><p class="meta">Maya · reply owed</p></div></li>
+    <li class="active"><span>3</span><div><strong>Draft ready</strong><label class="lbl">Title<input readonly value="Re: Q3 pilot pack" /></label>
+<label class="lbl">Draft<textarea readonly>Hi Maya — Thursday works for the pilot pack.</textarea></label>
+<div class="actions"><button class="btn primary" type="button">Approve &amp; send</button><button class="btn" type="button">Quiet</button><button class="btn" type="button">Snooze</button></div></div></li>
+    <li><span>4</span><div><strong>Approve &amp; verify</strong><p class="meta">Grant burns once · loop done</p><button class="btn primary" type="button">Approve &amp; send</button></div></li>
+  </ul>
+</div>
+    </div>
+    <figcaption>
+      <span>UI map 08 · Work home (layout core)</span>
+      <code>980×680 · 08-work-home.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="11-evidence" data-export="11-evidence">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Evidence</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item on"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h2>11 · Context pack</h2><section class="evidence"><dl><dt>Source</dt><dd>gmail</dd><dt>Thread</dt><dd>Re: pilot</dd><dt>Session</dt><dd>—</dd><dt>Fingerprint</dt><dd>abc…</dd></dl></section><label class="lbl">Title<input readonly value="Re: Q3 pilot pack" /></label>
+<label class="lbl">Draft<textarea readonly>Hi Maya — Thursday works for the pilot pack.</textarea></label>
+<div class="actions"><button class="btn primary" type="button">Approve &amp; send</button><button class="btn" type="button">Quiet</button><button class="btn" type="button">Snooze</button></div></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 11 · Evidence / context pack</span>
+      <code>980×680 · 11-evidence.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="12-context" data-export="12-context">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Context</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h1>12 · Last 4 hours</h1><ul class="timeline"><li><time>2:10</time> Mail · 18m</li><li><time>1:40</time> Xcode · 6m</li><li><time>12:55</time> Calendar · 4m</li></ul><button class="btn" type="button">See more</button></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 12 · Context last 4h</span>
+      <code>980×680 · 12-context.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="14-synced" data-export="14-synced">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Synced</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h1>14–15 · Raw sync store</h1><div class="two-col"><section><h3>Mail threads</h3><ul><li>Maya pilot</li><li>Investor</li></ul></section><section><h3>Calendar</h3><ul><li>Thu standup</li></ul></section></div></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 14–15 · Synced mail + calendar</span>
+      <code>980×680 · 14-synced.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="17-settings" data-export="17-settings">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Settings</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item on"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h1>17–18 · General &amp; Quiet</h1><div class="row-set"><span>Launch at login</span><span class="ok">On</span></div><div class="row-set"><span>Default quiet band</span><span>Normal</span></div></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 17–18 · Settings general + quiet</span>
+      <code>980×680 · 17-settings.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="19-privacy" data-export="19-privacy">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Privacy</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item on"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h1>19 · Privacy</h1><div class="row-set"><span>Eyes off idle ≥90s</span><span class="ok">On</span></div><div class="row-set"><span>Purge raw ≤24h</span><span class="ok">On</span></div><div class="row-set"><span>Blocklist</span><button class="btn" type="button">Edit</button></div></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 19 · Privacy + retention</span>
+      <code>980×680 · 19-privacy.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac desktop" id="21-audit" data-export="21-audit">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Audit</span><span class="win-actions">Undock</span></div><div class="desk-body"><nav class="desk-nav wide"><button type="button" class="nav-item"><span class="nav-label">Close</span><span class="nav-sub">Next to send</span></button><button type="button" class="nav-item"><span class="nav-label">Synced</span><span class="nav-sub">Mail feed</span></button><h4 class="nav-sep"></h4><button type="button" class="nav-item"><span class="nav-label">Google</span><span class="nav-sub">Linked</span></button><button type="button" class="nav-item on"><span class="nav-label">Settings</span><span class="nav-sub">Privacy</span></button></nav><main class="main pad"><h1>21–22 · Audit log</h1><table class="audit"><tr><th>When</th><th>Event</th></tr><tr><td>now</td><td>propose mail</td></tr><tr><td>−1m</td><td>approve-send</td></tr><tr><td>−1m</td><td>verify done</td></tr></table><p class="meta">Disclosure: draft left device on approve only</p></main></div>
+    </div>
+    <figcaption>
+      <span>UI map 21–22 · Audit + disclosure</span>
+      <code>980×680 · 21-audit.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac tray" id="23-tray" data-export="23-tray">
+      <div class="tray-wrap"><div class="menubar slim">􀣺 Juvantage</div><div class="tray"><p>Show agent</p><p>Quick sheet</p><p>Open Desktop</p><hr /><p>Quit</p></div></div>
+    </div>
+    <figcaption>
+      <span>UI map 23 · Menu bar tray</span>
+      <code>280×320 · 23-tray.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac sheet" id="sheet-screen" data-export="sheet-screen">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Quick sheet</span><span class="win-actions">Undock</span></div><div class="sheet"><span class="pill soon">Screen</span><h2>npm test integration</h2><p class="meta">Fuse · no Gmail</p><button class="btn primary block" type="button">Approve locally</button></div>
+    </div>
+    <figcaption>
+      <span>UI map — · Screen note sheet</span>
+      <code>340×560 · sheet-screen.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac sheet" id="sheet-voice" data-export="sheet-voice">
+      <div class="titlebar"><div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div><span class="win-title">Quick sheet</span><span class="win-actions">Undock</span></div><div class="sheet"><span class="pill soon">Voice</span><h2>Email investors Q3</h2><textarea readonly>Draft from hold-fn…</textarea><button class="btn primary block" type="button">Approve &amp; close</button></div>
+    </div>
+    <figcaption>
+      <span>UI map — · Voice loop sheet</span>
+      <code>340×560 · sheet-voice.png</code>
+    </figcaption>
+  </figure>
+  </main>
+</body>
+</html>

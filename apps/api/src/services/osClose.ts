@@ -18,6 +18,7 @@ import {
   consumeApprovalGrant,
   ensureFreshApprovalGrant,
 } from "./osGrants.js";
+import { releaseExecuteSlot, tryAdmitExecute } from "./osBus.js";
 import { canApproveExecute } from "./osModality.js";
 import { voiceDraft } from "./osVoice.js";
 
@@ -400,6 +401,14 @@ export async function executeProposal(userId: string, proposalId: string) {
     }
   }
 
+  const slot = tryAdmitExecute(userId);
+  if (!slot.ok) {
+    throw new OsCloseError(
+      "Brain busy — retry later (backpressure, not a blocking wait)",
+      429,
+    );
+  }
+  try {
   try {
     await consumeApprovalGrant(userId, proposal.id);
   } catch (err) {
@@ -416,7 +425,16 @@ export async function executeProposal(userId: string, proposalId: string) {
 
   let result: Record<string, unknown>;
 
-  if (proposal.kind === "reply" || proposal.kind === "note") {
+  if (loop.source === "dev_fixture") {
+    result = {
+      channel: "dev_fixture",
+      mode: "dev_fixture",
+      noted: true,
+      simulatedSend: true,
+      title: proposal.title,
+      at: new Date().toISOString(),
+    };
+  } else if (proposal.kind === "reply" || proposal.kind === "note") {
     if (!gmail || gmail.mode === "demo") {
       result = {
         channel: "gmail",
@@ -539,6 +557,9 @@ export async function executeProposal(userId: string, proposalId: string) {
     proposal: serializeProposal(executed),
     result,
   };
+  } finally {
+    releaseExecuteSlot(userId);
+  }
 }
 
 /** Verify close — marks loop done after a successful execute. */

@@ -256,6 +256,12 @@ function wireIpc() {
     sheetWindow?.hide();
     return { ok: true };
   });
+  ipcMain.handle("os:context-closed", (event) => {
+    if (agentWindow && !agentWindow.isDestroyed() && event.sender !== agentWindow.webContents) {
+      agentWindow.webContents.send("os:context-closed");
+    }
+    return { ok: true };
+  });
   ipcMain.handle("os:stub-action", (_e, action) => {
     console.log(`[os stub] ${action}`);
     return { ok: true, action, stub: true };

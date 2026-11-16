@@ -5,13 +5,14 @@ import type {
   OsSyncSummary,
   Proposal,
 } from "@juvantage/shared";
-import { isClosableObjectType } from "@juvantage/shared";
+import { isClosableObjectType, pickSheetHero } from "@juvantage/shared";
 import {
   apiBaseUrl,
   approveSendOsProposal,
   connectOsDemo,
   dismissOsLoop,
   editOsProposal,
+  ensureDevFixtures,
   extractOsLoops,
   fetchApiHealth,
   fetchOsConnectors,
@@ -68,6 +69,7 @@ function sourceFriendly(source: string | null | undefined): string {
   if (source === "gmail") return "Mail";
   if (source === "google_calendar") return "Calendar";
   if (source === "clip") return "Clip";
+  if (source === "episodic") return "Screen";
   if (source === "voice") return "Voice";
   return source;
 }
@@ -134,6 +136,9 @@ export function Desktop() {
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   /** When Source=All, clips stay collapsed until expanded (mail stays front). */
   const [clipsExpanded, setClipsExpanded] = useState(false);
+  /** Layout B default: one hero; list is opt-in ("Show queue"). */
+  const [queueOpen, setQueueOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [proposal, setProposal] = useState<Proposal | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
   const [draftBody, setDraftBody] = useState("");
@@ -175,12 +180,17 @@ export function Desktop() {
       setLoops([]);
       return;
     }
+    await ensureDevFixtures();
     const data = await fetchOsLoops(40);
     setLoops(data.loops);
     setSelectedId((current) => {
       const prefer = preferId ?? current ?? loopIdFromHash();
       const next =
-        data.loops.find((l) => l.id === prefer) ?? data.loops[0] ?? null;
+        data.loops.find((l) => l.id === prefer) ??
+        pickSheetHero(data.loops) ??
+        data.loops.find((l) => l.source !== "dev_fixture") ??
+        data.loops[0] ??
+        null;
       setProposal(next?.proposal ?? null);
       setDraftTitle(next?.proposal?.title ?? "");
       setDraftBody(next?.proposal?.body ?? "");
@@ -231,16 +241,28 @@ export function Desktop() {
     else if (sourceFilter === "calendar") {
       list = list.filter((l) => l.source === "google_calendar");
     } else if (sourceFilter === "all" && !clipsExpanded) {
-      list = list.filter((l) => l.source !== "clip");
+      list = list.filter(
+        (l) => l.source !== "clip" && l.source !== "episodic" && l.source !== "dev_fixture",
+      );
     }
     return list;
   }, [loops, band, sourceFilter, clipsExpanded]);
+
+  const heroLoop = useMemo(
+    () => pickSheetHero(filtered) ?? filtered[0] ?? null,
+    [filtered],
+  );
+
+  const queueCount = useMemo(() => {
+    if (!heroLoop) return Math.max(0, filtered.length);
+    return filtered.filter((l) => l.id !== heroLoop.id).length;
+  }, [filtered, heroLoop]);
 
   const collapsedClipCount = useMemo(() => {
     if (sourceFilter !== "all" || clipsExpanded) return 0;
     let list = loops;
     if (band !== "all") list = list.filter((l) => l.band === band);
-    return list.filter((l) => l.source === "clip").length;
+    return list.filter((l) => l.source === "clip" || l.source === "episodic").length;
   }, [loops, band, sourceFilter, clipsExpanded]);
 
   const gmailConnected = useMemo(
@@ -535,8 +557,8 @@ export function Desktop() {
       <div className="desk-body">
         <nav className="desk-nav" aria-label="Desktop">
           <button type="button" className={nav === "loops" ? "on" : ""} onClick={() => setNav("loops")}>
-            <span className="nav-label">Work</span>
-            <span className="nav-sub">What you still owe</span>
+            <span className="nav-label">Close</span>
+            <span className="nav-sub">Next thing to send</span>
           </button>
           <button type="button" className={nav === "inbox" ? "on" : ""} onClick={() => setNav("inbox")}>
             <span className="nav-label">Synced</span>
@@ -556,64 +578,90 @@ export function Desktop() {
         <main className="desk-main">
           {nav === "loops" ? (
             <>
-              <h1>What you still owe</h1>
+              <h1>Next to close</h1>
               <p className="page-sub loops-one-liner">
-                Jos finds unfinished work → you get a draft → you Approve → it
-                sends or books. Nothing goes out without you.
+                Edit the draft, then Approve. Daily work also lives on the teal sheet.
                 {userLabel ? ` · ${userLabel}` : null}
               </p>
               {loops.length ? (
                 <div className="status-strip" aria-live="polite">
                   <span>
-                    <strong>{loops.length}</strong> to close
+                    <strong>{loops.length}</strong> open
                   </span>
                   <span className="status-strip-dot" aria-hidden />
                   <span>{summary?.mailCount ?? 0} mail synced</span>
-                  <span className="status-strip-hint">Edit the draft, then Approve</span>
                 </div>
               ) : null}
-              <div className="chips">
-                <span className="chip-label">Urgency</span>
-                {(
-                  [
-                    ["all", "All"],
-                    ["critical", "Urgent"],
-                    ["high", "Soon"],
-                    ["normal", "Normal"],
-                    ["quiet", "Quiet"],
-                  ] as const
-                ).map(([id, label]) => (
+              <div className="hero-toolbar">
+                {queueCount > 0 && !queueOpen ? (
                   <button
-                    key={id}
                     type="button"
-                    className={`chip ${band === id ? "on" : ""}`}
-                    onClick={() => setBand(id)}
+                    className="btn ghost"
+                    onClick={() => setQueueOpen(true)}
                   >
-                    {label}
+                    {queueCount} more in queue
                   </button>
-                ))}
-                <span className="chip-label">From</span>
-                {(
-                  [
-                    ["all", "All"],
-                    ["mail", "Mail"],
-                    ["clip", "Clips"],
-                    ["calendar", "Calendar"],
-                  ] as const
-                ).map(([id, label]) => (
+                ) : queueOpen ? (
                   <button
-                    key={id}
                     type="button"
-                    className={`chip ${sourceFilter === id ? "on" : ""}`}
-                    onClick={() => setSourceFilter(id)}
+                    className="btn ghost"
+                    onClick={() => setQueueOpen(false)}
                   >
-                    {label}
+                    Hide queue
                   </button>
-                ))}
-                <button type="button" className="btn accent" onClick={() => void onExtract()} disabled={Boolean(busy)}>
-                  {busy === "extract" ? "Looking…" : "Find unfinished"}
+                ) : null}
+                <button
+                  type="button"
+                  className="btn ghost"
+                  onClick={() => setFiltersOpen((v) => !v)}
+                >
+                  {filtersOpen ? "Hide filters" : "Filters & sync"}
                 </button>
               </div>
+              {filtersOpen ? (
+                <div className="chips">
+                  <span className="chip-label">Urgency</span>
+                  {(
+                    [
+                      ["all", "All"],
+                      ["critical", "Urgent"],
+                      ["high", "Soon"],
+                      ["normal", "Normal"],
+                      ["quiet", "Quiet"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      className={`chip ${band === id ? "on" : ""}`}
+                      onClick={() => setBand(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <span className="chip-label">From</span>
+                  {(
+                    [
+                      ["all", "All"],
+                      ["mail", "Mail"],
+                      ["clip", "Clips"],
+                      ["calendar", "Calendar"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      className={`chip ${sourceFilter === id ? "on" : ""}`}
+                      onClick={() => setSourceFilter(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <button type="button" className="btn accent" onClick={() => void onExtract()} disabled={Boolean(busy)}>
+                    {busy === "extract" ? "Looking…" : "Find unfinished"}
+                  </button>
+                </div>
+              ) : null}
 
               {!filtered.length && loops.length > 0 ? (
                 <div className="empty-panel">
@@ -646,7 +694,9 @@ export function Desktop() {
                 </div>
               ) : null}
               {loops.length > 0 && (filtered.length > 0 || collapsedClipCount > 0) ? (
-                <div className="loops-layout">
+                <div
+                  className={`loops-layout${queueOpen ? "" : " focus-mode"}`}
+                >
                   <div className="loop-list">
                     {filtered.map((loop) => (
                       <button
@@ -669,11 +719,12 @@ export function Desktop() {
                         className="loop-row"
                         onClick={() => setClipsExpanded(true)}
                       >
-                        <span className="band-pill normal">clips</span>
+                        <span className="band-pill normal">notes</span>
                         <strong>
-                          {collapsedClipCount} clip{collapsedClipCount === 1 ? "" : "s"} hidden
+                          {collapsedClipCount} screen note{collapsedClipCount === 1 ? "" : "s"}{" "}
+                          hidden
                         </strong>
-                        <span className="muted">Show clips</span>
+                        <span className="muted">Show screen notes</span>
                       </button>
                     ) : null}
                     {sourceFilter === "all" && clipsExpanded ? (
@@ -683,7 +734,7 @@ export function Desktop() {
                         style={{ margin: "8px 0" }}
                         onClick={() => setClipsExpanded(false)}
                       >
-                        Hide clips again
+                        Hide screen notes again
                       </button>
                     ) : null}
                   </div>

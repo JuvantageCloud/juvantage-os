@@ -1,0 +1,326 @@
+DIGEST c600625becd0ff06c61f3dede894e625
+FPoissonDarkRoom
+R846:850 Stdlib.Arith.Arith <> <> lib
+R852:854 Stdlib.micromega.Lia <> <> lib
+def 867:870 <> pow2
+R877:879 Corelib.Init.Datatypes <> nat ind
+binder 873:873 <> n:1
+R884:886 Corelib.Init.Datatypes <> nat ind
+R899:899 PoissonDarkRoom <> n:1 var
+R921:921 Corelib.Init.Datatypes <> S constr
+R930:932 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R933:936 PoissonDarkRoom <> pow2:2 def
+prf 955:962 <> pow2_pos
+binder 973:973 <> n:4
+R977:979 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R980:983 PoissonDarkRoom <> pow2 def
+R985:985 PoissonDarkRoom <> n:4 var
+prf 1032:1041 <> pow2_ge_Sn
+binder 1052:1052 <> n:5
+R1058:1061 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R1055:1055 Corelib.Init.Datatypes <> S constr
+R1057:1057 PoissonDarkRoom <> n:5 var
+R1062:1065 PoissonDarkRoom <> pow2 def
+R1067:1067 PoissonDarkRoom <> n:5 var
+def 1117:1131 <> geom_sum_scaled
+R1145:1147 Corelib.Init.Datatypes <> nat ind
+binder 1134:1134 <> L:6
+binder 1136:1139 <> exp0:7
+binder 1141:1141 <> t:8
+R1152:1154 Corelib.Init.Datatypes <> nat ind
+R1167:1167 PoissonDarkRoom <> t:8 var
+R1189:1189 Corelib.Init.Datatypes <> S constr
+R1210:1212 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1198:1200 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1197:1197 PoissonDarkRoom <> L:6 var
+R1201:1204 PoissonDarkRoom <> pow2 def
+R1206:1209 PoissonDarkRoom <> exp0:7 var
+R1213:1227 PoissonDarkRoom <> geom_sum_scaled:9 def
+R1232:1232 Corelib.Init.Datatypes <> S constr
+R1234:1237 PoissonDarkRoom <> exp0:7 var
+R1229:1229 PoissonDarkRoom <> L:6 var
+prf 1257:1268 <> geom_sum_add
+binder 1281:1281 <> L:11
+binder 1283:1283 <> e:12
+binder 1285:1285 <> T:13
+R1326:1328 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1313:1315 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1292:1306 PoissonDarkRoom <> geom_sum_scaled def
+R1308:1308 PoissonDarkRoom <> L:11 var
+R1310:1310 PoissonDarkRoom <> e:12 var
+R1312:1312 PoissonDarkRoom <> T:13 var
+R1317:1319 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1316:1316 PoissonDarkRoom <> L:11 var
+R1320:1323 PoissonDarkRoom <> pow2 def
+R1325:1325 PoissonDarkRoom <> e:12 var
+R1330:1332 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1329:1329 PoissonDarkRoom <> L:11 var
+R1333:1336 PoissonDarkRoom <> pow2 def
+R1340:1342 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1339:1339 PoissonDarkRoom <> e:12 var
+R1343:1343 PoissonDarkRoom <> T:13 var
+R1443:1445 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1430:1432 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1434:1436 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1437:1440 PoissonDarkRoom <> pow2 def
+R1447:1449 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1450:1453 PoissonDarkRoom <> pow2 def
+R1457:1459 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1477:1487 Stdlib.Arith.PeanoNat Nat add_0_r thm
+R1498:1508 Stdlib.Arith.PeanoNat Nat add_0_l thm
+R1533:1547 PoissonDarkRoom <> geom_sum_scaled def
+R1571:1571 Corelib.Init.Datatypes <> S constr
+R1661:1669 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1648:1650 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1620:1622 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1611:1613 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1614:1617 PoissonDarkRoom <> pow2 def
+R1623:1637 PoissonDarkRoom <> geom_sum_scaled def
+R1642:1642 Corelib.Init.Datatypes <> S constr
+R1652:1654 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1655:1658 PoissonDarkRoom <> pow2 def
+R1695:1697 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1670:1684 PoissonDarkRoom <> geom_sum_scaled def
+R1689:1689 Corelib.Init.Datatypes <> S constr
+R1699:1701 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1702:1705 PoissonDarkRoom <> pow2 def
+R1708:1708 Corelib.Init.Datatypes <> S constr
+R1726:1729 PoissonDarkRoom <> pow2 def
+R1772:1774 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1775:1775 Corelib.Init.Datatypes <> S constr
+R1789:1791 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1786:1786 Corelib.Init.Datatypes <> S constr
+def 1835:1848 <> oneshot_scaled
+R1857:1859 Corelib.Init.Datatypes <> nat ind
+binder 1851:1851 <> L:14
+binder 1853:1853 <> T:15
+R1864:1866 Corelib.Init.Datatypes <> nat ind
+R1872:1875 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1886:1886 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1871:1871 PoissonDarkRoom <> L:14 var
+R1882:1884 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R1876:1879 PoissonDarkRoom <> pow2 def
+R1881:1881 PoissonDarkRoom <> T:15 var
+prf 1896:1907 <> mul_pred_pow
+binder 1920:1920 <> L:16
+binder 1922:1922 <> T:17
+R1947:1949 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1943:1945 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R1925:1938 PoissonDarkRoom <> oneshot_scaled def
+R1940:1940 PoissonDarkRoom <> L:16 var
+R1942:1942 PoissonDarkRoom <> T:17 var
+R1946:1946 PoissonDarkRoom <> L:16 var
+R1951:1953 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R1950:1950 PoissonDarkRoom <> L:16 var
+R1954:1957 PoissonDarkRoom <> pow2 def
+R1959:1959 PoissonDarkRoom <> T:17 var
+R1990:2003 PoissonDarkRoom <> oneshot_scaled def
+R2020:2027 PoissonDarkRoom <> pow2_pos thm
+R2052:2065 Stdlib.Arith.PeanoNat Nat mul_succ_r thm
+R2079:2079 Corelib.Init.Datatypes <> S constr
+R2088:2090 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2082:2085 PoissonDarkRoom <> pow2 def
+R2101:2104 PoissonDarkRoom <> pow2 def
+prf 2146:2170 <> poisson_integral_discrete
+binder 2183:2183 <> L:18
+binder 2185:2185 <> T:19
+R2213:2215 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2192:2206 PoissonDarkRoom <> geom_sum_scaled def
+R2208:2208 PoissonDarkRoom <> L:18 var
+R2212:2212 PoissonDarkRoom <> T:19 var
+R2216:2229 PoissonDarkRoom <> oneshot_scaled def
+R2231:2231 PoissonDarkRoom <> L:18 var
+R2233:2233 PoissonDarkRoom <> T:19 var
+R2271:2282 PoissonDarkRoom <> geom_sum_add thm
+R2304:2307 PoissonDarkRoom <> pow2 def
+R2324:2334 Stdlib.Arith.PeanoNat Nat mul_1_r thm
+R2356:2367 PoissonDarkRoom <> mul_pred_pow thm
+R2390:2405 Stdlib.Arith.PeanoNat Nat add_cancel_r thm
+prf 2452:2473 <> oneshot_remainder_is_L
+binder 2486:2486 <> L:20
+binder 2488:2488 <> T:21
+R2522:2524 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2501:2503 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2492:2494 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R2491:2491 PoissonDarkRoom <> L:20 var
+R2495:2498 PoissonDarkRoom <> pow2 def
+R2500:2500 PoissonDarkRoom <> T:21 var
+R2504:2517 PoissonDarkRoom <> oneshot_scaled def
+R2519:2519 PoissonDarkRoom <> L:20 var
+R2521:2521 PoissonDarkRoom <> T:21 var
+R2525:2525 PoissonDarkRoom <> L:20 var
+R2561:2572 PoissonDarkRoom <> mul_pred_pow thm
+prf 2599:2616 <> oneshot_can_exceed
+binder 2629:2629 <> L:22
+binder 2631:2631 <> C:23
+R2639:2642 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2635:2637 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R2638:2638 PoissonDarkRoom <> L:22 var
+R2643:2649 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R2651:2652 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 2650:2650 <> T:24
+R2671:2673 Corelib.Init.Peano <> ::nat_scope:x_'>'_x not
+R2653:2666 PoissonDarkRoom <> oneshot_scaled def
+R2668:2668 PoissonDarkRoom <> L:22 var
+R2670:2670 PoissonDarkRoom <> T:24 var
+R2674:2674 PoissonDarkRoom <> C:23 var
+R2709:2709 Corelib.Init.Datatypes <> S constr
+R2722:2735 PoissonDarkRoom <> oneshot_scaled def
+R2752:2761 PoissonDarkRoom <> pow2_ge_Sn thm
+R2764:2764 Corelib.Init.Datatypes <> S constr
+R2796:2799 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2793:2793 Corelib.Init.Datatypes <> S constr
+R2810:2812 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2800:2803 PoissonDarkRoom <> pow2 def
+R2806:2806 Corelib.Init.Datatypes <> S constr
+R2842:2845 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R2839:2839 Corelib.Init.Datatypes <> S constr
+R2847:2850 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R2865:2865 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R2861:2863 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2851:2854 PoissonDarkRoom <> pow2 def
+R2857:2857 Corelib.Init.Datatypes <> S constr
+R2880:2891 Stdlib.Arith.PeanoNat Nat le_trans thm
+R2923:2933 Stdlib.Arith.PeanoNat Nat mul_1_l thm
+R2946:2948 Corelib.Init.Peano <> ::nat_scope:x_'-'_x not
+R2936:2939 PoissonDarkRoom <> pow2 def
+R2942:2942 Corelib.Init.Datatypes <> S constr
+R2969:2985 Stdlib.Arith.PeanoNat Nat mul_le_mono_r thm
+def 3019:3033 <> dorm_occ_scaled
+R3042:3044 Corelib.Init.Datatypes <> nat ind
+binder 3036:3036 <> L:25
+binder 3038:3038 <> T:26
+R3049:3051 Corelib.Init.Datatypes <> nat ind
+R3064:3064 PoissonDarkRoom <> T:26 var
+R3080:3080 PoissonDarkRoom <> L:25 var
+R3086:3086 Corelib.Init.Datatypes <> S constr
+R3095:3098 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3119:3119 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3094:3094 PoissonDarkRoom <> L:25 var
+R3115:3117 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3101:3103 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3104:3107 PoissonDarkRoom <> pow2 def
+R3110:3110 Corelib.Init.Datatypes <> S constr
+def 3140:3150 <> ears_scaled
+R3159:3161 Corelib.Init.Datatypes <> nat ind
+binder 3153:3153 <> L:28
+binder 3155:3155 <> T:29
+R3166:3168 Corelib.Init.Datatypes <> nat ind
+R3181:3181 PoissonDarkRoom <> T:29 var
+R3203:3203 Corelib.Init.Datatypes <> S constr
+R3221:3223 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3212:3215 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3220:3220 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3211:3211 PoissonDarkRoom <> L:28 var
+R3216:3216 Corelib.Init.Datatypes <> S constr
+R3224:3227 PoissonDarkRoom <> pow2 def
+prf 3246:3260 <> dorm_minus_ears
+binder 3273:3273 <> L:31
+binder 3275:3276 <> T':32
+R3311:3317 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R3283:3297 PoissonDarkRoom <> dorm_occ_scaled def
+R3299:3299 PoissonDarkRoom <> L:31 var
+R3302:3302 Corelib.Init.Datatypes <> S constr
+R3305:3305 Corelib.Init.Datatypes <> S constr
+R3307:3308 PoissonDarkRoom <> T':32 var
+R3342:3344 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3318:3328 PoissonDarkRoom <> ears_scaled def
+R3330:3330 PoissonDarkRoom <> L:31 var
+R3333:3333 Corelib.Init.Datatypes <> S constr
+R3336:3336 Corelib.Init.Datatypes <> S constr
+R3338:3339 PoissonDarkRoom <> T':32 var
+R3346:3349 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3370:3370 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3345:3345 PoissonDarkRoom <> L:31 var
+R3366:3368 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3361:3363 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3350:3353 PoissonDarkRoom <> pow2 def
+R3356:3356 Corelib.Init.Datatypes <> S constr
+R3358:3359 PoissonDarkRoom <> T':32 var
+R3364:3365 PoissonDarkRoom <> T':32 var
+prf 3415:3425 <> gap_beats_C
+binder 3438:3438 <> L:33
+binder 3440:3440 <> C:34
+R3452:3459 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R3448:3450 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R3451:3451 PoissonDarkRoom <> L:33 var
+R3461:3463 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R3460:3460 PoissonDarkRoom <> C:34 var
+R3465:3468 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3493:3493 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3464:3464 PoissonDarkRoom <> L:33 var
+R3489:3491 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3483:3485 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3469:3472 PoissonDarkRoom <> pow2 def
+R3475:3475 Corelib.Init.Datatypes <> S constr
+R3478:3478 Corelib.Init.Datatypes <> S constr
+R3480:3480 PoissonDarkRoom <> C:34 var
+R3486:3486 Corelib.Init.Datatypes <> S constr
+R3488:3488 PoissonDarkRoom <> C:34 var
+R3552:3554 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3546:3548 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3532:3535 PoissonDarkRoom <> pow2 def
+R3538:3538 Corelib.Init.Datatypes <> S constr
+R3541:3541 Corelib.Init.Datatypes <> S constr
+R3549:3549 Corelib.Init.Datatypes <> S constr
+R3575:3578 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R3619:3622 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R3624:3626 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3647:3657 Stdlib.Arith.PeanoNat Nat mul_1_l thm
+R3674:3690 Stdlib.Arith.PeanoNat Nat mul_le_mono_r thm
+R3717:3719 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R3754:3763 PoissonDarkRoom <> pow2_ge_Sn thm
+R3766:3766 Corelib.Init.Datatypes <> S constr
+R3769:3769 Corelib.Init.Datatypes <> S constr
+R3805:3807 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R3825:3827 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R3819:3821 Corelib.Init.Peano <> ::nat_scope:x_'*'_x not
+R3808:3808 Corelib.Init.Datatypes <> S constr
+R3811:3811 Corelib.Init.Datatypes <> S constr
+R3814:3814 Corelib.Init.Datatypes <> S constr
+R3822:3822 Corelib.Init.Datatypes <> S constr
+R3850:3864 Stdlib.Arith.PeanoNat Nat lt_le_trans thm
+R3894:3910 Stdlib.Arith.PeanoNat Nat add_le_mono_r thm
+R3923:3939 Stdlib.Arith.PeanoNat Nat mul_le_mono_r thm
+R3963:3977 Stdlib.Arith.PeanoNat Nat lt_le_trans thm
+prf 4017:4044 <> poisson_occupation_crossover
+binder 4057:4057 <> L:35
+binder 4059:4059 <> C:36
+R4067:4074 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R4063:4065 Corelib.Init.Peano <> ::nat_scope:x_'<'_x not
+R4066:4066 PoissonDarkRoom <> L:35 var
+R4075:4081 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R4083:4084 Corelib.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 4082:4082 <> T:37
+R4104:4106 Corelib.Init.Peano <> ::nat_scope:x_'>'_x not
+R4085:4099 PoissonDarkRoom <> dorm_occ_scaled def
+R4101:4101 PoissonDarkRoom <> L:35 var
+R4103:4103 PoissonDarkRoom <> T:37 var
+R4122:4124 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R4107:4117 PoissonDarkRoom <> ears_scaled def
+R4119:4119 PoissonDarkRoom <> L:35 var
+R4121:4121 PoissonDarkRoom <> T:37 var
+R4125:4125 PoissonDarkRoom <> C:36 var
+R4162:4162 Corelib.Init.Datatypes <> S constr
+R4165:4165 Corelib.Init.Datatypes <> S constr
+R4168:4168 Corelib.Init.Datatypes <> S constr
+R4187:4201 PoissonDarkRoom <> dorm_minus_ears thm
+R4206:4206 Corelib.Init.Datatypes <> S constr
+R4227:4237 PoissonDarkRoom <> gap_beats_C thm
+R4262:4278 Stdlib.Arith.PeanoNat Nat add_lt_mono_l thm
+def 4308:4316 <> extrinsic
+R4330:4333 Corelib.Init.Datatypes <> bool ind
+binder 4319:4326 <> _eyes_on:38
+R4349:4351 Corelib.Init.Datatypes <> nat ind
+binder 4337:4345 <> ears_cost:39
+R4356:4358 Corelib.Init.Datatypes <> nat ind
+R4363:4371 PoissonDarkRoom <> ears_cost:39 var
+prf 4383:4410 <> eyes_off_extrinsic_invariant
+binder 4423:4431 <> ears_cost:40
+R4463:4465 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4438:4446 PoissonDarkRoom <> extrinsic def
+R4448:4452 Corelib.Init.Datatypes <> false constr
+R4454:4462 PoissonDarkRoom <> ears_cost:40 var
+R4466:4474 PoissonDarkRoom <> extrinsic def
+R4476:4479 Corelib.Init.Datatypes <> true constr
+R4481:4489 PoissonDarkRoom <> ears_cost:40 var

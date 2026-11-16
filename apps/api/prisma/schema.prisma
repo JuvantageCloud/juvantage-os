@@ -190,6 +190,33 @@ model OsAuditEvent {
   @@index([loopId])
 }
 
+/** Work session — idle gap starts a new segment (Dark Room). */
+model ContextSession {
+  id        String         @id @default(cuid())
+  userId    String
+  startedAt DateTime       @default(now())
+  endedAt   DateTime?
+  events    ContextEvent[]
+
+  @@index([userId, startedAt])
+}
+
+/** Normalized host signals before fuse → loop (purge ≤24h). */
+model ContextEvent {
+  id         String          @id @default(cuid())
+  userId     String
+  sessionId  String
+  kind       String
+  app        String?
+  title      String?
+  text       String?
+  textHash   String?
+  recordedAt DateTime        @default(now())
+  session    ContextSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, sessionId, recordedAt])
+}
+
 /** Personal OS — ambient app/title/URL ledger (purge ≤24h). */
 model AmbientEvent {
   id         String   @id @default(cuid())

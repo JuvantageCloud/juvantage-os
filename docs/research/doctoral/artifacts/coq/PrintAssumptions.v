@@ -8,6 +8,9 @@ Require Import SeniMachine.
 Require Import DarkRoom.
 Require Import OpenDoc.
 Require Import MpscRing.
+Require Import PoissonDarkRoom.
+Require Import SdoTerminal.
+Require Import SeniIdealMac.
 
 Print Assumptions blind_schedule_ni.
 Print Assumptions blind_implies_ni.
@@ -49,3 +52,27 @@ Print Assumptions no_overwrite.
 Print Assumptions try_occupy_decides.
 Print Assumptions occupy_enabled.
 Print Assumptions blocking_enqueue_misses_every_bound.
+
+Print Assumptions poisson_integral_discrete.
+Print Assumptions oneshot_remainder_is_L.
+Print Assumptions oneshot_can_exceed.
+Print Assumptions poisson_occupation_crossover.
+Print Assumptions eyes_off_extrinsic_invariant.
+Print Assumptions gap_beats_C.
+
+Print Assumptions sdo_terminal_exists.
+Print Assumptions sdo_terminal_unique.
+Print Assumptions factors_through_sdo.
+Print Assumptions morphisms_unique_on_sem.
+Print Assumptions layout_product_close_ignores_lay.
+Print Assumptions forget_is_semantic_only.
+
+Print Assumptions verify_implies_sign.
+Print Assumptions sign_injective.
+Print Assumptions different_keys_different_tags.
+Print Assumptions wrong_key_rejected.
+Print Assumptions ideal_no_mint_no_effect.
+Print Assumptions ideal_at_most_one_effect.
+Print Assumptions ideal_commit_second_adds_nothing.
+Print Assumptions ideal_forge_wrong_key_rejected.
+Print Assumptions ideal_stolen_once_concrete.

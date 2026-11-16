@@ -27,6 +27,8 @@
 	</dict>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Juvantage OS reads the front window title to fuse work context (ambient sampling). Nothing sends without your approve.</string>
+	<key>NSAccessibilityUsageDescription</key>
+	<string>Juvantage OS reads the focused text once when you open a suggestion, so the draft matches what is on screen. The image is not kept. Nothing sends without your approve.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Hold fn to talk — Juvantage OS listens only while fn is held, then drafts for your approval.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Layout C — Sheet primary</title>
+  <link rel="stylesheet" href="shared-layout.css" />
+  <style>
+    .settings-body { flex: 1; padding: 20px 24px; max-width: 480px; }
+    .settings-body h2 { margin: 0 0 12px; font-size: 1rem; }
+    .line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--hair); font-size: 12px; }
+    .sheet-label { text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Layout C — Sheet primary</h1>
+    <p class="lede">All closing work happens on the <strong>340×560</strong> sheet (same as Mac float). Desktop is only link Google, privacy, audit — not a second Work UI.</p>
+    <div class="mac">
+      <div class="tb"><span class="dots"><i class="r"></i><i class="y"></i><i class="g"></i></span><span class="title">Juvantage — Settings</span></div>
+      <div class="settings-body">
+        <h2>Hands</h2>
+        <div class="line"><span>Gmail</span><span style="color:var(--accent)">Connected</span></div>
+        <div class="line"><span>Calendar</span><span style="color:var(--accent)">Connected</span></div>
+        <button class="btn" type="button" style="margin-top:12px">Sync now</button>
+        <h2 style="margin-top:24px">Privacy</h2>
+        <div class="line"><span>Eyes off when idle</span><span>On</span></div>
+        <p class="muted">Loops + drafts stay in Brain. No Work page.</p>
+      </div>
+    </div>
+    <p class="sheet-label">↓ This is where you actually work (menu bar agent)</p>
+    <div class="mac sheet-mac">
+      <div class="tb"><span class="title">Quick sheet</span></div>
+      <div class="body" style="padding:14px;display:flex;flex-direction:column;gap:6px">
+        <span class="pill">Urgent</span>
+        <strong style="font-size:14px">Reply: Maya</strong>
+        <textarea readonly>Hi Maya — …</textarea>
+        <div class="row">
+          <button class="btn go" type="button">Approve &amp; send</button>
+          <button class="btn" type="button">Quiet</button>
+        </div>
+        <button class="btn" type="button" style="width:100%">Open settings</button>
+      </div>
+    </div>
+    <p class="callout">Matches roadmap: float is the shell; Desktop is settings when needed.</p>
+  </div>
+</body>
+</html>

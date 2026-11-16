@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jos Round — Juvantage OS wire gallery</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&family=Nunito:wght@400;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600&display=swap');
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Nunito", "Segoe UI", sans-serif; font-size: 13px; color: #134e4a; background: #e8f6f4; }
+    .top { position: sticky; top: 0; z-index: 5; padding: 20px 28px; background: #fafeff; border-bottom: 1px solid rgba(19,78,74,.12); }
+    .top h1 { margin: 0 0 6px; font-family: "Nunito", "Segoe UI", sans-serif; font-size: 1.5rem; }
+    .top p { margin: 0; color: rgba(19,78,74,.65); max-width: 70ch; line-height: 1.45; font-size: 0.9rem; }
+    .stack { max-width: 1040px; margin: 0 auto; padding: 32px 20px 96px; display: flex; flex-direction: column; gap: 48px; }
+    figure { margin: 0; }
+    figcaption { margin-top: 12px; font-size: 0.8rem; font-weight: 700; color: rgba(19,78,74,.65); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    figcaption code { font-size: 0.75rem; opacity: 0.85; }
+    .mac-frame { background: #ffffff; border: 1px solid rgba(19,78,74,.12); border-radius: 22px; box-shadow: 0 12px 0 rgba(19,78,74,.08); overflow: hidden; flex-shrink: 0; font-size: 12px; }
+    .mac-frame.desktop { width: 980px; height: 680px; }
+    .mac-frame.sheet { width: 340px; height: 560px; margin: 0 auto; }
+    .mac-frame.solo { width: 1024px; height: 640px; }
+    .mac-frame.tray { width: 280px; height: 320px; margin: 0 auto; }
+    .mac-frame.desktop, .mac-frame.solo { max-width: 100%; transform-origin: top left; }
+    @media (max-width: 1000px) {
+      .mac-frame.desktop, .mac-frame.solo { transform: scale(calc(100vw / 1020)); margin-bottom: -120px; }
+    }
+    .titlebar { height: 38px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-bottom: 1px solid rgba(19,78,74,.12); background: #ffffff; font-weight: 600; font-size: 12px; }
+    .win-title { flex: 1; text-align: center; font-family: "Nunito", "Segoe UI", sans-serif; }
+    .win-actions { font-size: 11px; color: rgba(19,78,74,.65); }
+    .traffic { display: flex; gap: 6px; }
+    .traffic i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+    .traffic .r { background: #ff5f57; } .traffic .y { background: #febc2e; } .traffic .g { background: #28c840; }
+    .desk-body { display: grid; grid-template-columns: 168px 1fr; height: calc(100% - 38px); min-height: 0; }
+    .desk-nav { background: #ecfdf9; border-right: 1px solid rgba(19,78,74,.12); padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; text-align: left; }
+    .nav-item { border: none; background: transparent; border-radius: 16px; padding: 8px 10px; cursor: default; color: #134e4a; font-family: inherit; width: 100%; text-align: left; }
+    .nav-item.on { background: #ffffff; box-shadow: 0 1px 0 rgba(19,78,74,.12); color: #0f766e; }
+    .nav-label { display: block; font-weight: 700; font-size: 12px; }
+    .nav-sub { display: block; font-size: 10px; color: rgba(19,78,74,.65); margin-top: 2px; }
+    .nav-sep { height: 1px; background: rgba(19,78,74,.12); margin: 8px 4px; border: none; }
+    .desk-main { padding: 18px 20px; overflow: auto; background: #fafeff; }
+    .desk-main h1, .desk-main h2 { font-family: "Nunito", "Segoe UI", sans-serif; margin: 0 0 8px; }
+    .lede { color: rgba(19,78,74,.65); line-height: 1.45; margin: 0 0 14px; font-size: 12px; }
+    .fine { font-size: 10px; color: rgba(19,78,74,.65); margin-top: 12px; }
+    .muted { color: rgba(19,78,74,.65); font-size: 11px; margin: 4px 0 0; }
+    .btn { font-family: inherit; border-radius: 16px; padding: 8px 12px; font-weight: 600; font-size: 11px; border: 1px solid rgba(19,78,74,.12); background: #ffffff; color: #134e4a; cursor: default; }
+    .btn.primary, .btn.accent { background: #14b8a6; color: #fff; border-color: #14b8a6; }
+    .btn.ghost { background: transparent; }
+    .btn.block { width: 100%; }
+    .btn.mini { padding: 4px 8px; font-size: 10px; }
+    .status-strip { font-size: 11px; padding: 8px 12px; border-radius: 16px; background: #ccfbf1; margin-bottom: 12px; }
+    .chips-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 14px; }
+    .chip-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: rgba(19,78,74,.65); margin-right: 4px; }
+    .chip { border: 1px solid rgba(19,78,74,.12); border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 700; background: #ffffff; cursor: default; font-family: inherit; color: #134e4a; }
+    .chip.on { background: #14b8a6; color: #fff; border-color: #14b8a6; }
+    .work-split { display: grid; grid-template-columns: 1fr 1.15fr; gap: 14px; min-height: 360px; }
+    .loop-list { display: flex; flex-direction: column; gap: 8px; }
+    .loop-row { text-align: left; border: 1px solid rgba(19,78,74,.12); border-radius: 16px; padding: 10px; background: #ffffff; font-family: inherit; cursor: default; width: 100%; color: #134e4a; }
+    .loop-row.sel { border-color: #14b8a6; background: #ccfbf1; }
+    .loop-row.muted { border-style: dashed; font-size: 11px; color: rgba(19,78,74,.65); }
+    .loop-meta { display: block; font-size: 10px; color: rgba(19,78,74,.65); margin-top: 4px; }
+    .detail-pane h2 { font-size: 1rem; margin-top: 4px; }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .pill { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 999px; margin-right: 6px; }
+    .pill-warn { background: #f97316; color: #fff; }
+    .pill-soon { background: #ccfbf1; color: #0f766e; }
+    .pill-quiet { border: 1px solid rgba(19,78,74,.12); }
+    input, textarea { width: 100%; border: 1px solid rgba(19,78,74,.12); border-radius: 16px; padding: 8px; font-family: inherit; font-size: 11px; background: #ffffff; color: #134e4a; margin-top: 4px; }
+    textarea { min-height: 88px; resize: none; line-height: 1.4; }
+    textarea.tall { min-height: 200px; }
+    .field-label { display: block; font-size: 10px; font-weight: 700; margin-top: 8px; }
+    .conn-card { border: 1px solid rgba(19,78,74,.12); border-radius: 22px; padding: 14px; margin-bottom: 10px; display: grid; gap: 8px; }
+    .conn-card.on { border-color: #14b8a6; }
+    .state { font-size: 10px; font-weight: 800; text-transform: uppercase; }
+    .state.ok { color: #14b8a6; }
+    .state.off { color: rgba(19,78,74,.65); }
+    .row-btns { display: flex; gap: 8px; }
+    .setting-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(19,78,74,.12); }
+    .toggle.on { color: #14b8a6; font-weight: 800; }
+    .signin-body { display: grid; place-items: center; height: calc(100% - 38px); background: #fafeff; }
+    .signin-card { width: 320px; padding: 24px; border: 1px solid rgba(19,78,74,.12); border-radius: 22px; background: #ffffff; }
+    .eyebrow { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #14b8a6; margin: 0 0 8px; }
+    .sheet-panel { padding: 14px; height: 100%; display: flex; flex-direction: column; gap: 6px; background: #fafeff; overflow: auto; }
+    .sheet-meta { display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: rgba(19,78,74,.65); }
+    .sheet-title { font-family: "Nunito", "Segoe UI", sans-serif; font-size: 1rem; margin: 0; line-height: 1.3; }
+    .tool-hint { font-size: 11px; color: rgba(19,78,74,.65); margin: 0; line-height: 1.35; }
+    .chip-src { font-size: 10px; font-weight: 700; color: #0f766e; }
+    .evidence-toggle { background: none; border: none; font-family: inherit; font-size: 11px; font-weight: 600; color: #0f766e; text-align: left; padding: 6px 0; cursor: default; }
+    .evidence-lines { margin: 0; font-size: 10px; display: flex; flex-direction: column; gap: 4px; background: #ccfbf1; padding: 8px; border-radius: 16px; }
+    .evidence-lines div { display: grid; grid-template-columns: 72px 1fr; gap: 6px; }
+    .evidence-lines dt { font-weight: 700; color: rgba(19,78,74,.65); margin: 0; }
+    .evidence-lines dd { margin: 0; }
+    .evidence-panel { border: 1px solid rgba(19,78,74,.12); border-radius: 16px; padding: 12px; background: #ccfbf1; margin-bottom: 12px; }
+    .engine-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .engine-chips span { font-size: 9px; font-weight: 700; padding: 3px 6px; border-radius: 6px; background: rgba(19,78,74,.12); opacity: 0.7; }
+    .sheet-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 8px; }
+    .toast { background: #ccfbf1; color: #0f766e; padding: 12px; border-radius: 16px; font-weight: 800; text-align: center; }
+    .toast.pulse { animation: glow 1.5s ease infinite; }
+    @keyframes glow { 50% { box-shadow: 0 0 0 6px #ccfbf1; } }
+    .center { text-align: center; }
+    .mac-wallpaper { background: linear-gradient(160deg,#ccfbf1,#e8f6f4); height: 100%; position: relative; }
+    .menu-bar-mock { position: absolute; top: 0; left: 0; right: 0; height: 26px; background: rgba(0,0,0,.15); font-size: 11px; padding: 4px 12px; color: #134e4a; backdrop-filter: blur(8px); }
+    .wall-hint { position: absolute; left: 20px; bottom: 20px; font-size: 11px; color: rgba(19,78,74,.65); }
+    .agent-float { position: absolute; right: 32px; bottom: 40px; width: 80px; height: 88px; border-radius: 20px; background: radial-gradient(circle at 50% 35%,#f7f3e8,#14b8a6 72%); border: 2px solid rgba(255,255,255,.45); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+    .agent-float.mini { position: relative; right: auto; bottom: auto; margin: 12px auto; width: 56px; height: 60px; }
+    .agent-float.nudge { animation: bob 1.2s ease infinite; }
+    .agent-face { display: block; width: 32px; height: 24px; margin: 28px auto 0; border-radius: 40%; background: #f7f3e8; }
+    .agent-float .badge { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; background: #f97316; color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+    @keyframes bob { 50% { transform: translateY(-6px); } }
+    .sheet-ghost { position: absolute; right: 28px; bottom: 140px; width: 200px; padding: 8px; font-size: 10px; border: 1px dashed rgba(19,78,74,.12); border-radius: 12px; background: #ffffff; opacity: 0.85; }
+    .tray-scene { background: linear-gradient(160deg,#ccfbf1,#e8f6f4); height: 100%; padding-top: 8px; }
+    .tray-menu { margin: 8px auto 0; width: 220px; background: rgba(40,40,40,.92); color: #fff; border-radius: 10px; padding: 6px; font-size: 12px; }
+    .tray-menu p { margin: 0; padding: 8px 10px; border-radius: 6px; }
+    .tray-menu hr { border: none; border-top: 1px solid rgba(255,255,255,.15); margin: 4px 0; }
+    .inbox-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .feed { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.6; }
+    .single-detail { max-width: 640px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>Jos Round</h1>
+    <p>Rounded UI · teal Jos · friendly copy · <strong>Mac sizes</strong> — Desktop 980×680, Quick sheet 340×560.
+    Same flows as the running app (Work, Approve, Google, evidence). Run <code>npm run ui:exploration:png</code> to fill <code>images/*.png</code>.</p>
+  </header>
+  <main class="stack">
+  <figure>
+    <div class="mac-frame desktop" id="01-sign-in" data-export="01-sign-in">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Juvantage OS — Desktop</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="signin-body">
+  <div class="signin-card">
+    <p class="eyebrow">Brain on this Mac</p>
+    <h1>Sign in</h1>
+    <p class="lede">OAuth tokens and approve grants never live in the WebView shell.</p>
+    <label>Email<input readonly value="john@juvantage.com" /></label>
+    <label>Password<input readonly type="password" value="demo1234" /></label>
+    <button class="btn primary block" type="button">Sign in</button>
+    <p class="fine">Demo: john@juvantage.com / demo1234</p>
+  </div>
+</div>
+    </div>
+    <figcaption>
+      <span>25 · Sign in</span>
+      <code>980×680 pt · 01-sign-in.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame desktop" id="02-onboarding-connect" data-export="02-onboarding-connect">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Juvantage OS — Desktop</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="desk-body">
+  <nav class="desk-nav" aria-label="Desktop">
+    <button type="button" class="nav-item">
+      <span class="nav-label">Work</span>
+      <span class="nav-sub">What you still owe</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Synced</span>
+      <span class="nav-sub">Mail &amp; calendar feed</span>
+    </button>
+    <h4 class="nav-sep" aria-hidden="true"></h4>
+    <button type="button" class="nav-item on">
+      <span class="nav-label">Google</span>
+      <span class="nav-sub">Linked</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Settings</span>
+      <span class="nav-sub">Privacy &amp; metrics</span>
+    </button>
+  </nav>
+  <main class="desk-main">
+    <h1>Google</h1>
+    <p class="lede">Hands for Jos — read mail &amp; calendar. <strong>Nothing sends</strong> until you Approve on a loop.</p>
+    <div class="conn-card">
+      <div><strong>Gmail</strong><p class="muted">Read threads · send only after approve</p></div>
+      <span class="state off">Not connected</span>
+      <button class="btn primary" type="button">Connect Google</button>
+    </div>
+    <div class="conn-card">
+      <div><strong>Calendar</strong><p class="muted">Read events · create on approve</p></div>
+      <span class="state off">Not connected</span>
+      <button class="btn ghost" type="button">Use demo data</button>
+    </div>
+    <p class="fine">Or: menu bar agent → teal circle → sign in when Brain is down.</p>
+  </main>
+</div>
+    </div>
+    <figcaption>
+      <span>16 · Connect Google</span>
+      <code>980×680 pt · 02-onboarding-connect.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame solo" id="03-agent-idle" data-export="03-agent-idle">
+      <div class="mac-wallpaper solo-scene">
+  <div class="menu-bar-mock"><span>􀣺</span> Juvantage · File · Edit · View</div>
+  <p class="wall-hint">Your Mac — only Jos floats</p>
+  <div class="agent-float idle" title="Jos"><span class="agent-face"></span></div>
+</div>
+    </div>
+    <figcaption>
+      <span>01 · Agent on Mac</span>
+      <code>1024×640 pt · 03-agent-idle.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame solo" id="04-agent-nudge" data-export="04-agent-nudge">
+      <div class="mac-wallpaper solo-scene">
+  <div class="menu-bar-mock">Menu bar · Juvantage</div>
+  <div class="agent-float nudge"><span class="badge">1</span><span class="agent-face"></span></div>
+  <div class="sheet-ghost">Click → quick sheet (340×560)</div>
+</div>
+    </div>
+    <figcaption>
+      <span>02 · Agent nudge</span>
+      <code>1024×640 pt · 04-agent-nudge.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame sheet" id="05-quick-sheet-mail" data-export="05-quick-sheet-mail">
+      <div class="sheet-panel">
+  <header class="sheet-meta">
+    <span>1 hero · mail</span>
+    <button class="btn ghost mini" type="button">Desktop</button>
+  </header>
+  <span class="pill pill-warn">URGENT</span>
+  <span class="chip-src">Mail · reply owed</span>
+  <h2 class="sheet-title">Q3 pilot pack — need your reply</h2>
+  <p class="tool-hint">Jos opened Mail compose — edit, then Approve to send.</p>
+  <button class="evidence-toggle" type="button">Context used for this proposal ▸</button>
+  <label class="field-label">Title<input readonly value="Re: Q3 pilot pack" /></label>
+  <label class="field-label">Draft<textarea readonly>Hi Maya,
+
+Thanks for the note on the pilot pack. I can confirm Thursday works on our side.
+
+Best,
+John</textarea></label>
+  <div class="engine-chips"><span>mail</span><span>gmail</span><span>92% router</span></div>
+  <div class="sheet-actions">
+    <button class="btn primary" type="button">Approve &amp; send</button>
+    <button class="btn ghost" type="button">Quiet</button>
+    <button class="btn ghost" type="button">Snooze</button>
+  </div>
+</div>
+    </div>
+    <figcaption>
+      <span>05 · Quick sheet mail</span>
+      <code>340×560 pt · 05-quick-sheet-mail.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame sheet" id="06-quick-sheet-episodic" data-export="06-quick-sheet-episodic">
+      <div class="sheet-panel">
+  <header class="sheet-meta"><span>Screen note</span></header>
+  <span class="pill pill-soon">SOON</span>
+  <span class="chip-src">Screen · local close</span>
+  <h2 class="sheet-title">npm run test:integration</h2>
+  <p class="tool-hint">Approve files this away. <strong>Does not</strong> send Gmail or run the command.</p>
+  <button class="evidence-toggle open" type="button">Context used ▾</button>
+  <dl class="evidence-lines">
+    <div><dt>Source</dt><dd>Front window + clipboard</dd></div>
+    <div><dt>App</dt><dd>Cursor</dd></div>
+    <div><dt>Signals</dt><dd>2 fused</dd></div>
+  </dl>
+  <textarea readonly>Jos fused 2 signals… Edit, then Approve to close locally.</textarea>
+  <button class="btn primary block" type="button">Approve</button>
+</div>
+    </div>
+    <figcaption>
+      <span>Screen note sheet</span>
+      <code>340×560 pt · 06-quick-sheet-episodic.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame desktop" id="07-desktop-work" data-export="07-desktop-work">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Juvantage OS — Desktop</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="desk-body">
+  <nav class="desk-nav" aria-label="Desktop">
+    <button type="button" class="nav-item on">
+      <span class="nav-label">Work</span>
+      <span class="nav-sub">What you still owe</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Synced</span>
+      <span class="nav-sub">Mail &amp; calendar feed</span>
+    </button>
+    <h4 class="nav-sep" aria-hidden="true"></h4>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Google</span>
+      <span class="nav-sub">Linked</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Settings</span>
+      <span class="nav-sub">Privacy &amp; metrics</span>
+    </button>
+  </nav>
+  <main class="desk-main work-layout">
+    <h1>What you still owe</h1>
+    <p class="lede">Jos finds unfinished work → draft → you Approve → sends or books.</p>
+    <div class="status-strip"><strong>6</strong> to close · 20 mail synced · Edit, then Approve</div>
+    <div class="chips-row">
+      <span class="chip-label">Urgency</span>
+      <button class="chip on" type="button">All</button>
+      <button class="chip" type="button">Urgent</button>
+      <button class="chip" type="button">Soon</button>
+      <span class="chip-label">From</span>
+      <button class="chip on" type="button">All</button>
+      <button class="chip" type="button">Mail</button>
+      <button class="chip" type="button">Calendar</button>
+      <button class="btn accent" type="button">Find unfinished</button>
+    </div>
+    <div class="work-split">
+      <div class="loop-list">
+        <button class="loop-row sel" type="button">
+          <span class="pill pill-warn">URGENT</span><strong>Q3 pilot pack — Maya</strong>
+          <span class="loop-meta">reply owed · Mail</span>
+        </button>
+        <button class="loop-row" type="button">
+          <span class="pill pill-soon">SOON</span><strong>Confirm Thursday standup</strong>
+          <span class="loop-meta">appointment · Calendar</span>
+        </button>
+        <button class="loop-row muted" type="button"><em>2 screen notes hidden — Show</em></button>
+      </div>
+      <div class="detail-pane">
+        <span class="pill pill-warn">URGENT</span> <span class="pill pill-quiet">Mail</span>
+        <h2>Q3 pilot pack — need your reply</h2>
+        <p class="loop-meta">Reply owed · aging 22h</p>
+        <button class="evidence-toggle open" type="button">Context used ▾</button>
+        <dl class="evidence-lines">
+          <div><dt>Thread</dt><dd>Re: Pilot timeline</dd></div>
+          <div><dt>From</dt><dd>maya@example.com</dd></div>
+          <div><dt>Router</dt><dd>92%</dd></div>
+        </dl>
+        <label class="field-label">Title<input value="Re: Q3 pilot pack" readonly /></label>
+        <textarea readonly>Hi Maya,…</textarea>
+        <div class="detail-actions">
+          <button class="btn accent" type="button">Draft</button>
+          <button class="btn primary" type="button">Approve &amp; send</button>
+          <button class="btn ghost" type="button">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+    </div>
+    <figcaption>
+      <span>08 · Work home (MVP)</span>
+      <code>980×680 pt · 07-desktop-work.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame desktop" id="08-evidence-drawer" data-export="08-evidence-drawer">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Work · evidence open</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="desk-body">
+  <nav class="desk-nav" aria-label="Desktop">
+    <button type="button" class="nav-item on">
+      <span class="nav-label">Work</span>
+      <span class="nav-sub">What you still owe</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Synced</span>
+      <span class="nav-sub">Mail &amp; calendar feed</span>
+    </button>
+    <h4 class="nav-sep" aria-hidden="true"></h4>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Google</span>
+      <span class="nav-sub">Linked</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Settings</span>
+      <span class="nav-sub">Privacy &amp; metrics</span>
+    </button>
+  </nav>
+  <main class="desk-main work-layout single-detail">
+    <h2>Q3 pilot pack</h2>
+    <section class="evidence-panel">
+      <h3>Context used for this proposal</h3>
+      <dl class="evidence-lines full">
+        <div><dt>Source</dt><dd>Gmail sync</dd></div>
+        <div><dt>Subject</dt><dd>Re: Q3 pilot pack</dd></div>
+        <div><dt>Snippet</dt><dd>…confirm timeline by EOD Thursday?</dd></div>
+        <div><dt>Session</dt><dd>—</dd></div>
+        <div><dt>Router</dt><dd>mail · 92%</dd></div>
+      </dl>
+    </section>
+    <textarea class="tall" readonly>Full draft body…</textarea>
+  </main>
+</div>
+    </div>
+    <figcaption>
+      <span>11 · Evidence drawer</span>
+      <code>980×680 pt · 08-evidence-drawer.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame desktop" id="09-connectors" data-export="09-connectors">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Google</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="desk-body">
+  <nav class="desk-nav" aria-label="Desktop">
+    <button type="button" class="nav-item">
+      <span class="nav-label">Work</span>
+      <span class="nav-sub">What you still owe</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Synced</span>
+      <span class="nav-sub">Mail &amp; calendar feed</span>
+    </button>
+    <h4 class="nav-sep" aria-hidden="true"></h4>
+    <button type="button" class="nav-item on">
+      <span class="nav-label">Google</span>
+      <span class="nav-sub">Linked</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Settings</span>
+      <span class="nav-sub">Privacy &amp; metrics</span>
+    </button>
+  </nav>
+  <main class="desk-main">
+    <h1>Google</h1>
+    <p class="lede">Synced · <strong>20</strong> mail · <strong>18</strong> events</p>
+    <div class="conn-card on">
+      <div><strong>Gmail</strong><p class="muted">Last sync 2m ago</p></div>
+      <span class="state ok">Connected · demo</span>
+      <div class="row-btns"><button class="btn ghost" type="button">Sync</button><button class="btn ghost" type="button">Disconnect</button></div>
+    </div>
+    <div class="conn-card on">
+      <div><strong>Calendar</strong><p class="muted">events.read + events.create</p></div>
+      <span class="state ok">Connected</span>
+    </div>
+    <button class="btn primary" type="button">Send me a test to close</button>
+  </main>
+</div>
+    </div>
+    <figcaption>
+      <span>16 · Google linked</span>
+      <code>980×680 pt · 09-connectors.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame desktop" id="10-settings-privacy" data-export="10-settings-privacy">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Settings</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="desk-body">
+  <nav class="desk-nav" aria-label="Desktop">
+    <button type="button" class="nav-item">
+      <span class="nav-label">Work</span>
+      <span class="nav-sub">What you still owe</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Synced</span>
+      <span class="nav-sub">Mail &amp; calendar feed</span>
+    </button>
+    <h4 class="nav-sep" aria-hidden="true"></h4>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Google</span>
+      <span class="nav-sub">Linked</span>
+    </button>
+    <button type="button" class="nav-item on">
+      <span class="nav-label">Settings</span>
+      <span class="nav-sub">Privacy &amp; metrics</span>
+    </button>
+  </nav>
+  <main class="desk-main">
+    <h1>Privacy</h1>
+    <p class="lede">Quartet: eyes off when idle · raw context purged ≤24h.</p>
+    <div class="setting-row"><div><strong>Pause eyes when idle ≥ 90s</strong><p class="muted">Ears stay on (mail extract)</p></div><span class="toggle on">On</span></div>
+    <div class="setting-row"><div><strong>Purge ambient &amp; context ≤ 24h</strong><p class="muted">Keep loops + proposals</p></div><span class="toggle on">On</span></div>
+    <div class="setting-row"><div><strong>Blocklist apps</strong><p class="muted">Never read these front windows</p></div><button class="btn ghost" type="button">Edit</button></div>
+    <p class="fine">Metrics: <code>GET /os/metrics</code> · dogfood clear rate</p>
+  </main>
+</div>
+    </div>
+    <figcaption>
+      <span>19 · Privacy</span>
+      <code>980×680 pt · 10-settings-privacy.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame sheet" id="11-approve-success" data-export="11-approve-success">
+      <div class="sheet-panel success">
+  <div class="toast pulse">Sent · verified closed</div>
+  <p class="lede center">Demo simulated send. Loop marked done.</p>
+  <div class="agent-float mini"><span class="agent-face"></span></div>
+  <button class="btn ghost block" type="button">Open Desktop</button>
+</div>
+    </div>
+    <figcaption>
+      <span>06 · Sheet closed</span>
+      <code>340×560 pt · 11-approve-success.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame desktop" id="12-synced-inbox" data-export="12-synced-inbox">
+      <div class="titlebar">
+  <div class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+  <span class="win-title">Synced</span>
+  <span class="win-actions">Undock</span>
+</div>
+<div class="desk-body">
+  <nav class="desk-nav" aria-label="Desktop">
+    <button type="button" class="nav-item">
+      <span class="nav-label">Work</span>
+      <span class="nav-sub">What you still owe</span>
+    </button>
+    <button type="button" class="nav-item on">
+      <span class="nav-label">Synced</span>
+      <span class="nav-sub">Mail &amp; calendar feed</span>
+    </button>
+    <h4 class="nav-sep" aria-hidden="true"></h4>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Google</span>
+      <span class="nav-sub">Linked</span>
+    </button>
+    <button type="button" class="nav-item">
+      <span class="nav-label">Settings</span>
+      <span class="nav-sub">Privacy &amp; metrics</span>
+    </button>
+  </nav>
+  <main class="desk-main inbox">
+    <h1>Mail &amp; calendar feed</h1>
+    <p class="lede">Raw sync store — debug. Obligations surface on Work.</p>
+    <div class="inbox-split">
+      <section><h3>Mail threads</h3><ul class="feed"><li>Maya · pilot pack</li><li>Investor update</li></ul></section>
+      <section><h3>Calendar</h3><ul class="feed"><li>Thu 10am standup</li><li>Fri coffee Sarah</li></ul></section>
+    </div>
+  </main>
+</div>
+    </div>
+    <figcaption>
+      <span>14–15 · Synced feed</span>
+      <code>980×680 pt · 12-synced-inbox.png</code>
+    </figcaption>
+  </figure>
+  <figure>
+    <div class="mac-frame tray" id="13-tray-menu" data-export="13-tray-menu">
+      <div class="tray-scene">
+  <div class="menu-bar-mock">􀣺 Juvantage</div>
+  <div class="tray-menu">
+    <p>Show agent</p>
+    <p>Open quick sheet</p>
+    <p>Open Desktop</p>
+    <hr />
+    <p>Quit Juvantage OS</p>
+  </div>
+</div>
+    </div>
+    <figcaption>
+      <span>23 · Menu bar</span>
+      <code>280×320 pt · 13-tray-menu.png</code>
+    </figcaption>
+  </figure>
+  </main>
+</body>
+</html>

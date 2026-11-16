@@ -19,7 +19,11 @@ The 1–100 scores that match the checker live in [`artifacts/coq/MACHINE_CHECK.
   - Gap II: **Thm B.1–B.2 quantitative EFE**  
   - Gap III: **Thm C.1–C.2 universal SDO**  
   - Artifacts: `MemoryNI.tla`, `DarkRoomEFE.md`  
-- **Machine-checked models (Rocq 9.3.0, no axioms):** [`artifacts/coq/`](./artifacts/coq/) — `MemoryNI.v`, `WasmJS.v`, `ProcIso.v`, `SeniMachine.v`, `DarkRoom.v`, `OpenDoc.v`, `MpscRing.v`. Log and scores: [`artifacts/coq/MACHINE_CHECK.md`](./artifacts/coq/MACHINE_CHECK.md). This does **not** verify Chromium, HMAC, or macOS. Isabelle was not run.
+- Pass 3 (hard leftovers → Rocq): [`DISTINCTION_PASS3.md`](./DISTINCTION_PASS3.md)  
+  - Poisson discrete integral + occupation crossover (`PoissonDarkRoom.v`)  
+  - SDO terminal property (`SdoTerminal.v`)  
+  - Ideal-MAC SENI / symbolic EUF (`SeniIdealMac.v`)  
+- **Machine-checked models (Rocq 9.3.0, no axioms):** [`artifacts/coq/`](./artifacts/coq/) — prior seven plus Pass 3 three. Log and scores: [`artifacts/coq/MACHINE_CHECK.md`](./artifacts/coq/MACHINE_CHECK.md). This does **not** verify Chromium, HMAC-SHA256, or macOS. Isabelle was not run.
 
 **Unified product paper:** [`../JV-OS-RP-01_PAPER.md`](../JV-OS-RP-01_PAPER.md)  
 **Sparks:** [`../SPARKS.md`](../SPARKS.md)  
@@ -27,4 +31,4 @@ The 1–100 scores that match the checker live in [`artifacts/coq/MACHINE_CHECK.
 
 ### Pass / Distinction claim
 
-The three assignment dossiers are written. The machine-checked portion is the Rocq models in `artifacts/coq/`, scored in `MACHINE_CHECK.md`. Chromium, HMAC, and the Poisson integral are not in that portion. Application L4 hardware benches remain engineering validation.
+The three assignment dossiers are written. The machine-checked portion is the Rocq models in `artifacts/coq/`, scored in `MACHINE_CHECK.md` (56 closed theorems after Pass 3). Chromium, HMAC-SHA256 (PPT), and real-analysis Poisson remain outside that portion. Application L4 hardware benches remain engineering validation.

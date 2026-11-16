@@ -5,6 +5,12 @@ contextBridge.exposeInMainWorld("juvantageOs", {
   openDesktop: (loopId) => ipcRenderer.invoke("os:open-desktop", loopId ?? null),
   undock: () => ipcRenderer.invoke("os:undock"),
   closeSheet: () => ipcRenderer.invoke("os:close-sheet"),
+  contextClosed: () => ipcRenderer.invoke("os:context-closed"),
+  onContextClosed: (cb) => {
+    const handler = () => cb();
+    ipcRenderer.on("os:context-closed", handler);
+    return () => ipcRenderer.removeListener("os:context-closed", handler);
+  },
   stubAction: (action) => ipcRenderer.invoke("os:stub-action", action),
   openExternal: (url) => ipcRenderer.invoke("os:open-external", url),
   ambientSample: () => ipcRenderer.invoke("os:ambient-sample"),

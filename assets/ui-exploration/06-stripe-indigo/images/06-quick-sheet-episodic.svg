@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="580" viewBox="0 0 360 580">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect x="16" y="16" width="328" height="548" rx="12" fill="#ffffff" stroke="#e6ebf1" stroke-width="2"/>
+  <text x="180" y="48" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0a2540">Quick sheet — screen</text>
+  <text x="180" y="72" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#425466">Stripe Indigo</text>
+  <rect x="40" y="100" width="280" height="40" rx="8" fill="#f2f0ff"/>
+  <text x="180" y="126" text-anchor="middle" font-size="11" fill="#4f46e5" font-family="system-ui">06-quick-sheet-episodic</text>
+  <text x="180" y="540" text-anchor="middle" font-size="10" fill="#425466">Open gallery.html for full layout</text>
+</svg>

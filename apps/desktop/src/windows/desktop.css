@@ -387,6 +387,23 @@
   min-height: 360px;
 }
 
+.loops-layout.focus-mode {
+  grid-template-columns: 1fr;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.loops-layout.focus-mode .loop-list {
+  display: none;
+}
+
+.hero-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
 .loop-list {
   display: flex;
   flex-direction: column;

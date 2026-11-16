@@ -57,6 +57,30 @@ final class BrainClient: ObservableObject {
         userEmail = nil
     }
 
+    /// Dogfood: sign in once so the web sheet can call the Brain without opening Desktop.
+    func ensureDevLoginIfNeeded() async {
+        #if DEBUG
+        guard TokenStore.token == nil else { return }
+        try? await login(email: "john@juvantage.com", password: "demo1234")
+        #endif
+    }
+
+    /// Native push — does not depend on WKWebView or Accessibility trust string.
+    func pushEpisodicFromFrontWindow() async {
+        guard TokenStore.token != nil else { return }
+        let eye = AmbientSampler.episodicContext()
+        guard eye.ok else { return }
+        var payload: [String: Any] = ["app": eye.app]
+        if let title = eye.title { payload["title"] = title }
+        if let text = eye.text { payload["text"] = text }
+        guard let body = try? JSONSerialization.data(withJSONObject: payload) else { return }
+        do {
+            _ = try await rawRequest(path: "/os/loops/episodic", method: "POST", body: body, authed: true)
+        } catch {
+            // Sheet still shows local hints; Brain may be down.
+        }
+    }
+
     func fetchLoops(limit: Int = 5) async throws -> [LoopDTO] {
         let res: LoopsResponseDTO = try await request(path: "/os/loops?limit=\(limit)")
         return res.loops

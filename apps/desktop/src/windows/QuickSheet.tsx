@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { LoopWithProposal, Proposal } from "@juvantage/shared";
-import { isClosableObjectType } from "@juvantage/shared";
+import { isClosableObjectType, pickSheetHero } from "@juvantage/shared";
 import {
   approveSendOsProposal,
   dismissOsLoop,
   editOsProposal,
+  ensureDevFixtures,
   extractOsLoops,
+  fetchOsConnectors,
   fetchOsLoops,
+  syncOsConnectors,
+  subscribeOsContextStream,
+  surfaceEpisodic,
   getToken,
   proposeOsLoop,
   snoozeOsLoop,
@@ -42,7 +47,11 @@ function kindLabel(kind: string): string {
   return kind.replace(/_/g, " ");
 }
 
-function toolHint(objectType: string | null | undefined): string {
+function toolHint(loop: { source?: string | null; objectType?: string | null }): string {
+  if (loop.source === "episodic") {
+    return "Jos read the front window — edit, then Approve to close. This does not send email.";
+  }
+  const objectType = loop.objectType;
   if (objectType === "mail") return "Jos opened Mail compose — edit, then Approve to send.";
   if (objectType === "calendar") return "Jos opened Calendar — edit, then Approve to book/confirm.";
   if (objectType === "voice") return "Jos drafted from your voice — edit, then Approve to close.";
@@ -61,38 +70,142 @@ export function QuickSheet() {
   const [busy, setBusy] = useState<string | null>(null);
   const [quietPick, setQuietPick] = useState(false);
   const [focusId, setFocusId] = useState<string | null>(null);
+  const [miss, setMiss] = useState<string | null>(null);
+  const [heroKey, setHeroKey] = useState("");
   const focusRef = useRef<string | null>(null);
   focusRef.current = focusId;
+  const appliedBody = useRef<string | null>(null);
+  const firstLoad = useRef(true);
+  const syncLeaseRef = useRef(0);
+  const SYNC_MIN_MS = 60_000;
+
+  async function maybeSyncExtract() {
+    const now = Date.now();
+    if (now - syncLeaseRef.current < SYNC_MIN_MS) return;
+    try {
+      const { connectors } = await fetchOsConnectors();
+      const linked = connectors.some(
+        (c) =>
+          c.status === "connected" &&
+          (c.provider === "gmail" || c.provider === "google_calendar"),
+      );
+      if (!linked) return;
+      syncLeaseRef.current = now;
+      await syncOsConnectors();
+      await extractOsLoops();
+    } catch {
+      /* offline or unsigned */
+    }
+  }
+
+  async function readFrontWindow() {
+    const eye = window.juvantageOs?.episodicContext;
+    if (!eye) {
+      setMiss(
+        "This Mac app is still the older build. In Xcode, press Stop, then Run. That loads the window reader.",
+      );
+      return;
+    }
+    try {
+      const ctx = await eye();
+      const app = ctx.app?.trim() || "the other window";
+      const line = ctx.text?.trim() ?? "";
+      const hasWords = Boolean(line || (ctx.title && ctx.title.trim().length >= 4));
+      if (line.length >= 8) {
+        const saved = await surfaceEpisodic({ app: ctx.app, title: ctx.title, text: ctx.text });
+        if (saved.surfaced) {
+          setMiss(null);
+          return;
+        }
+      }
+      if (!ctx.ok) {
+        setMiss(
+          "The menu bar at the very top does not name the window Jos should read. Click the Xcode window so the menu bar says Xcode, highlight a line so it turns blue, and leave it. This card checks again in a few seconds.",
+        );
+        return;
+      }
+      if (app.toLowerCase().includes("system settings") || app.toLowerCase() === "settings") {
+        setMiss(
+          "You opened this while looking at System Settings. Close the card, click your code window so the menu bar says Xcode, highlight one line, press ⌘C to copy, then click the teal circle.",
+        );
+        return;
+      }
+      if (ctx.axTrusted === false && !ctx.text?.trim()) {
+        setMiss(
+          `Jos found ${app}. The switch next to JuvantageOSMac can be on while the app icon still looks grey — that is normal in Xcode. macOS may still think this build is "not trusted" until you press Stop, then Run. Or skip the blue-line read: highlight a line, press ⌘C to copy, then open this card (clipboard does not need Accessibility).`,
+        );
+        return;
+      }
+      if (!hasWords) {
+        setMiss(
+          `Jos found ${app} but no line yet. Highlight one line, press ⌘C to copy it, then leave this card open — it checks again every few seconds.`,
+        );
+        return;
+      }
+      const saved = await surfaceEpisodic({ app: ctx.app, title: ctx.title, text: ctx.text });
+      if (!saved.surfaced) {
+        setMiss(
+          `Jos looked at ${app} and still did not get a sentence. Highlight one line so it turns blue.`,
+        );
+        return;
+      }
+      setMiss(null);
+    } catch {
+      setMiss(
+        "The window read didn't reach the Brain. The one in your terminal is already running — don't start a second copy.",
+      );
+    }
+  }
 
   const refresh = useCallback(async () => {
     if (!getToken()) {
       setLoops([]);
       setProposal(null);
+      setMiss(
+        "Not signed in to the Brain. Open Desktop from this card and sign in, or press Stop then Run in Xcode (dev builds sign in automatically on launch).",
+      );
       setLoading(false);
       return;
     }
-    setLoading(true);
+    if (firstLoad.current) setLoading(true);
     try {
-      const data = await fetchOsLoops(4);
-      setLoops(data.loops);
-      const focused =
-        data.loops.find((l) => l.id === focusRef.current) ?? data.loops[0];
+      await ensureDevFixtures();
+      await readFrontWindow();
+      await maybeSyncExtract();
+      const data = await fetchOsLoops(8);
+      const hero = pickSheetHero(data.loops);
+      const shown = hero ? [hero] : [];
+      setLoops(shown);
+      const focused = shown.find((l) => l.id === focusRef.current) ?? shown[0];
+      if (focused) setHeroKey(`${focused.id}:${focused.updatedAt ?? ""}`);
       if (focused?.id !== focusRef.current) setFocusId(focused?.id ?? null);
       const topProp = focused?.proposal ?? null;
       setProposal(topProp);
-      setDraftTitle(topProp?.title ?? "");
-      setDraftBody(topProp?.body ?? "");
+      const nextBody = topProp?.body ?? "";
+      if (appliedBody.current !== nextBody) {
+        appliedBody.current = nextBody;
+        setDraftTitle(topProp?.title ?? "");
+        setDraftBody(nextBody);
+      }
     } catch {
       setLoops([]);
     } finally {
+      firstLoad.current = false;
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     void refresh();
-    const id = window.setInterval(() => void refresh(), 20_000);
-    return () => window.clearInterval(id);
+    const id = window.setInterval(() => void refresh(), 45_000);
+    const stopStream = subscribeOsContextStream(() => void refresh());
+    const onToken = () => void refresh();
+    window.addEventListener("juv-os-token", onToken);
+    return () => {
+      window.clearInterval(id);
+      stopStream();
+      window.removeEventListener("juv-os-token", onToken);
+    };
   }, [refresh]);
 
   useEffect(() => {
@@ -134,16 +247,7 @@ export function QuickSheet() {
     window.setTimeout(() => setToast(null), 2800);
   }
 
-  function focusLoop(loop: LoopWithProposal) {
-    setFocusId(loop.id);
-    setProposal(loop.proposal ?? null);
-    setDraftTitle(loop.proposal?.title ?? "");
-    setDraftBody(loop.proposal?.body ?? "");
-    setQuietPick(false);
-  }
-
   const top = loops.find((l) => l.id === focusId) ?? loops[0] ?? null;
-  const others = top ? loops.filter((l) => l.id !== top.id) : [];
   const canApprove = top ? isClosableObjectType(top.objectType) : false;
   const approveLabel =
     top?.objectType === "mail" ? "Approve & send" : "Approve & close context";
@@ -217,6 +321,7 @@ export function QuickSheet() {
               ? "Booked — context closed"
               : "Context closed",
       );
+      void window.juvantageOs?.contextClosed?.();
       await refresh();
     } catch (err) {
       flash(err instanceof Error ? err.message : "Approve failed");
@@ -249,24 +354,8 @@ export function QuickSheet() {
     await refresh();
   }
 
-  async function onExtract() {
-    if (!getToken()) {
-      flash("Sign in on Desktop first");
-      return;
-    }
-    const res = await extractOsLoops();
-    setLoops(res.loops as LoopWithProposal[]);
-    flash(
-      res.createdCount
-        ? `Found ${res.createdCount} new — pick one below`
-        : res.loops.length
-          ? `${res.loops.length} still open`
-          : "Nothing unfinished matched yet",
-    );
-  }
-
   return (
-    <div className="sheet-shell">
+    <div className={`sheet-shell${loading ? " sheet-loading" : ""}`}>
       <header className="sheet-header">
         <div>
           <h1>Suggestion</h1>
@@ -290,7 +379,7 @@ export function QuickSheet() {
 
       {top ? (
         <div className="sheet-loops">
-          <article className="loop-card focus sheet-hero">
+          <article key={heroKey || top.id} className="loop-card focus sheet-hero sheet-hero-enter">
             <div className="loop-meta">
               <span className={`band ${top.band}`}>
                 {top.band === "critical"
@@ -304,7 +393,7 @@ export function QuickSheet() {
             </div>
             <h2>{top.title}</h2>
             {top.summary ? <p>{top.summary}</p> : null}
-            <p className="loop-source">{toolHint(top.objectType)}</p>
+            <p className="loop-source">{toolHint(top)}</p>
           </article>
 
           <EvidenceDrawer
@@ -322,36 +411,30 @@ export function QuickSheet() {
             busy={busy !== null}
           />
 
-          {others.length > 0 ? (
-            <div className="sheet-more" aria-label="Other suggestions">
-              <p className="quiet-label">Also open</p>
-              {others.map((loop) => (
-                <button
-                  key={loop.id}
-                  type="button"
-                  className="loop-card sheet-more-item"
-                  onClick={() => focusLoop(loop)}
-                >
-                  <strong>{loop.title}</strong>
-                  <span className="muted">
-                    {sourceLabel(loop.source)} · {kindLabel(loop.kind)}
-                  </span>
-                </button>
-              ))}
-            </div>
-          ) : null}
         </div>
       ) : (
         <div className="sheet-empty">
-          <p className="empty-title">Nothing to close right now</p>
+          <p className="empty-title">No sentence from the window in front</p>
           <p className="empty-body">
-            Link Google on Desktop, hold <kbd>fn</kbd> to talk, or press{" "}
-            <kbd>⌘⇧L</kbd> to clip something you owe. Jos will suggest a close
-            here.
+            {miss ??
+              "Click the window you were using, highlight one line, then click the teal circle."}
           </p>
-          <button type="button" className="btn-extract" onClick={() => void onExtract()}>
-            Find unfinished
-          </button>
+          <p className="empty-body">
+            Maya and “You were in some app” are practice cards. They stay on Desktop. They are not a read of your screen.
+          </p>
+          {miss?.includes("JuvantageOSMac") ? (
+            <button
+              type="button"
+              className="btn-extract"
+              onClick={() =>
+                void window.juvantageOs?.openExternal(
+                  "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_Accessibility",
+                )
+              }
+            >
+              Open Accessibility settings
+            </button>
+          ) : null}
         </div>
       )}
 

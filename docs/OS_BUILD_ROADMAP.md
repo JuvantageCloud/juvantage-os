@@ -7,7 +7,11 @@
 **Agent:** `assets/motion/characters/mascot-idle-loop.json` (locked)
 
 ```text
-Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  →  Teams container
+The OS is the Brain (close laws). Mac is host 1, not the product.
+
+Ship order:  host-1 shell (done)  →  quartet in the running Brain
+             →  dogfood on that Brain  →  ranker-to-1  →  episodic eye
+             →  Skills  →  second host / Teams container
 ```
 
 ---
@@ -21,7 +25,7 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 | Brain | **Extend `apps/api`** with Brain API routes (`/loops`, `/approve`, …) | Teams needs Docker → extract image |
 | Screen fork | **B · Screen-first episodic** — connectors as hands/away-ears; presence eyes-off when idle; OCR deepens in V2 (`OS_ARCHITECTURE.md` §A6–A8) | Dogfood weak on specificity → pull episodic OCR earlier |
 | Retention | Purge raw ambient/frames ≤24h; **keep Loops + proposals** | User asks longer evidence window |
-| Quick sheet | **Up to 3** loops (V2 ranker → bias to **1**) | Too noisy → 1 |
+| Quick sheet | **1** hero suggestion (list of 3 is the Desktop Work backup) | Dogfood says one is wrong |
 | LLM | Adapter behind brain (start Anthropic if key exists); **context packs only** | Cost/privacy → Bedrock/local |
 
 ---
@@ -83,6 +87,9 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 - [x] Ambient: frontmost app via osascript; **purge raw ≤24h**
 - [x] Presence stub: eyes/ambient pause when idle ≥90s
 - [x] Clip hotkey ⌘⇧L → create loop stub from current context
+- [x] Context fuse v1: `ContextSession` + `ContextEvent` → bundle → episodic loop (`OS_CONTEXT_FUSE.md`)
+- [x] `POST /os/capture/events` host ingest (episodic uses same fuse path)
+- [x] Automated harness: context fuse + demo close (`npm test` + `npm run test:integration -w @juvantage/api`)
 
 **Exit:** you get nudged on something real from your mailbox. ✅ (demo mail qualifies)
 
@@ -130,7 +137,7 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 - [ ] **Use daily 14 days** (human gate — not a code checkbox)
 - [ ] Private beta invite list (target ~25) — optional; **init GitHub/CI before invites**
 
-**Gate to Teams:** you would miss it if it were gone.
+**Gate to Teams:** you would miss the **Brain** if it were gone — not the Mac chrome. Teams is a second host on the same grant protocol. Do not start Phase 7 until the quartet gate below is checked in code.
 
 **Operational review (capture + gates):** [`OS_OPERATIONAL_REVIEW.md`](./OS_OPERATIONAL_REVIEW.md) · trust boundary [`OS_TCB.md`](./OS_TCB.md) · research addendum [`research/doctoral/FEEDBACK_ADDENDUM.md`](./research/doctoral/FEEDBACK_ADDENDUM.md)
 
@@ -141,8 +148,8 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 
 **Active sprint plan:** [`OS_NEXT_SPRINT.md`](./OS_NEXT_SPRINT.md) (Connect vs Loops UX + P0.1 proof + macOS Lottie)
 
-**Research complete:** [`research/JV-OS-RP-01_PAPER.md`](./research/JV-OS-RP-01_PAPER.md) — modality objects, episodic sensing, approve capability.  
-**V1.5 slice (shipping from research — SENI + Thm III):**
+**Research models** (Rocq toys, not a verified OS): [`research/doctoral/artifacts/coq/MACHINE_CHECK.md`](./research/doctoral/artifacts/coq/MACHINE_CHECK.md) · [`research/doctoral/DISTINCTION_PASS3.md`](./research/doctoral/DISTINCTION_PASS3.md). Do not add another proof file as the next stage.  
+**V1.5 slice (laws already mirrored in Brain — SENI consume-once + Thm III refuse):**
 1. [x] Refuse weak clips (app-name-only → no HIGH todo / AmbientHint)
 2. [x] `objectType` + routerConf on Loop + `osModality` router
 3. [x] ApprovalGrant one-shot on approve→execute (SENI Thm I.1)
@@ -151,6 +158,22 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 6. [x] Desktop: disable Approve when objectType not closable + show object chip
 
 **GitHub/CI timing:** not required for solo dogfood. Do it when (a) a second person touches the repo, (b) private beta invites, or (c) hosted Brain deploy — whichever comes first.
+
+---
+
+## Quartet gate — before V2 eyes, before Phase 7 *(next engineering stage)*
+
+The four laws are founded. The running Brain only partly obeys them. This gate is production code and tests, not more Rocq.
+
+**Done when:** a thrown-away shell cannot mint or forge a close, and a second shell would call the same Brain.
+
+- [x] **A.1 / TCB:** mint key stays in Brain (`TOKEN_ENCRYPTION_KEY`). Test: a shell key cannot match `signGrantMac`.
+- [x] **SENI:** grant tag is HMAC-SHA256. Wrong key and tampered nonce fail (`osGrants.test.ts`). Consume still rejects replay in `consumeApprovalGrant`.
+- [x] **Dark Room:** `presencePolicy` — idle ≥90s drops the eye ledger, `earsOn` stays true, `retainFrames` is false.
+- [x] **SDO:** `canApproveExecute` is `isClosableObjectType` (float and Desktop already import that helper). Hint/unknown cannot approve.
+- [x] **Bus:** `tryAdmit` returns full and stays full; execute takes a slot and releases it (429 when full).
+
+Dogfood days can run **in parallel**. They do **not** replace this gate. Episodic OCR stays behind it.
 
 ---
 
@@ -170,7 +193,7 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 |--------|------|
 | Electron fights Mac UX | Switch shell; keep Brain API |
 | Loops too noisy | Tighten extract; default Quiet higher |
-| Still lose to Reyn on specificity | Pull V2 episodic OCR / watched pages forward (not always-on) |
+| Still lose to Reyn on specificity **after** quartet gate + 14 days | Pull V2 episodic OCR forward (not always-on) |
 | Approve scary / bugs | Freeze connectors; fix gate + verify only |
 | Dogfood &lt; 3 days/week | Fix surface before Phase 7 |
 
@@ -186,9 +209,10 @@ Ship order:  Mac Desktop Personal  →  dogfood  →  eye/ranker  →  Skills  �
 - [x] Phase 4 complete — Propose → approve → execute → verify (+ audit)
 - [x] Phase 5 complete — Desktop Loops home + undock + sheet hierarchy
 - [x] Phase 6 tooling — quiet feedback + metrics + agent relaunch
-- [ ] **Now:** complete Phase 6 P0 (operational review), then dogfood daily 14 days (Settings → Refresh metrics)
+- [x] Quartet gate in the running Brain (HMAC tests, presence policy, shared close rule, execute backpressure). Dogfood journal still open. V2 OCR and Phase 7 stay closed.
+- [x] Work list order: mail/calendar before episodic; Desktop opens on hero; screen notes collapsed by default ([`YOU_ARE_HERE.md`](./YOU_ARE_HERE.md))
 - [x] JV-OS-RP-01 research paper + sparks → architecture/flagship
-- [x] Doctoral Three-Tier dossier COMPLETE — Assignments 1·2·3 + artifacts (`docs/research/doctoral/`)
+- [x] Doctoral dossiers + Rocq **models** (Assignments 1·2·3, Pass 3). Models ≠ verified OS.
 - [x] CI: `.github/workflows/ci.yml` + `docs/SECRETS_AND_DEPLOY.md`
 - [x] Incident capability: capture failures → CI investigate → **draft PR for review** (`OS_INCIDENT_RESPONSE.md`)
 - [x] Scope/cost clarity in [`FLAGSHIP_STAGED_PLAN.md`](./FLAGSHIP_STAGED_PLAN.md) §0a–0b, §4 (2026-11-01)

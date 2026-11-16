@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect x="16" y="16" width="768" height="418" rx="12" fill="#ffffff" stroke="#e6ebf1" stroke-width="2"/>
+  <text x="400" y="48" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0a2540">Stripe Indigo</text>
+  <text x="400" y="72" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#425466">Stripe Indigo</text>
+  <rect x="40" y="100" width="720" height="40" rx="8" fill="#f2f0ff"/>
+  <text x="400" y="126" text-anchor="middle" font-size="11" fill="#4f46e5" font-family="system-ui">cover</text>
+  <text x="400" y="410" text-anchor="middle" font-size="10" fill="#425466">Open gallery.html for full layout</text>
+</svg>

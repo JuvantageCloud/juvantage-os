@@ -1,3 +1,4 @@
+import { sortLoopsForWork } from "@juvantage/shared";
 import { prisma } from "../db/client.js";
 
 const AGING_HOURS = 18;
@@ -169,13 +170,9 @@ export async function listOpenLoops(userId: string, limit = SURFACE_LIMIT) {
     },
   });
 
-  loops.sort((a, b) => {
-    const band = (BAND_ORDER[a.band] ?? 9) - (BAND_ORDER[b.band] ?? 9);
-    if (band !== 0) return band;
-    return b.updatedAt.getTime() - a.updatedAt.getTime();
-  });
+  const sorted = sortLoopsForWork(loops);
 
-  return loops.slice(0, limit).map(serializeLoop);
+  return sorted.slice(0, limit).map(serializeLoop);
 }
 
 export async function nudgeState(userId: string) {

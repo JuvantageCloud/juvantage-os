@@ -1,44 +1,47 @@
-# Next sprint — float-first close context
+# Next sprint — quartet in the running Brain
 
-**Goal:** The floating agent + quick sheet *is* the product. Desktop is secondary.
+**Goal:** Make the four OS laws true in `apps/api`, then keep dogfooding host 1 (Mac). The float is a shell. The Brain is the product.
 
-## Mental model (locked)
+Research tie-in: fused context lives on the **loop evidence pack** (Assignment 1 / RP-01, `docs/OS_CONTEXT_FUSE.md`) — not a separate Context tab in IA.
 
-| Surface | What it is | What you do |
-|---------|------------|-------------|
-| **Float** | Nudge that something needs closing | Click → suggestion sheet |
-| **Suggestion sheet** | Preview + OS tool for this context | Refine → **Approve** closes context |
-| **Desktop → Work** | Wider list of open contexts | Same close engine |
-| **Desktop → Google** | Link accounts once | Sign in / refresh |
-| **Desktop → Synced** | Raw mail/calendar feed | Glance only |
+## Laws (already founded — now enforce them)
 
-**Approve** = close this context (send / book / note) — not “always Gmail.”  
-Jos picks the **internal tool** (ModalityHost) from object type.
+| Law | In the running system |
+|-----|------------------------|
+| Browser / WebView is not a vault | Mint key + OAuth stay in Brain. Shell cannot forge a grant. |
+| No effect without a one-shot grant | Real MAC on `ApprovalGrant`. Second execute fails. Wrong key fails. |
+| Ears on, eyes off when idle | Idle is a scheduler: no frame retain; obligation extract still runs. |
+| Close is semantic | Float and Desktop both refuse weak clips and block Approve on non-closable types. |
 
----
+## Do not start (yet)
+
+- Another Rocq file
+- Phase 7 Docker / Teams
+- Scene graph, meeting audio, Skills
 
 ## Build order
 
-### A · Float-first (this PR)
+### A · Quartet (this stage)
 
-1. [x] Quick sheet as “Suggestion” — one hero context + tool surface
-2. [x] Plain-English Approve closes context
-3. [x] JOS-3: clip/ambient owned by sheet only (not Desktop too)
+1. [x] Grant tag = HMAC-SHA256; tests for wrong key and tampered fields
+2. [x] Idle scheduler: eyes off, ears on (`presencePolicy`)
+3. [x] Same close rule: Brain `canApproveExecute` uses the shared closable set
 
-### B · Next
+### B · Host-1 polish (beside A, not instead)
 
-1. [ ] Bias sheet to **1** suggestion (ranker)
-2. [ ] Success pulse on float after Approve
-3. [ ] JOS-8/9/10 security before wider dogfood
-4. [ ] Episodic OCR (V2) — after float path feels right
+1. [x] Suggestion sheet: one hero context, Approve closes
+2. [x] Clip hotkey owned by the sheet only (JOS-3)
+3. [x] Sheet shows **1** suggestion (the rest stay on Desktop → Work)
+4. [x] Success pulse on the float after Approve
+5. [x] Hero priority: linked mail/calendar beats episodic; `GET /os/loops/:id/context` + drawer
+6. [x] Episodic ingest: window + clipboard → `ContextSession` fuse (`POST /os/capture/events`)
 
-### C · Dogfood
+### C · Quality gate (replaces handwritten 14-day journal)
 
 1. [x] Live Gmail Approve once
-2. [ ] Days 2–14 journal
-
----
+2. [x] HTTP harness: demo close + capture fuse + context pack (`npm run test:integration -w @juvantage/api`)
+3. [ ] Optional: widen harness to live OAuth smoke (not required for V2 eyes)
 
 ## Done when
 
-You say: *“Float nudges me → I preview → Jos opens the right tool → Approve closes the context.”*
+A test suite shows: shell cannot forge, grant burns once, idle keeps no frames, both shells refuse a weak clip, hero picks real obligations when connectors are linked, and the evidence drawer loads the fused session ledger. Then V2 eyes are allowed.

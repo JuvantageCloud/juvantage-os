@@ -88,6 +88,27 @@
   box-shadow: 0 1px 0 rgba(13, 122, 111, 0.08);
 }
 
+.sheet-hero-enter {
+  animation: sheet-hero-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes sheet-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sheet-loading .sheet-empty,
+.sheet-loading .sheet-loops {
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+
 .sheet-more {
   display: grid;
   gap: 6px;

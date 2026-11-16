@@ -2,7 +2,7 @@
  * SENI (Distinction Thm I.1) — linear ApprovalGrant store.
  * Host oracle: mint on approve, consume exactly once on execute.
  */
-import { createHmac, randomBytes } from "node:crypto";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { prisma } from "../db/client.js";
 import { env } from "../lib/env.js";
 
@@ -26,15 +26,37 @@ export function maskForProposalKind(kind: string): bigint {
   return MASK_EXECUTE_SEND;
 }
 
-function macGrant(fields: {
+export type GrantMacFields = {
   grantId: string;
   proposalId: string;
   nonce: string;
   mask: string;
   expiresAt: string;
-}): string {
+};
+
+/** HMAC-SHA256 over the grant fields. Key stays in the Brain (TOKEN_ENCRYPTION_KEY). */
+export function signGrantMac(key: string, fields: GrantMacFields): string {
   const payload = `${fields.grantId}|${fields.proposalId}|${fields.nonce}|${fields.mask}|${fields.expiresAt}`;
-  return createHmac("sha256", env.tokenEncryptionKey).update(payload).digest("hex");
+  return createHmac("sha256", key).update(payload).digest("hex");
+}
+
+/** Constant-time check. A shell that does not hold `key` cannot produce a match. */
+export function grantMacMatches(key: string, fields: GrantMacFields, mac: string): boolean {
+  const expected = signGrantMac(key, fields);
+  let a: Buffer;
+  let b: Buffer;
+  try {
+    a = Buffer.from(expected, "hex");
+    b = Buffer.from(mac, "hex");
+  } catch {
+    return false;
+  }
+  if (a.length === 0 || a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+function macGrant(fields: GrantMacFields): string {
+  return signGrantMac(env.tokenEncryptionKey, fields);
 }
 
 /** One fresh grant per proposal — expire stale fresh rows before mint. */
@@ -116,14 +138,14 @@ export async function consumeApprovalGrant(userId: string, proposalId: string) {
     });
     throw new GrantError("SENI: Approval grant expired — approve again", 403);
   }
-  const expected = macGrant({
+  const fields = {
     grantId: grant.id,
     proposalId: grant.proposalId,
     nonce: grant.nonce,
     mask: grant.mask,
     expiresAt: grant.expiresAt.toISOString(),
-  });
-  if (expected !== grant.mac) {
+  };
+  if (!grantMacMatches(env.tokenEncryptionKey, fields, grant.mac)) {
     throw new GrantError("SENI: CapToken MAC invalid — forge blocked", 403);
   }
 

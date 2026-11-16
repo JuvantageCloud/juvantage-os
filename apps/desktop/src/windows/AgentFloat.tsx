@@ -6,6 +6,15 @@ import "./agent-float.css";
 export function AgentFloat() {
   const [nudge, setNudge] = useState(false);
   const [count, setCount] = useState(0);
+  const [closedPulse, setClosedPulse] = useState(false);
+
+  useEffect(() => {
+    const off = window.juvantageOs?.onContextClosed?.(() => {
+      setClosedPulse(true);
+      window.setTimeout(() => setClosedPulse(false), 1600);
+    });
+    return () => off?.();
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,7 +45,7 @@ export function AgentFloat() {
   }, []);
 
   return (
-    <div className={`agent-float ${nudge ? "has-nudge" : ""}`}>
+    <div className={`agent-float ${nudge ? "has-nudge" : ""} ${closedPulse ? "closed-pulse" : ""}`}>
       <div className="agent-drag" aria-hidden title="Drag to move" />
       <button
         type="button"
