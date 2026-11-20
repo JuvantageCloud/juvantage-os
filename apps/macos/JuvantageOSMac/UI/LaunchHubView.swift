@@ -68,6 +68,15 @@ struct LaunchHubView: View {
             Text("Later: ✨ menu bar · teal agent · ⌘⇧L clip")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
+
+            #if DEBUG
+            Button("Reset onboarding (dev)") {
+                LaunchPolicy.hasCompletedOnboarding = false
+                axDone = false
+                voiceDone = false
+            }
+            .font(.caption)
+            #endif
         }
         .padding(24)
         .frame(minWidth: 460, minHeight: 340)

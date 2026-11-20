@@ -38,7 +38,7 @@ npm run mvp:smoke
 
 Xcode dev builds often auto-login; if sheet says “not signed in”, open **Desktop** and sign in once.
 
-**First launch (Mac):** one setup window only — allow screen context and voice when prompted, tap **Start Juvantage**. Agent float appears; quick sheet does not auto-open.
+**First launch (Mac):** one setup window only — allow screen context and voice when prompted, tap **Start Juvantage**. Agent float appears; quick sheet does not auto-open. Debug builds: **Reset onboarding (dev)** on that screen, or after one run: `defaults write com.juvantage.os.mac juv_os_onboarding_v1 -bool false` (`defaults delete` only works after the app has run once).
 
 ---
 
