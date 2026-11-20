@@ -58,10 +58,11 @@
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 8px 28px rgba(15, 45, 40, 0.08);
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   flex-direction: column;
-  min-height: 120px;
+  min-height: min(320px, 50vh);
+  flex: 1 1 auto;
 }
 
 .modality-surface-head {
@@ -114,7 +115,8 @@
 }
 
 .modality-field textarea {
-  min-height: 120px;
+  min-height: 200px;
+  flex: 1;
   resize: vertical;
 }
 

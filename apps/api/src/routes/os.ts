@@ -42,7 +42,7 @@ import { captureAndFuseLoop, ingestCaptureEvents } from "../services/osContextFu
 import { getLoopContextPack } from "../services/osLoopContext.js";
 import { getPresenceHint, presenceFromQuery } from "../services/osPresenceHint.js";
 import { seedP01MailTest } from "../services/osProof.js";
-import { VoiceLoopError, createVoiceLoop } from "../services/osVoice.js";
+import { VoiceLoopError, createVoiceLoop, parseVoiceQuickAnswer } from "../services/osVoice.js";
 import {
   osGoogleOAuthErrorHtml,
   osGoogleOAuthSuccessHtml,
@@ -428,9 +428,18 @@ osRoutes.post("/loops/voice", async (c) => {
   const user = c.get("user");
   const body = (await c.req.json().catch(() => ({}))) as { text?: string; app?: string };
   try {
+    const transcript = typeof body.text === "string" ? body.text.trim() : "";
+    const quick = parseVoiceQuickAnswer(transcript);
+    if (quick) {
+      return c.json({
+        mode: "quick_answer" as const,
+        answer: quick.answer,
+        nudge: await nudgeState(user.sub),
+      });
+    }
     const loop = await createVoiceLoop(user.sub, body);
     const drafted = await proposeForLoop(user.sub, loop.id);
-    return c.json({ ...drafted, nudge: await nudgeState(user.sub) });
+    return c.json({ mode: "loop" as const, ...drafted, nudge: await nudgeState(user.sub) });
   } catch (err) {
     if (err instanceof VoiceLoopError) return c.json({ error: err.message }, 400);
     return closeErr(c, err);

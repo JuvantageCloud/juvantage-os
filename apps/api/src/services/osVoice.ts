@@ -11,6 +11,11 @@ export type VoiceIntent = {
   topic: string;
 };
 
+export type VoiceQuickAnswer = { mode: "answer"; answer: string };
+
+const TIME_RE = /^(?:what(?:'s| is) the time|what time is it)\??$/i;
+const MATH_RE = /^what(?:'s| is)\s+([\d.+\-*/()\s]+)\??$/i;
+
 const EMAIL_RE =
   /\b(?:draft|write|send|compose|shoot)?\s*(?:an?\s+|the\s+)?(?:quick\s+)?(?:(?:email|e-mail|message)\s+(?:(?:to|for)\s+)?|(?:mail|note)\s+(?:to|for)\s+)(.+)$/i;
 const TOPIC_SPLIT_RE = /\s+(?:about|re|regarding|saying|that|telling them|letting them know|to say)\s+/i;
@@ -18,6 +23,32 @@ const FILLER_RE = /^(?:hey\s+juvantage[,\s]*|ok(?:ay)?[,\s]+|so[,\s]+|please[,\s
 
 function tidy(s: string) {
   return s.replace(/\s+/g, " ").replace(/[\s,.;!?]+$/, "").trim();
+}
+
+/** Instant fn answers — no loop when matched (JOS-28). */
+export function parseVoiceQuickAnswer(raw: string): VoiceQuickAnswer | null {
+  const text = tidy(raw).replace(FILLER_RE, "");
+  if (TIME_RE.test(text)) {
+    const answer = new Date().toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+    return { mode: "answer", answer };
+  }
+  const math = text.match(MATH_RE);
+  if (math?.[1]) {
+    const expr = math[1].trim();
+    if (!/^[\d.+\-*/()\s]+$/.test(expr)) return null;
+    try {
+      const value = Function(`"use strict"; return (${expr})`)() as unknown;
+      if (typeof value === "number" && Number.isFinite(value)) {
+        return { mode: "answer", answer: String(value) };
+      }
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 export function parseVoiceIntent(raw: string): VoiceIntent {

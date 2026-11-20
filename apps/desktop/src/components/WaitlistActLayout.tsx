@@ -22,6 +22,7 @@ type Props = {
   onToggleEditor: () => void;
   onDraft: () => void;
   onApprove: () => void;
+  onApproveLater?: () => void;
   onLinkGoogle?: () => void;
   onFindUnfinished?: () => void;
   presenceHint?: PresenceHint | null;
@@ -42,6 +43,7 @@ export function WaitlistActLayout({
   onToggleEditor,
   onDraft,
   onApprove,
+  onApproveLater,
   onLinkGoogle,
   onFindUnfinished,
   presenceHint,
@@ -207,10 +209,11 @@ export function WaitlistActLayout({
               <button
                 type="button"
                 className="btn"
-                disabled
-                title="Scheduled approve is on the V1 roadmap"
+                disabled={busy || !hasDraft || !onApproveLater}
+                title="Snooze this close step for 2 hours"
+                onClick={() => void onApproveLater?.()}
               >
-                Approve later
+                Approve in 2h
               </button>
             </div>
 

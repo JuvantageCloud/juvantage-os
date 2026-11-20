@@ -358,13 +358,6 @@ export async function fetchOsNudge(): Promise<OsNudge> {
   return res.json();
 }
 
-export async function snoozeOsLoop(id: string): Promise<void> {
-  await apiFetch(`/os/loops/${id}/snooze`, {
-    method: "POST",
-    body: JSON.stringify({ hours: 4 }),
-  });
-}
-
 export type QuietReason =
   | "wrong_band"
   | "wrong_object"
@@ -439,16 +432,26 @@ export async function clipOsLoop(input: {
   return res.json();
 }
 
-export async function voiceOsLoop(input: { text: string; app?: string | null }): Promise<{
-  loop: Loop;
-  proposal: Proposal;
-  nudge: OsNudge;
-}> {
+export type VoiceOsResponse =
+  | { mode: "quick_answer"; answer: string; nudge: OsNudge }
+  | { mode: "loop"; loop: Loop; proposal: Proposal; nudge: OsNudge };
+
+export async function voiceOsLoop(input: {
+  text: string;
+  app?: string | null;
+}): Promise<VoiceOsResponse> {
   const res = await apiFetch("/os/loops/voice", {
     method: "POST",
     body: JSON.stringify(input),
   });
   return res.json();
+}
+
+export async function snoozeOsLoop(id: string, hours = 4): Promise<void> {
+  await apiFetch(`/os/loops/${id}/snooze`, {
+    method: "POST",
+    body: JSON.stringify({ hours }),
+  });
 }
 
 export async function postAmbient(input: {

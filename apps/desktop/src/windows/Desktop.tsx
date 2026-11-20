@@ -678,6 +678,17 @@ export function Desktop() {
                 onToggleEditor={() => setEditorOpen((v) => !v)}
                 onDraft={() => void onDraft()}
                 onApprove={() => void onApproveSend()}
+                onApproveLater={() => {
+                  if (!selected) return;
+                  setBusy("snooze");
+                  void snoozeOsLoop(selected.id, 2)
+                    .then(() => {
+                      notify("Snoozed 2 hours — will resurface then", "success");
+                      return refreshLoops();
+                    })
+                    .catch((err: Error) => notify(formatApiError(err, "Snooze"), "error"))
+                    .finally(() => setBusy(null));
+                }}
                 onLinkGoogle={() => setOverlay("connect")}
                 onFindUnfinished={() => void onExtract()}
                 presenceHint={presenceHint}
