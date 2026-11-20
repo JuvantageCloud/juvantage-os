@@ -319,7 +319,7 @@ describe("HTTP harness — demo approve-send close loop", () => {
     await json(await app.request("/os/loops/extract", { method: "POST", headers: auth, body: "{}" }));
 
     const before = await json<{
-      loops: Array<{ id: string; source: string; status?: string }>;
+      loops: Array<{ id: string; source: string; title: string; status: string }>;
     }>(await app.request("/os/loops?limit=20", { headers: auth }));
     const mailLoop = before.loops.find(
       (l) => l.source === "gmail" && ["open", "proposed"].includes(l.status),
