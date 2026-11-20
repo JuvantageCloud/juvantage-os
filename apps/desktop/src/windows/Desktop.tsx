@@ -32,7 +32,13 @@ import {
   type QuietReason,
 } from "../lib/api";
 import { ConnectorTile } from "../components/ConnectorTile";
+import { DesktopSettingsContent } from "../components/DesktopSettingsContent";
+import {
+  SettingsWorkbench,
+  type SettingsSection,
+} from "../components/SettingsWorkbench";
 import { WaitlistActLayout } from "../components/WaitlistActLayout";
+import { loopLooksLikeNoise } from "../lib/loopDisplay";
 import "../components/modality-surfaces.css";
 import "./desktop.css";
 
@@ -146,6 +152,7 @@ export function Desktop() {
   const [quietPick, setQuietPick] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [listeningHelp, setListeningHelp] = useState(false);
+  const [settingsSection, setSettingsSection] = useState<SettingsSection>("privacy");
   const [metrics, setMetrics] = useState<OsDogfoodMetrics | null>(null);
 
   const hostShell = Boolean(window.juvantageOs?.hostShell);
@@ -266,6 +273,7 @@ export function Desktop() {
         if (l.source === "clip" || l.source === "dev_fixture") return false;
         if (l.source === "episodic" && l.band !== "critical" && l.band !== "high") return false;
         if (l.source === "voice" && l.band === "quiet") return false;
+        if (loopLooksLikeNoise(l)) return false;
         return true;
       });
     }
@@ -314,6 +322,12 @@ export function Desktop() {
       ),
     [connectors],
   );
+
+  const earsStatus = useMemo(() => {
+    if (gmailLive) return "Gmail + Calendar (live)";
+    if (gmailConnected) return "Demo mail & calendar";
+    return "Not linked";
+  }, [gmailConnected, gmailLive]);
 
   function selectLoop(loop: LoopWithProposal) {
     setSelectedId(loop.id);
@@ -583,7 +597,7 @@ export function Desktop() {
         ) : (
           <span className="titlebar-spacer" aria-hidden />
         )}
-        <div className="titlebar-mid">
+        <div className="titlebar-end">
           <button
             type="button"
             className="listening-pill listening-pill--btn"
@@ -591,18 +605,18 @@ export function Desktop() {
             onClick={() => setListeningHelp((v) => !v)}
           >
             <span className="listening-dot" aria-hidden />
-            Listening
+            <span className="listening-label">Listening</span>
           </button>
           {listeningHelp ? (
             <div className="listening-popover" role="dialog" aria-label="What listening means">
               <p>
-                <strong>Eyes:</strong> frontmost app and window title while you are active (not full screen recording).
+                <strong>Eyes:</strong> frontmost app and window title while you are active.
               </p>
               <p>
-                <strong>Ears:</strong> Gmail and Calendar after you link Google. Jos reads in the background; you close from Work.
+                <strong>Ears:</strong> Gmail and Calendar after you link Google.
               </p>
               <p>
-                <strong>Voice:</strong> hold <kbd>fn</kbd> in the quick sheet for short asks and drafts (coming to quick answers next).
+                <strong>Voice:</strong> hold <kbd>fn</kbd> on the quick sheet.
               </p>
               {presenceHint?.app ? (
                 <p className="listening-popover-now">
@@ -612,20 +626,27 @@ export function Desktop() {
               ) : null}
             </div>
           ) : null}
-        </div>
-        <div className="actions">
           <button
             type="button"
-            className="btn ghost btn-settings"
+            className="btn-icon btn-ghost"
             title="Settings"
-            onClick={() => setOverlay(overlay === "settings" ? null : "settings")}
+            aria-label="Settings"
+            onClick={() => {
+              setSettingsSection("privacy");
+              setOverlay(overlay === "settings" ? null : "settings");
+            }}
           >
-            Settings
+            <svg className="icon-gear" viewBox="0 0 20 20" aria-hidden>
+              <path
+                fill="currentColor"
+                d="M10 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Zm7.4-2.2.9-.7.8-1.4-.9-.7a7.5 7.5 0 0 0 0-2l.9-.7-.8-1.4-.9.7a7.7 7.7 0 0 0-1.7-1l-.3-1.1h-1.6l-.3 1.1c-.6.3-1.2.6-1.7 1l-.9-.7-.8 1.4.9.7a7.5 7.5 0 0 0 0 2l-.9.7.8 1.4.9-.7c.5.4 1.1.7 1.7 1l.3 1.1h1.6l.3-1.1c.6-.3 1.2-.6 1.7-1Z"
+              />
+            </svg>
           </button>
           {showUndock ? (
             <button
               type="button"
-              className="btn ghost"
+              className="btn ghost btn-compact"
               title="Open desktop in its own window"
               onClick={() => void window.juvantageOs?.undock()}
             >
@@ -657,8 +678,21 @@ export function Desktop() {
                 onToggleEditor={() => setEditorOpen((v) => !v)}
                 onDraft={() => void onDraft()}
                 onApprove={() => void onApproveSend()}
+                onApproveLater={() => {
+                  if (!selected) return;
+                  setBusy("snooze");
+                  void snoozeOsLoop(selected.id, 2)
+                    .then(() => {
+                      notify("Snoozed 2 hours — will resurface then", "success");
+                      return refreshLoops();
+                    })
+                    .catch((err: Error) => notify(formatApiError(err, "Snooze"), "error"))
+                    .finally(() => setBusy(null));
+                }}
                 onLinkGoogle={() => setOverlay("connect")}
                 onFindUnfinished={() => void onExtract()}
+                presenceHint={presenceHint}
+                earsStatus={earsStatus}
               />
               {selected && quietPick ? (
                 <div className="quiet-reasons quiet-reasons--inline">
@@ -703,33 +737,28 @@ export function Desktop() {
                 overlay === "connect" ? "Google" : overlay === "inbox" ? "Connector cache" : "Settings"
               }
             >
-              <div className="desk-overlay-panel desk-overlay-panel--full">
-                <div className="desk-overlay-head">
-                  <h1>
-                    {overlay === "connect"
-                      ? "Google"
-                      : overlay === "inbox"
-                        ? "Connector cache (dev)"
-                        : "Settings"}
-                  </h1>
-                  <button
-                    type="button"
-                    className="btn primary btn-back-work"
-                    onClick={() => setOverlay(null)}
-                  >
-                    ← Back to work
-                  </button>
-                </div>
-                {overlay === "settings" ? (
-                  <p className="page-sub settings-quick-links">
-                    <button type="button" className="inline-link" onClick={() => setOverlay("connect")}>
-                      Link Google
+              <div
+                className={`desk-overlay-panel desk-overlay-panel--full${
+                  overlay === "settings" ? " desk-overlay-panel--settings" : ""
+                }`}
+              >
+                {overlay !== "settings" ? (
+                  <div className="desk-overlay-head">
+                    <h1 className="type-title">
+                      {overlay === "connect"
+                        ? "Google"
+                        : overlay === "inbox"
+                          ? "Connector cache (dev)"
+                          : ""}
+                    </h1>
+                    <button
+                      type="button"
+                      className="btn primary btn-back-work"
+                      onClick={() => setOverlay(null)}
+                    >
+                      ← Back to work
                     </button>
-                    {" · "}
-                    <button type="button" className="inline-link" onClick={() => setFiltersOpen((v) => !v)}>
-                      {filtersOpen ? "Hide filters" : "Loop filters"}
-                    </button>
-                  </p>
+                  </div>
                 ) : null}
 
                 {overlay === "inbox" ? (
@@ -878,186 +907,35 @@ export function Desktop() {
           ) : null}
 
                 {overlay === "settings" ? (
-            <>
-              <p className="page-sub">What Jos can see · privacy · dogfood metrics.</p>
-              {filtersOpen ? (
-                <div className="chips" style={{ marginBottom: 12 }}>
-                  <span className="chip-label">Urgency</span>
-                  {(
-                    [
-                      ["all", "All"],
-                      ["critical", "Urgent"],
-                      ["high", "Soon"],
-                      ["normal", "Normal"],
-                      ["quiet", "Quiet"],
-                    ] as const
-                  ).map(([id, label]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      className={`chip ${band === id ? "on" : ""}`}
-                      onClick={() => setBand(id)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                  <span className="chip-label">From</span>
-                  {(
-                    [
-                      ["all", "All"],
-                      ["mail", "Mail"],
-                      ["clip", "Clips"],
-                      ["calendar", "Calendar"],
-                    ] as const
-                  ).map(([id, label]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      className={`chip ${sourceFilter === id ? "on" : ""}`}
-                      onClick={() => setSourceFilter(id)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-              <div className="panel">
-                <h2>What Jos can see today</h2>
-                <p className="page-sub" style={{ marginTop: 0 }}>
-                  <strong>On:</strong> Gmail + Calendar (when linked), frontmost
-                  app / window title while you’re present, and clips you mark with{" "}
-                  <strong>⌘⇧L</strong>.
-                  <br />
-                  <strong>Not yet:</strong> full screen OCR / pixel reading — that’s
-                  V2 episodic eyes in the plan, not this build. We won’t pretend it’s
-                  here.
-                </p>
-                <p className="meta-mono">{apiBaseUrl()}</p>
-                {health.status === "ok" ? (
-                  <p className="ok">
-                    Brain up · {health.service}
-                    {health.llm ? " · LLM ready" : " · template drafts (no LLM key)"}
-                  </p>
-                ) : null}
-                {health.status === "error" ? <p className="err">{health.message}</p> : null}
-              </div>
-              <div className="panel">
-                <h2>Developer</h2>
-                <p className="page-sub">
-                  Raw Gmail/Calendar cache (not product UI) — for connector debugging only.
-                </p>
-                <button type="button" className="btn ghost" onClick={() => setOverlay("inbox")}>
-                  Open sync cache debug
-                </button>
-              </div>
-              <div className="panel">
-                <h2>Dogfood metrics (14d)</h2>
-                <p className="page-sub">
-                  Clear / accept / edit rates from your approve + quiet history.
-                </p>
-                <div className="btn-row" style={{ marginBottom: 10 }}>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() =>
-                      fetchOsMetrics(14)
-                        .then((m) => {
-                          setMetrics(m);
-                          notify("Metrics refreshed", "success");
-                        })
-                        .catch((err: Error) =>
-                          notify(formatApiError(err, "Metrics"), "error"),
-                        )
-                    }
+                  <SettingsWorkbench
+                    section={settingsSection}
+                    onSection={setSettingsSection}
+                    onBack={() => setOverlay(null)}
                   >
-                    Refresh metrics
-                  </button>
-                </div>
-                {metrics ? (
-                  <>
-                    <div className="form-row">
-                      <span>Clear rate</span>
-                      <span className="ok">{pct(metrics.clearRate)}</span>
-                    </div>
-                    <div className="form-row">
-                      <span>Accept rate</span>
-                      <span>{pct(metrics.acceptRate)}</span>
-                    </div>
-                    <div className="form-row">
-                      <span>Edit rate</span>
-                      <span>{pct(metrics.editRate)}</span>
-                    </div>
-                    <div className="form-row">
-                      <span>Done / dismissed / open</span>
-                      <span className="page-sub" style={{ margin: 0 }}>
-                        {metrics.loops.done} / {metrics.loops.dismissed} / {metrics.loops.open}
-                      </span>
-                    </div>
-                    <div className="form-row">
-                      <span>Quiet: wrong band</span>
-                      <span>{metrics.quietReasons.wrong_band}</span>
-                    </div>
-                    <div className="form-row">
-                      <span>Quiet: wrong object</span>
-                      <span>{metrics.quietReasons.wrong_object ?? 0}</span>
-                    </div>
-                    <div className="form-row">
-                      <span>Quiet: not actionable</span>
-                      <span>{metrics.quietReasons.not_actionable}</span>
-                    </div>
-                    <div className="form-row">
-                      <span>Quiet: already handled</span>
-                      <span>{metrics.quietReasons.already_done}</span>
-                    </div>
-                  </>
-                ) : (
-                  <p className="page-sub">Refresh after a few quiet/approve actions.</p>
-                )}
-              </div>
-              <div className="panel">
-                <h2>Plan and billing</h2>
-                <p className="page-sub" style={{ marginTop: 0 }}>
-                  Personal tier is active in this build. Team seats and usage upgrades will live here with Stripe checkout (V1).
-                </p>
-                <div className="form-row">
-                  <span>Personal</span>
-                  <span className="ok">Current</span>
-                </div>
-                <div className="form-row">
-                  <span>Teams</span>
-                  <span className="page-sub" style={{ margin: 0 }}>
-                    Coming soon
-                  </span>
-                </div>
-                <p className="page-sub">
-                  Connectors for cloud agents (Cursor, custom MCP) will appear under Connectors once we ship workspace keys.
-                </p>
-              </div>
-              <div className="panel">
-                <h2>General</h2>
-                <div className="form-row"><span>Check-in morning</span><span className="page-sub" style={{ margin: 0 }}>09:30</span></div>
-                <div className="form-row"><span>Check-in afternoon</span><span className="page-sub" style={{ margin: 0 }}>15:30</span></div>
-                <div className="form-row"><span>Context window</span><span className="page-sub" style={{ margin: 0 }}>4 hours</span></div>
-              </div>
-              <div className="panel">
-                <h2>Privacy</h2>
-                <div className="form-row"><span>Eyes pause when idle ≥90s</span><span className="ok">On</span></div>
-                <div className="form-row"><span>Raw ambient purge</span><span className="page-sub" style={{ margin: 0 }}>≤24h</span></div>
-                <p className="page-sub">
-                  We keep unfinished work + approvals — not a searchable screen journal
-                  (that’s Reyn’s category).
-                </p>
-              </div>
-              <div className="panel">
-                <h2>Account</h2>
-                <p className="ok">{userLabel}</p>
-                <div className="btn-row">
-                  <button type="button" className="btn" onClick={onLogout}>
-                    Sign out
-                  </button>
-                </div>
-              </div>
-            </>
+                    <DesktopSettingsContent
+                      section={settingsSection}
+                      apiBase={apiBaseUrl()}
+                      health={health}
+                      userLabel={userLabel}
+                      metrics={metrics}
+                      band={band}
+                      sourceFilter={sourceFilter}
+                      setBand={setBand}
+                      setSourceFilter={setSourceFilter}
+                      onLogout={onLogout}
+                      onOpenConnect={() => setOverlay("connect")}
+                      onOpenSyncDebug={() => setOverlay("inbox")}
+                      onRefreshMetrics={() =>
+                        void fetchOsMetrics(14)
+                          .then((m) => {
+                            setMetrics(m);
+                            notify("Stats updated", "success");
+                          })
+                          .catch((err: Error) => notify(formatApiError(err, "Stats"), "error"))
+                      }
+                      pct={pct}
+                    />
+                  </SettingsWorkbench>
                 ) : null}
               </div>
             </div>

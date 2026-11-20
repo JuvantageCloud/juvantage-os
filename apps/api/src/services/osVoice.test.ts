@@ -1,6 +1,20 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { parseVoiceIntent, voiceDraft } from "./osVoice.js";
+import { parseVoiceIntent, parseVoiceQuickAnswer, voiceDraft } from "./osVoice.js";
+
+describe("parseVoiceQuickAnswer", () => {
+  it("answers time questions", () => {
+    const q = parseVoiceQuickAnswer("what time is it");
+    assert.ok(q);
+    assert.equal(q!.mode, "answer");
+    assert.ok(q!.answer.length > 0);
+  });
+
+  it("answers simple math", () => {
+    const q = parseVoiceQuickAnswer("what is 2 + 2");
+    assert.deepEqual(q, { mode: "answer", answer: "4" });
+  });
+});
 
 describe("parseVoiceIntent", () => {
   it("reads an email intent with recipient and topic", () => {

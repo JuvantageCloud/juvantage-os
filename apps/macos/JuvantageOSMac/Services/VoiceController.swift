@@ -35,7 +35,8 @@ final class VoiceController: ObservableObject {
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
 
-    func start() {
+    /// Hotkey monitors only — no system permission dialogs until `requestPermissions()`.
+    func startMonitors() {
         guard monitors.isEmpty else { return }
         if let global = NSEvent.addGlobalMonitorForEvents(matching: [.flagsChanged, .keyDown], handler: { event in
             let type = event.type
@@ -52,6 +53,14 @@ final class VoiceController: ObservableObject {
         }) {
             monitors.append(local)
         }
+    }
+
+    func start() {
+        startMonitors()
+    }
+
+    /// One step from onboarding — Mic then Speech (system shows separate sheets; we do not auto-call on launch).
+    func requestPermissions() {
         SFSpeechRecognizer.requestAuthorization { _ in }
         AVCaptureDevice.requestAccess(for: .audio) { _ in }
     }

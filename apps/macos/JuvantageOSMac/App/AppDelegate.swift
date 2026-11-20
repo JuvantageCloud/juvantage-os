@@ -122,20 +122,68 @@ final class ShellController: ObservableObject {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var clipMonitors: [Any] = []
-
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
-        registerClipHotkey()
         Task { @MainActor in
-            ShellController.shared.setupAgentPanel()
-            VoiceController.shared.start()
             await BrainClient.shared.refreshHealth()
-            await BrainClient.shared.ensureDevLoginIfNeeded()
-            OsWebViewRegistry.injectAuthTokenIntoWebViews()
-            ShellController.shared.toggleQuickSheet()
-            NSApp.activate(ignoringOtherApps: true)
+            if LaunchPolicy.hasCompletedOnboarding {
+                AppRuntime.shared.installGlobalShortcuts()
+                ShellController.shared.setupAgentPanel()
+                await BrainClient.shared.ensureDevLoginIfNeeded()
+                OsWebViewRegistry.injectAuthTokenIntoWebViews()
+                LaunchPolicy.hideHubWindows()
+            }
         }
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
+    }
+}
+
+// MARK: - Calm launch (kept in AppDelegate.swift so Xcode target membership never drifts)
+
+enum LaunchPolicy {
+    private static let onboardKey = "juv_os_onboarding_v1"
+
+    static var hasCompletedOnboarding: Bool {
+        get { UserDefaults.standard.bool(forKey: onboardKey) }
+        set { UserDefaults.standard.set(newValue, forKey: onboardKey) }
+    }
+
+    @MainActor
+    static func finishOnboarding() {
+        hasCompletedOnboarding = true
+        AppRuntime.shared.installGlobalShortcuts()
+        ShellController.shared.setupAgentPanel()
+        hideHubWindows()
+    }
+
+    @MainActor
+    static func hideHubWindows() {
+        for window in NSApp.windows {
+            let title = window.title.lowercased()
+            if title.isEmpty || title.contains("juvantage") {
+                if window.frame.width < 520, window.frame.height < 320 {
+                    window.orderOut(nil)
+                }
+            }
+        }
+    }
+}
+
+@MainActor
+final class AppRuntime {
+    static let shared = AppRuntime()
+
+    private var clipMonitors: [Any] = []
+    private var installed = false
+
+    func installGlobalShortcuts() {
+        guard !installed else { return }
+        installed = true
+        registerClipHotkey()
+        VoiceController.shared.startMonitors()
     }
 
     private func registerClipHotkey() {
@@ -156,9 +204,5 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return event
         }
         clipMonitors.append(local)
-    }
-
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        false
     }
 }

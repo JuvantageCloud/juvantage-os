@@ -21,6 +21,27 @@ export function mergedEarsFromEvidence(evidence: unknown): MergedEar[] {
     .filter((x): x is MergedEar => x != null);
 }
 
+export function bodyLooksLikeDiff(body: string): boolean {
+  const hits = body.split(/\r?\n/).filter((l) => /^[+-]/.test(l.trim())).length;
+  return hits >= 2;
+}
+
+export function loopCardTitle(loop: LoopWithProposal, max = 72): string {
+  const raw = loop.title?.trim() || "Open loop";
+  if (raw.length <= max) return raw;
+  return `${raw.slice(0, max - 1)}…`;
+}
+
+/** Screen clips that are chat dumps / runbooks should not crowd Work. */
+export function loopLooksLikeNoise(loop: LoopWithProposal): boolean {
+  if (loop.source !== "clip" && loop.source !== "episodic") return false;
+  const t = loop.title ?? "";
+  if (t.length > 140) return true;
+  if (/^how i'll run from here/i.test(t)) return true;
+  if (/batch ui\/brain fixes/i.test(t)) return true;
+  return false;
+}
+
 export function loopChannelTag(loop: LoopWithProposal): string {
   const ev = loop.evidence as Record<string, unknown> | null;
   if (loop.source === "gmail") return "Gmail";

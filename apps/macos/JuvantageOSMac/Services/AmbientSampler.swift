@@ -82,12 +82,19 @@ enum AmbientSampler {
         return (app.localizedName ?? "").lowercased().contains("juvantage")
     }
 
-    private static func promptForAccessIfNeeded() {
-        if AXIsProcessTrusted() || didPromptAccess { return }
+    /// Call from onboarding only — avoids stacking AX prompt on top of launch UI.
+    static func requestAccessibility() {
+        guard !AXIsProcessTrusted() else { return }
+        guard !didPromptAccess else { return }
         didPromptAccess = true
         let key = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
         let options = [key: true] as CFDictionary
         _ = AXIsProcessTrustedWithOptions(options)
+    }
+
+    private static func promptForAccessIfNeeded() {
+        if AXIsProcessTrusted() || didPromptAccess { return }
+        // Defer: user enables from Settings or first-run hub first.
     }
 
     /// Highlighted text and window name for one app, even if it is not frontmost anymore.

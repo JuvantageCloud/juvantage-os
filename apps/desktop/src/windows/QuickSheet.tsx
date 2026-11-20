@@ -223,6 +223,10 @@ export function QuickSheet() {
       setBusy("voice");
       try {
         const res = await voiceOsLoop({ text });
+        if (res.mode === "quick_answer") {
+          report(true, res.answer);
+          return;
+        }
         const loop = { ...res.loop, proposal: res.proposal };
         setLoops((prev) => [loop, ...prev.filter((l) => l.id !== loop.id)]);
         setFocusId(loop.id);
