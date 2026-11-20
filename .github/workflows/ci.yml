@@ -35,6 +35,12 @@ jobs:
           DATABASE_URL: "file:./ci.db"
         run: npx prisma generate
 
+      - name: Prisma push (CI sqlite)
+        working-directory: apps/api
+        env:
+          DATABASE_URL: "file:./ci.db"
+        run: npx prisma db push --skip-generate
+
       - name: API unit tests
         working-directory: apps/api
         env:
