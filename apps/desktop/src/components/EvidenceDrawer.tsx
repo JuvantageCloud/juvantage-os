@@ -1,5 +1,7 @@
+import { useEffect, useMemo, useState } from "react";
 import type { EvidenceLine, LoopWithProposal } from "@juvantage/shared";
-import { evidenceLinesForLoop } from "@juvantage/shared";
+import { evidenceLinesForLoop, evidenceLinesFromContextPack } from "@juvantage/shared";
+import { fetchLoopContext } from "../lib/api";
 
 type Props = {
   loop: LoopWithProposal;
@@ -8,13 +10,34 @@ type Props = {
 };
 
 export function EvidenceDrawer({ loop, open, onToggle }: Props) {
-  const lines = evidenceLinesForLoop({
-    source: loop.source,
-    objectType: loop.objectType,
-    evidence: loop.evidence,
-    ambient: loop.ambient,
-    routerConf: loop.routerConf,
-  });
+  const [pack, setPack] = useState<Awaited<ReturnType<typeof fetchLoopContext>> | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    void fetchLoopContext(loop.id)
+      .then((p) => {
+        if (!cancelled) setPack(p);
+      })
+      .catch(() => {
+        if (!cancelled) setPack(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, loop.id]);
+
+  const lines = useMemo(() => {
+    const base = evidenceLinesForLoop({
+      source: loop.source,
+      objectType: loop.objectType,
+      evidence: loop.evidence,
+      ambient: loop.ambient,
+      routerConf: loop.routerConf,
+    });
+    const fused = evidenceLinesFromContextPack(pack);
+    return [...base, ...fused];
+  }, [loop, pack]);
 
   return (
     <section className="evidence-drawer" aria-label="Retrieved context">

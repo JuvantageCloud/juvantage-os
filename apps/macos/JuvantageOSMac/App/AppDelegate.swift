@@ -49,6 +49,12 @@ final class ShellController: ObservableObject {
     }
 
     func showQuickSheet() {
+        AmbientSampler.rememberFrontWindow()
+        Task { @MainActor in
+            await BrainClient.shared.ensureDevLoginIfNeeded()
+            await BrainClient.shared.pushEpisodicFromFrontWindow()
+            OsWebViewRegistry.injectAuthTokenIntoWebViews()
+        }
         if quickSheetPanel == nil {
             let panel = NSPanel(
                 contentRect: NSRect(x: 0, y: 0, width: 380, height: 520),
@@ -123,6 +129,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             ShellController.shared.setupAgentPanel()
             VoiceController.shared.start()
             await BrainClient.shared.refreshHealth()
+            await BrainClient.shared.ensureDevLoginIfNeeded()
+            OsWebViewRegistry.injectAuthTokenIntoWebViews()
             ShellController.shared.toggleQuickSheet()
             NSApp.activate(ignoringOtherApps: true)
         }

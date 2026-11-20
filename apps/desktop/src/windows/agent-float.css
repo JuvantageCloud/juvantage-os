@@ -40,6 +40,20 @@
   border-radius: 16px;
 }
 
+.agent-float.closed-pulse .agent-hit {
+  animation: closed-pulse 0.7s ease-in-out 2;
+}
+
+@keyframes closed-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
 .agent-float.has-nudge .agent-hit {
   animation: nudge-pulse 1.8s ease-in-out infinite;
 }

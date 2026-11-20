@@ -15,7 +15,7 @@
   border: none;
   background: transparent;
   font: 500 0.72rem var(--font, system-ui);
-  color: var(--teal-deep, #0f3d38);
+  color: var(--accent, #1e3a5f);
   cursor: pointer;
 }
 
@@ -81,7 +81,7 @@
   padding: 3px 8px;
   border-radius: 999px;
   background: var(--teal-soft, #e8f5f2);
-  color: var(--teal-deep, #0f3d38);
+  color: var(--accent, #1e3a5f);
 }
 
 .modality-surface-title {
@@ -122,7 +122,7 @@
   margin-top: auto;
   padding: 10px 12px;
   font-size: 0.68rem;
-  color: var(--teal-deep, #0f3d38);
+  color: var(--accent, #1e3a5f);
   border-top: 1px solid var(--hair, #e5e2db);
   background: #f4faf8;
 }

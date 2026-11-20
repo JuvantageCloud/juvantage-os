@@ -1,6 +1,7 @@
 /**
  * Modality router (JV-OS-RP-01 §8 / Thm III functor F approximation).
  */
+import { isClosableObjectType } from "@juvantage/shared";
 export type ObjectType =
   | "mail"
   | "chat"
@@ -55,9 +56,7 @@ export function routeModality(input: RouterInput): {
   return { objectType: "hint", routerConf: 0.2, reason: "weak_signal" };
 }
 
-/** Approve & send allowed only for closable object types. */
+/** Approve & send allowed only for closable object types (same set as every shell). */
 export function canApproveExecute(objectType: string | null | undefined): boolean {
-  return ["mail", "chat", "pdf", "form", "calendar", "clip", "voice"].includes(
-    objectType ?? "",
-  );
+  return isClosableObjectType(objectType);
 }

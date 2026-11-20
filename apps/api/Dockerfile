@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 COPY packages/shared/package.json packages/shared/
 COPY apps/api/package.json apps/api/
 
-RUN npm ci --workspace=@juvantage/shared --workspace=@juvantage/api --include-workspace-root
+RUN npm ci --workspace=@juvantage/shared --workspace=@juvantage/api --include-workspace-root --ignore-scripts
 
 COPY packages/shared packages/shared
 COPY apps/api apps/api

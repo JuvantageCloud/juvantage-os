@@ -336,6 +336,8 @@ export async function syncOsGmail(userId: string) {
     const lastMessageAt = last?.internalDate
       ? new Date(Number(last.internalDate))
       : null;
+    const lastHeaders = last?.payload?.headers ?? [];
+    const lastFrom = headerValue(lastHeaders, "From");
 
     await prisma.osMailThread.upsert({
       where: { userId_externalId: { userId, externalId: detail.id } },
@@ -347,14 +349,20 @@ export async function syncOsGmail(userId: string) {
         snippet: detail.snippet ?? t.snippet ?? null,
         fromAddr,
         lastMessageAt,
-        payloadJson: JSON.stringify({ messageCount: detail.messages?.length ?? 0 }),
+        payloadJson: JSON.stringify({
+          messageCount: detail.messages?.length ?? 0,
+          lastFrom,
+        }),
       },
       update: {
         subject,
         snippet: detail.snippet ?? t.snippet ?? null,
         fromAddr,
         lastMessageAt,
-        payloadJson: JSON.stringify({ messageCount: detail.messages?.length ?? 0 }),
+        payloadJson: JSON.stringify({
+          messageCount: detail.messages?.length ?? 0,
+          lastFrom,
+        }),
         syncedAt: new Date(),
       },
     });

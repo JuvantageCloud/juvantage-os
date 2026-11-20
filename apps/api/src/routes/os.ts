@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { streamSSE } from "hono/streaming";
 import { requireAuth, type AppVariables } from "../middleware/auth.js";
 import { googleOAuthConfigured } from "../services/connections.js";
 import {
@@ -35,6 +36,11 @@ import {
   snoozeLoop,
 } from "../services/osLoops.js";
 import { dogfoodMetrics, normalizeQuietReason } from "../services/osMetrics.js";
+import { presencePolicy } from "../services/osPresence.js";
+import { ensureDevFixtures } from "../services/osDevFixtures.js";
+import { captureAndFuseLoop, ingestCaptureEvents } from "../services/osContextFuse.js";
+import { getLoopContextPack } from "../services/osLoopContext.js";
+import { getPresenceHint, presenceFromQuery } from "../services/osPresenceHint.js";
 import { seedP01MailTest } from "../services/osProof.js";
 import { VoiceLoopError, createVoiceLoop } from "../services/osVoice.js";
 import {
@@ -125,6 +131,14 @@ osRoutes.post("/connectors/demo", async (c) => {
   return c.json({ mode: "demo", sync, extracted, connectors, summary, loops });
 });
 
+osRoutes.post("/dev/fixtures", async (c) => {
+  const user = c.get("user");
+  const result = await ensureDevFixtures(user.sub);
+  if (!result.ok) return c.json({ error: "Dev fixtures are off" }, 404);
+  const loops = await listOpenLoops(user.sub, 20);
+  return c.json({ ...result, count: loops.length });
+});
+
 osRoutes.post("/proof/p0-mail-seed", async (c) => {
   const user = c.get("user");
   try {
@@ -166,7 +180,16 @@ osRoutes.post("/loops/extract", async (c) => {
 osRoutes.get("/loops", async (c) => {
   const user = c.get("user");
   const limit = Number(c.req.query("limit") ?? 3);
-  const loops = await listOpenLoops(user.sub, Number.isFinite(limit) ? limit : 3);
+  const appQ = c.req.query("app");
+  const titleQ = c.req.query("title");
+  const presence =
+    appQ || titleQ
+      ? presenceFromQuery(appQ, titleQ)
+      : await getPresenceHint(user.sub);
+  const loops = await listOpenLoops(user.sub, {
+    limit: Number.isFinite(limit) ? limit : 3,
+    presence,
+  });
   const withProposals = await Promise.all(
     loops.map(async (loop) => ({
       ...loop,
@@ -175,6 +198,14 @@ osRoutes.get("/loops", async (c) => {
   );
   const nudge = await nudgeState(user.sub);
   return c.json({ loops: withProposals, nudge });
+});
+
+/** RP-01 evidence pack — fused session events for the float drawer (not a separate Context tab). */
+osRoutes.get("/loops/:id/context", async (c) => {
+  const user = c.get("user");
+  const pack = await getLoopContextPack(user.sub, c.req.param("id"));
+  if (!pack) return c.json({ error: "loop not found" }, 404);
+  return c.json(pack);
 });
 
 osRoutes.get("/audit", async (c) => {
@@ -265,6 +296,35 @@ osRoutes.get("/loops/nudge", async (c) => {
   return c.json(await nudgeState(user.sub));
 });
 
+/** Live sheet: push when the hero loop changes (client refetches; no polling required). */
+osRoutes.get("/nudge/stream", async (c) => {
+  const user = c.get("user");
+  return streamSSE(c, async (stream) => {
+    let lastSig = "";
+    const maxTicks = 600;
+    for (let i = 0; i < maxTicks; i++) {
+      const loops = await listOpenLoops(user.sub, 5);
+      const live = loops.find((l) => l.source !== "dev_fixture") ?? loops[0];
+      const sig = live ? `${live.id}:${live.updatedAt}` : "empty";
+      if (sig !== lastSig) {
+        await stream.writeSSE({
+          event: "context",
+          data: JSON.stringify({
+            sig,
+            loopId: live?.id ?? null,
+            title: live?.title ?? null,
+            refresh: true,
+          }),
+        });
+        lastSig = sig;
+      } else if (i % 20 === 0) {
+        await stream.writeSSE({ event: "ping", data: "{}" });
+      }
+      await stream.sleep(2000);
+    }
+  });
+});
+
 osRoutes.post("/loops/:id/snooze", async (c) => {
   const user = c.get("user");
   const body = (await c.req.json().catch(() => ({}))) as { hours?: number };
@@ -291,6 +351,52 @@ osRoutes.get("/metrics", async (c) => {
   const daysRaw = Number(c.req.query("days") ?? "14");
   const days = Number.isFinite(daysRaw) ? Math.min(90, Math.max(1, daysRaw)) : 14;
   return c.json(await dogfoodMetrics(user.sub, days));
+});
+
+osRoutes.post("/capture/events", async (c) => {
+  const user = c.get("user");
+  const body = (await c.req.json().catch(() => ({}))) as {
+    events?: Array<{
+      kind?: string;
+      app?: string | null;
+      title?: string | null;
+      text?: string | null;
+      recordedAt?: string;
+    }>;
+    idleSeconds?: number;
+  };
+  const events = (body.events ?? []).map((e) => ({
+    kind: (e.kind === "clipboard" || e.kind === "window_focus" ? e.kind : "window_read") as
+      | "window_read"
+      | "clipboard"
+      | "window_focus",
+    app: e.app,
+    title: e.title,
+    text: e.text,
+    recordedAt: e.recordedAt,
+  }));
+  const result = await ingestCaptureEvents(user.sub, events, body.idleSeconds);
+  return c.json({ ...result, nudge: await nudgeState(user.sub) });
+});
+
+osRoutes.post("/loops/episodic", async (c) => {
+  const user = c.get("user");
+  const body = (await c.req.json().catch(() => ({}))) as {
+    app?: string;
+    title?: string | null;
+    text?: string | null;
+    idleSeconds?: number;
+  };
+  const result = await captureAndFuseLoop(user.sub, body);
+  if (!result.surfaced) {
+    return c.json({ surfaced: false, reason: result.reason, nudge: await nudgeState(user.sub) });
+  }
+  return c.json({
+    surfaced: true,
+    fresh: result.fresh,
+    loop: result.loop,
+    nudge: await nudgeState(user.sub),
+  });
 });
 
 osRoutes.post("/loops/clip", async (c) => {
@@ -338,10 +444,21 @@ osRoutes.post("/ambient", async (c) => {
     idleSeconds?: number;
   };
   const idleSeconds = body.idleSeconds ?? 0;
-  const eyesOff = idleSeconds >= 90;
-  if (eyesOff) {
-    return c.json({ inserted: 0, eyesOff: true, reason: "idle — ambient paused" });
+  const policy = presencePolicy(idleSeconds);
+  if (!policy.recordEyeLedger) {
+    return c.json({
+      inserted: 0,
+      eyesOff: true,
+      earsOn: policy.earsOn,
+      retainFrames: policy.retainFrames,
+      reason: "idle — eyes off, obligation ears still on",
+    });
   }
   const result = await recordAmbient(user.sub, body.events ?? []);
-  return c.json({ ...result, eyesOff: false });
+  return c.json({
+    ...result,
+    eyesOff: false,
+    earsOn: policy.earsOn,
+    retainFrames: policy.retainFrames,
+  });
 });

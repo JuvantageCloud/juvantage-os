@@ -1,7 +1,7 @@
 # Juvantage OS — Flagship staged plan (V1 → V3)
 
 **Status:** Working approval brief + timeline + cost  
-**Updated:** 2026-11-01  
+**Updated:** 2026-11-14  
 **Locked sensing thesis:** Screen-first episodic + presence modes + connectors as ears/hands (`OS_ARCHITECTURE.md` §A6–A8)  
 **Parent docs:** `JUVANTAGE_OS_SCOPE.md` · `OS_PRODUCT.md` · `OS_ARCHITECTURE.md` · `OS_BUILD_ROADMAP.md`
 
@@ -10,9 +10,9 @@ FLAGSHIP BET:  Watch work → rank what costs you if it waits → draft → appr
 NOT THE BET:   Searchable life journal / always-on recorder
 ```
 
-**Where we are now:** Phases 0–4 shipped (chrome → connectors → loops → **close gate**).  
-**Next:** Phase 6 dogfood — use daily 14 days; Settings → metrics. Then V1.5 slice from research (weak-clip refuse + objectType).  
-**Research done:** [`research/JV-OS-RP-01_PAPER.md`](./research/JV-OS-RP-01_PAPER.md) · sparks [`research/SPARKS.md`](./research/SPARKS.md)
+**Where we are now:** Phases 0–5 and the V1.5 Brain slice are shipped (close gate, object types, consume-once grant, float sheet, live Gmail once). Rocq models exist; they do **not** verify the OS.  
+**Next:** Quartet gate in the running Brain (real MAC grant, shell cannot forge, idle scheduler, same close rule on every shell). Dogfood journal runs beside that. Episodic OCR and Teams stay behind the gate.  
+**Research models:** [`research/doctoral/artifacts/coq/MACHINE_CHECK.md`](./research/doctoral/artifacts/coq/MACHINE_CHECK.md) · [`research/JV-OS-RP-01_PAPER.md`](./research/JV-OS-RP-01_PAPER.md)
 
 ---
 
@@ -68,23 +68,26 @@ No soft language. Exact pictures.
 ### 4. What we *are* building (the only story)
 
 ```text
-YOU WORK ON THE MAC
-        │
-        ├─ Eyes (light): which app, window title, URL — always while present
-        ├─ Eyes (deep): screenshot+OCR only on clip / change / “explain this”
-        ├─ Ears (optional): Gmail + Calendar when you Connect Google
+ANY HOST (Mac now; phone / car / Teams later — shells only)
         │
         ▼
-   OPEN LOOPS  (especially: you owe a reply)
+   BRAIN  (the OS: loops + linear approve + verify)
+        │
+        ├─ Eyes (light): app, title, URL — while present on that host
+        ├─ Eyes (deep): OCR only on clip / change — V2, after quartet gate
+        ├─ Ears: connectors when linked; obligation signals stay on when idle
         │
         ▼
-   FLOATING AGENT NUDGES  →  quick sheet  →  DRAFT
+   ONE OPEN LOOP  (typed object, not a screen box)
         │
         ▼
-   YOU APPROVE  →  send / create event  →  VERIFY CLOSED
+   HOST SURFACE (float on Mac)  →  preview  →  YOU APPROVE
+        │
+        ▼
+   BRAIN CONSUMES GRANT ONCE  →  send / book / note  →  VERIFY CLOSED
 ```
 
-If Google isn’t connected: you still get ambient + clip loops; drafts may be copy-paste instead of API-send until you connect.
+If Google isn’t connected: ambient + clip still open loops; close may be copy-paste until a matching hand exists. The Brain does not move into the shell.
 
 ---
 
@@ -211,8 +214,9 @@ Assume **solo founder + Cursor**, ~15–25 focused hrs/week. Calendar is a forec
 | Done | V1b-sense | Phase 3: Loops, extract, ambient, presence, clip, nudge | Nudge on real/demo mail | ✅ |
 | Done | V1b-close | Phase 4: propose → approve → execute → verify | Close gate live (demo send + audit) | ✅ |
 | Done | V1c-chrome | Phase 5: Desktop Loops home + undock + sheet hierarchy | Frames 07–08 live | ✅ |
-| **Now → +2 wk** | **V1c-dogfood** | Phase 6: 14-day dogfood | Would miss it if gone; quiet not hated | ◀ current |
-| +2 → +7 wk | V2a | Deeper episodic OCR; session goals; away digest | Top-1 useful ≥50% of nudges | |
+| Beside | V1c-dogfood | 14-day journal on host 1 | Would miss the Brain if gone | running, not the gate |
+| **Now** | **Quartet** | HMAC grant; shell key fails; idle scheduler; one close rule; try/backpressure | `osGrants.test.ts` green | ◀ in code |
+| After quartet | V2a | Deeper episodic OCR; session goals; away digest | Top-1 useful ≥50% of nudges | |
 | +9 → +13 wk | V2b | Attention ranker; watched pages; privacy FAQ + what-left-device | Demo holds; 5 interviews OK privacy | |
 | +13 → +19 wk | V3a | Skills + standing approvals; private beta ~25 | ≥3 Skills; no trust incident | |
 | +19 → +27 wk | V3b | Teams lite; eyes-off; owner/SLA | 1 design partner metrics | |
@@ -256,14 +260,15 @@ Figures are **order-of-magnitude for solo dogfood → small beta**, not a board 
 ### 4.3 Spend priority (law)
 
 ```text
-1. Close-loop quality (Phase 4)     ← pay time + small LLM $
-2. Privacy UX (pause, blocklist, what left device)
-3. Eye depth (episodic OCR)          ← only after dogfood gate
-4. Ranker / watched pages
-5. Skills / Teams                    ← only after Personal love
+1. Quartet in the running Brain      ← real grant MAC, TCB test, idle scheduler
+2. Close-loop quality on host 1      ← small LLM $; one hero suggestion
+3. Privacy UX (pause, blocklist, what left device)
+4. Eye depth (episodic OCR)          ← only after quartet + dogfood
+5. Ranker / watched pages
+6. Second host / Skills / Teams      ← same Brain, new shell
 ```
 
-**Biggest save we already chose:** not building always-on searchable capture. That single CUT is the difference between a Mac companion and a second Reyn.
+**Biggest save we already chose:** not building always-on searchable capture. The OS is the Brain. A Mac companion without the quartet in code is still a shell.
 
 ---
 
@@ -277,9 +282,9 @@ Figures are **order-of-magnitude for solo dogfood → small beta**, not a board 
 - [ ] Privacy one-pager draft (even internal)
 - [x] Phase 2 shipped (auth + connectors + encrypted tokens + sync / demo)
 
-### Enter V2 (after V1c gate)
-- [ ] Phase 6 P0 complete ([`OS_OPERATIONAL_REVIEW.md`](./OS_OPERATIONAL_REVIEW.md))
-- [ ] 14-day dogfood passed  
+### Enter V2 (after quartet gate — dogfood alone does not open this)
+- [ ] Quartet checklist in [`OS_BUILD_ROADMAP.md`](./OS_BUILD_ROADMAP.md) (real MAC, forge test, idle scheduler, same close rule)
+- [ ] 14-day dogfood passed on that Brain  
 - [ ] Approve gate never bypassed in prod paths  
 - [ ] Metrics: clear rate, accept/dismiss baseline  
 - [ ] Explicit decision: deepen OCR now vs more connectors
@@ -311,7 +316,7 @@ Figures are **order-of-magnitude for solo dogfood → small beta**, not a board 
 | What is scene graph / chaos cleanup? | Co-tabs + mess → closable proposals. **V3.** |
 | Meeting audio → loops? | Spoken commitments become owed work. **Later**, after V2. |
 | Must users connect Google? | **No.** Optional. Unlocks send/verify. |
-| What do we build next? | **Phase 4: propose → approve → verify.** |
+| What do we build next? | **Quartet gate on the running Brain.** Not another proof file. Not OCR. Not Teams. |
 | Where is the plan of record? | **This file** + `OS_BUILD_ROADMAP.md` for checkboxes. |
 
 ---

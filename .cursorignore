@@ -1,0 +1,13 @@
+# Agent / IDE must not load secrets into context
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+apps/api/.env
+*.pem
+*.p12
+**/secrets/**
+**/credentials.json
+**/service-account*.json

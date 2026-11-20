@@ -1,0 +1,632 @@
+DIGEST 5d79b9f057367c2c28c7c1e58cb6b77e
+FSeniIdealMac
+R964:967 Stdlib.Lists.List <> <> lib
+R969:973 Stdlib.Arith.Arith <> <> lib
+R975:977 Stdlib.micromega.Lia <> <> lib
+R979:982 Stdlib.Bool.Bool <> <> lib
+R992:1004 Stdlib.Lists.List ListNotations <> mod
+rec 1097:1099 <> Tag
+proj 1106:1107 <> tk
+proj 1116:1117 <> tg
+proj 1126:1127 <> tn
+R1111:1113 Corelib.Init.Datatypes <> nat ind
+R1121:1123 Corelib.Init.Datatypes <> nat ind
+R1131:1133 Corelib.Init.Datatypes <> nat ind
+def 1150:1153 <> sign
+R1174:1176 Corelib.Init.Datatypes <> nat ind
+binder 1156:1158 <> key:5
+binder 1160:1163 <> gid0:6
+binder 1165:1170 <> nonce0:7
+R1181:1183 SeniIdealMac <> Tag rec
+R1193:1194 SeniIdealMac <> tk proj
+R1204:1205 SeniIdealMac <> tg proj
+R1216:1217 SeniIdealMac <> tn proj
+R1199:1201 SeniIdealMac <> key:5 var
+R1210:1213 SeniIdealMac <> gid0:6 var
+R1222:1227 SeniIdealMac <> nonce0:7 var
+def 1245:1250 <> verify
+R1271:1273 Corelib.Init.Datatypes <> nat ind
+binder 1253:1255 <> key:8
+binder 1257:1260 <> gid0:9
+binder 1262:1267 <> nonce0:10
+R1281:1283 SeniIdealMac <> Tag rec
+binder 1277:1277 <> t:11
+R1288:1291 Corelib.Init.Datatypes <> bool ind
+R1343:1349 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1317:1323 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1299:1305 Stdlib.Arith.PeanoNat Nat eqb def
+R1308:1309 SeniIdealMac <> tk proj
+R1311:1311 SeniIdealMac <> t:11 var
+R1314:1316 SeniIdealMac <> key:8 var
+R1324:1330 Stdlib.Arith.PeanoNat Nat eqb def
+R1333:1334 SeniIdealMac <> tg proj
+R1336:1336 SeniIdealMac <> t:11 var
+R1339:1342 SeniIdealMac <> gid0:9 var
+R1350:1356 Stdlib.Arith.PeanoNat Nat eqb def
+R1359:1360 SeniIdealMac <> tn proj
+R1362:1362 SeniIdealMac <> t:11 var
+R1365:1370 SeniIdealMac <> nonce0:10 var
+prf 1388:1398 <> verify_sign
+binder 1411:1413 <> key:12
+binder 1415:1418 <> gid0:13
+binder 1420:1425 <> nonce0:14
+R1477:1479 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1432:1437 SeniIdealMac <> verify def
+R1439:1441 SeniIdealMac <> key:12 var
+R1443:1446 SeniIdealMac <> gid0:13 var
+R1448:1453 SeniIdealMac <> nonce0:14 var
+R1456:1459 SeniIdealMac <> sign def
+R1461:1463 SeniIdealMac <> key:12 var
+R1465:1468 SeniIdealMac <> gid0:13 var
+R1470:1475 SeniIdealMac <> nonce0:14 var
+R1480:1483 Corelib.Init.Datatypes <> true constr
+R1510:1515 SeniIdealMac <> verify def
+R1518:1521 SeniIdealMac <> sign def
+R1542:1553 Stdlib.Arith.PeanoNat Nat eqb_refl thm
+prf 1583:1601 <> verify_implies_sign
+binder 1614:1616 <> key:15
+binder 1618:1621 <> gid0:16
+binder 1623:1628 <> nonce0:17
+binder 1630:1630 <> t:18
+R1668:1675 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R1661:1663 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1637:1642 SeniIdealMac <> verify def
+R1644:1646 SeniIdealMac <> key:15 var
+R1648:1651 SeniIdealMac <> gid0:16 var
+R1653:1658 SeniIdealMac <> nonce0:17 var
+R1660:1660 SeniIdealMac <> t:18 var
+R1664:1667 Corelib.Init.Datatypes <> true constr
+R1677:1679 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R1676:1676 SeniIdealMac <> t:18 var
+R1680:1683 SeniIdealMac <> sign def
+R1685:1687 SeniIdealMac <> key:15 var
+R1689:1692 SeniIdealMac <> gid0:16 var
+R1694:1699 SeniIdealMac <> nonce0:17 var
+R1749:1754 SeniIdealMac <> verify def
+R1771:1788 Stdlib.Bool.Bool <> andb_true_iff thm
+R1831:1848 Stdlib.Bool.Bool <> andb_true_iff thm
+R1891:1900 Stdlib.Arith.PeanoNat Nat eqb_eq thm
+R1917:1926 Stdlib.Arith.PeanoNat Nat eqb_eq thm
+R1943:1952 Stdlib.Arith.PeanoNat Nat eqb_eq thm
+prf 2033:2046 <> sign_injective
+binder 2059:2060 <> k1:19
+binder 2062:2063 <> g1:20
+binder 2065:2066 <> n1:21
+binder 2068:2069 <> k2:22
+binder 2071:2072 <> g2:23
+binder 2074:2075 <> n2:24
+R2111:2118 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2095:2097 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2082:2085 SeniIdealMac <> sign def
+R2087:2088 SeniIdealMac <> k1:19 var
+R2090:2091 SeniIdealMac <> g1:20 var
+R2093:2094 SeniIdealMac <> n1:21 var
+R2098:2101 SeniIdealMac <> sign def
+R2103:2104 SeniIdealMac <> k2:22 var
+R2106:2107 SeniIdealMac <> g2:23 var
+R2109:2110 SeniIdealMac <> n2:24 var
+R2126:2129 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2121:2123 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2119:2120 SeniIdealMac <> k1:19 var
+R2124:2125 SeniIdealMac <> k2:22 var
+R2137:2140 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R2132:2134 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2130:2131 SeniIdealMac <> g1:20 var
+R2135:2136 SeniIdealMac <> g2:23 var
+R2143:2145 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2141:2142 SeniIdealMac <> n1:21 var
+R2146:2147 SeniIdealMac <> n2:24 var
+prf 2283:2311 <> different_keys_different_tags
+binder 2324:2325 <> k1:25
+binder 2327:2328 <> k2:26
+binder 2330:2330 <> g:27
+binder 2332:2332 <> n:28
+R2347:2354 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2341:2344 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R2339:2340 SeniIdealMac <> k1:25 var
+R2345:2346 SeniIdealMac <> k2:26 var
+R2366:2369 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R2355:2358 SeniIdealMac <> sign def
+R2360:2361 SeniIdealMac <> k1:25 var
+R2363:2363 SeniIdealMac <> g:27 var
+R2365:2365 SeniIdealMac <> n:28 var
+R2370:2373 SeniIdealMac <> sign def
+R2375:2376 SeniIdealMac <> k2:26 var
+R2378:2378 SeniIdealMac <> g:27 var
+R2380:2380 SeniIdealMac <> n:28 var
+R2426:2439 SeniIdealMac <> sign_injective thm
+prf 2502:2519 <> wrong_key_rejected
+binder 2532:2534 <> key:29
+binder 2536:2539 <> key':30
+binder 2541:2544 <> gid0:31
+binder 2546:2551 <> nonce0:32
+R2569:2576 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R2561:2564 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R2558:2560 SeniIdealMac <> key:29 var
+R2565:2568 SeniIdealMac <> key':30 var
+R2623:2625 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2577:2582 SeniIdealMac <> verify def
+R2584:2586 SeniIdealMac <> key:29 var
+R2588:2591 SeniIdealMac <> gid0:31 var
+R2593:2598 SeniIdealMac <> nonce0:32 var
+R2601:2604 SeniIdealMac <> sign def
+R2606:2609 SeniIdealMac <> key':30 var
+R2611:2614 SeniIdealMac <> gid0:31 var
+R2616:2621 SeniIdealMac <> nonce0:32 var
+R2626:2630 Corelib.Init.Datatypes <> false constr
+R2684:2689 SeniIdealMac <> verify def
+R2692:2695 SeniIdealMac <> sign def
+R2736:2738 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R2720:2726 Stdlib.Arith.PeanoNat Nat eqb def
+R2739:2743 Corelib.Init.Datatypes <> false constr
+R2756:2766 Stdlib.Arith.PeanoNat Nat eqb_neq thm
+rec 2913:2915 <> Tok
+proj 2922:2924 <> gid
+proj 2933:2937 <> nonce
+proj 2946:2948 <> mac
+proj 2957:2959 <> exp
+R2928:2930 Corelib.Init.Datatypes <> nat ind
+R2941:2943 Corelib.Init.Datatypes <> nat ind
+R2952:2954 SeniIdealMac <> Tag rec
+R2963:2965 Corelib.Init.Datatypes <> nat ind
+ind 2981:2983 <> GSt
+constr 2988:2992 <> Fresh
+constr 2996:3003 <> Consumed
+scheme 2981:2983 <> GSt_rect
+scheme 2981:2983 <> GSt_ind
+scheme 2981:2983 <> GSt_rec
+scheme 2981:2983 <> GSt_sind
+rec 3014:3018 <> Store
+proj 3027:3031 <> grant
+proj 3057:3063 <> effects
+proj 3074:3076 <> now
+R3035:3040 Corelib.Init.Datatypes <> option ind
+R3046:3048 Corelib.Init.Datatypes <> ::type_scope:x_'*'_x not
+R3043:3045 SeniIdealMac <> Tok rec
+R3049:3051 SeniIdealMac <> GSt ind
+R3067:3069 Corelib.Init.Datatypes <> nat ind
+R3080:3082 Corelib.Init.Datatypes <> nat ind
+def 3099:3103 <> empty
+R3107:3111 SeniIdealMac <> Store rec
+R3119:3123 SeniIdealMac <> grant proj
+R3134:3140 SeniIdealMac <> effects proj
+R3148:3150 SeniIdealMac <> now proj
+R3128:3131 Corelib.Init.Datatypes <> None constr
+def 3173:3176 <> mint
+R3202:3204 Corelib.Init.Datatypes <> nat ind
+binder 3179:3181 <> key:44
+binder 3183:3186 <> gid0:45
+binder 3188:3193 <> nonce0:46
+binder 3195:3198 <> exp0:47
+R3212:3216 SeniIdealMac <> Store rec
+binder 3208:3208 <> s:48
+R3221:3225 SeniIdealMac <> Store rec
+R3244:3246 SeniIdealMac <> gid proj
+R3257:3261 SeniIdealMac <> nonce proj
+R3288:3290 SeniIdealMac <> mac proj
+R3317:3319 SeniIdealMac <> exp proj
+R3251:3254 SeniIdealMac <> gid0:45 var
+R3266:3271 SeniIdealMac <> nonce0:46 var
+R3295:3298 SeniIdealMac <> sign def
+R3300:3302 SeniIdealMac <> key:44 var
+R3304:3307 SeniIdealMac <> gid0:45 var
+R3309:3314 SeniIdealMac <> nonce0:46 var
+R3324:3327 SeniIdealMac <> exp0:47 var
+binder 3236:3236 <> t:49
+R3340:3344 SeniIdealMac <> grant proj
+R3366:3372 SeniIdealMac <> effects proj
+R3388:3390 SeniIdealMac <> now proj
+R3349:3352 Corelib.Init.Datatypes <> Some constr
+R3354:3354 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3356:3357 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3363:3363 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3355:3355 SeniIdealMac <> t:49 var
+R3358:3362 SeniIdealMac <> Fresh constr
+R3377:3383 SeniIdealMac <> effects proj
+R3385:3385 SeniIdealMac <> s:48 var
+R3395:3397 SeniIdealMac <> now proj
+R3399:3399 SeniIdealMac <> s:48 var
+def 3417:3422 <> accept
+R3431:3433 Corelib.Init.Datatypes <> nat ind
+binder 3425:3427 <> key:50
+R3444:3446 SeniIdealMac <> Tok rec
+binder 3437:3437 <> t:51
+binder 3439:3440 <> t0:52
+R3457:3459 Corelib.Init.Datatypes <> nat ind
+binder 3450:3453 <> now0:53
+R3464:3467 Corelib.Init.Datatypes <> bool ind
+R3579:3585 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R3544:3550 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R3513:3519 Corelib.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R3475:3480 SeniIdealMac <> verify def
+R3482:3484 SeniIdealMac <> key:50 var
+R3487:3489 SeniIdealMac <> gid proj
+R3491:3492 SeniIdealMac <> t0:52 var
+R3496:3500 SeniIdealMac <> nonce proj
+R3502:3503 SeniIdealMac <> t0:52 var
+R3507:3509 SeniIdealMac <> mac proj
+R3511:3511 SeniIdealMac <> t:51 var
+R3520:3526 Stdlib.Arith.PeanoNat Nat eqb def
+R3529:3531 SeniIdealMac <> gid proj
+R3533:3533 SeniIdealMac <> t:51 var
+R3537:3539 SeniIdealMac <> gid proj
+R3541:3542 SeniIdealMac <> t0:52 var
+R3551:3557 Stdlib.Arith.PeanoNat Nat eqb def
+R3560:3564 SeniIdealMac <> nonce proj
+R3566:3566 SeniIdealMac <> t:51 var
+R3570:3574 SeniIdealMac <> nonce proj
+R3576:3577 SeniIdealMac <> t0:52 var
+R3586:3592 Stdlib.Arith.PeanoNat Nat leb def
+R3594:3597 SeniIdealMac <> now0:53 var
+R3600:3602 SeniIdealMac <> exp proj
+R3604:3605 SeniIdealMac <> t0:52 var
+def 3627:3632 <> commit
+R3641:3643 Corelib.Init.Datatypes <> nat ind
+binder 3635:3637 <> key:54
+R3651:3653 SeniIdealMac <> Tok rec
+binder 3647:3647 <> t:55
+R3661:3665 SeniIdealMac <> Store rec
+binder 3657:3657 <> s:56
+R3670:3674 SeniIdealMac <> Store rec
+R3687:3691 SeniIdealMac <> grant proj
+R3693:3693 SeniIdealMac <> s:56 var
+R3704:3707 Corelib.Init.Datatypes <> Some constr
+R3709:3709 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3712:3713 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3719:3719 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3714:3718 SeniIdealMac <> Fresh constr
+R3733:3738 SeniIdealMac <> accept def
+R3740:3742 SeniIdealMac <> key:54 var
+R3744:3744 SeniIdealMac <> t:55 var
+R3750:3752 SeniIdealMac <> now proj
+R3754:3754 SeniIdealMac <> s:56 var
+R3854:3854 SeniIdealMac <> s:56 var
+R3771:3775 SeniIdealMac <> grant proj
+R3801:3807 SeniIdealMac <> effects proj
+R3827:3829 SeniIdealMac <> now proj
+R3780:3783 Corelib.Init.Datatypes <> Some constr
+R3785:3785 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3788:3789 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3798:3798 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3790:3797 SeniIdealMac <> Consumed constr
+R3812:3812 Corelib.Init.Datatypes <> S constr
+R3815:3821 SeniIdealMac <> effects proj
+R3823:3823 SeniIdealMac <> s:56 var
+R3834:3836 SeniIdealMac <> now proj
+R3838:3838 SeniIdealMac <> s:56 var
+R3865:3865 SeniIdealMac <> s:56 var
+def 3886:3889 <> tick
+R3896:3900 SeniIdealMac <> Store rec
+binder 3892:3892 <> s:57
+R3905:3909 SeniIdealMac <> Store rec
+R3919:3923 SeniIdealMac <> grant proj
+R3937:3943 SeniIdealMac <> effects proj
+R3959:3961 SeniIdealMac <> now proj
+R3928:3932 SeniIdealMac <> grant proj
+R3934:3934 SeniIdealMac <> s:57 var
+R3948:3954 SeniIdealMac <> effects proj
+R3956:3956 SeniIdealMac <> s:57 var
+R3966:3966 Corelib.Init.Datatypes <> S constr
+R3969:3971 SeniIdealMac <> now proj
+R3973:3973 SeniIdealMac <> s:57 var
+def 3992:3997 <> credit
+R4004:4008 SeniIdealMac <> Store rec
+binder 4000:4000 <> s:58
+R4013:4015 Corelib.Init.Datatypes <> nat ind
+R4028:4032 SeniIdealMac <> grant proj
+R4034:4034 SeniIdealMac <> s:58 var
+R4045:4048 Corelib.Init.Datatypes <> Some constr
+R4050:4050 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4052:4053 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4059:4059 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4054:4058 SeniIdealMac <> Fresh constr
+ind 4095:4097 <> Cmd
+constr 4104:4108 <> Noise
+constr 4112:4118 <> Advance
+constr 4122:4127 <> Submit
+R4134:4136 SeniIdealMac <> Tok rec
+binder 4130:4130 <> t:61
+scheme 4095:4097 <> Cmd_rect
+scheme 4095:4097 <> Cmd_ind
+scheme 4095:4097 <> Cmd_rec
+scheme 4095:4097 <> Cmd_sind
+def 4150:4153 <> exec
+R4162:4164 Corelib.Init.Datatypes <> nat ind
+binder 4156:4158 <> key:62
+R4175:4178 Corelib.Init.Datatypes <> list ind
+R4180:4182 SeniIdealMac <> Cmd ind
+binder 4168:4171 <> cmds:63
+R4190:4194 SeniIdealMac <> Store rec
+binder 4186:4186 <> s:64
+R4199:4203 SeniIdealMac <> Store rec
+R4216:4219 SeniIdealMac <> cmds:63 var
+R4230:4231 Stdlib.Lists.List ListNotations ::list_scope:'['_']' not
+R4236:4236 SeniIdealMac <> s:64 var
+R4247:4250 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4242:4246 SeniIdealMac <> Noise constr
+R4259:4262 SeniIdealMac <> exec:65 def
+R4273:4273 SeniIdealMac <> s:64 var
+R4264:4266 SeniIdealMac <> key:62 var
+R4286:4289 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4279:4285 SeniIdealMac <> Advance constr
+R4298:4301 SeniIdealMac <> exec:65 def
+R4313:4316 SeniIdealMac <> tick def
+R4318:4318 SeniIdealMac <> s:64 var
+R4303:4305 SeniIdealMac <> key:62 var
+R4333:4336 Corelib.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4325:4330 SeniIdealMac <> Submit constr
+R4345:4348 SeniIdealMac <> exec:65 def
+R4360:4365 SeniIdealMac <> commit def
+R4367:4369 SeniIdealMac <> key:62 var
+R4373:4373 SeniIdealMac <> s:64 var
+R4350:4352 SeniIdealMac <> key:62 var
+prf 4390:4397 <> tick_sum
+binder 4410:4410 <> s:67
+R4447:4449 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R4429:4431 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R4413:4419 SeniIdealMac <> effects proj
+R4422:4425 SeniIdealMac <> tick def
+R4427:4427 SeniIdealMac <> s:67 var
+R4432:4437 SeniIdealMac <> credit def
+R4440:4443 SeniIdealMac <> tick def
+R4445:4445 SeniIdealMac <> s:67 var
+R4459:4461 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R4450:4456 SeniIdealMac <> effects proj
+R4458:4458 SeniIdealMac <> s:67 var
+R4462:4467 SeniIdealMac <> credit def
+R4469:4469 SeniIdealMac <> s:67 var
+R4497:4500 SeniIdealMac <> tick def
+R4503:4508 SeniIdealMac <> credit def
+R4530:4534 SeniIdealMac <> grant proj
+prf 4588:4597 <> commit_sum
+binder 4610:4612 <> key:68
+binder 4614:4614 <> t:69
+binder 4616:4616 <> s:70
+R4673:4676 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R4647:4649 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R4623:4629 SeniIdealMac <> effects proj
+R4632:4637 SeniIdealMac <> commit def
+R4639:4641 SeniIdealMac <> key:68 var
+R4643:4643 SeniIdealMac <> t:69 var
+R4645:4645 SeniIdealMac <> s:70 var
+R4650:4655 SeniIdealMac <> credit def
+R4658:4663 SeniIdealMac <> commit def
+R4665:4667 SeniIdealMac <> key:68 var
+R4669:4669 SeniIdealMac <> t:69 var
+R4671:4671 SeniIdealMac <> s:70 var
+R4686:4688 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R4677:4683 SeniIdealMac <> effects proj
+R4685:4685 SeniIdealMac <> s:70 var
+R4689:4694 SeniIdealMac <> credit def
+R4696:4696 SeniIdealMac <> s:70 var
+R4733:4738 SeniIdealMac <> commit def
+R4753:4757 SeniIdealMac <> grant proj
+R4818:4823 SeniIdealMac <> accept def
+R4835:4837 SeniIdealMac <> now proj
+R4873:4878 SeniIdealMac <> credit def
+R4923:4933 Stdlib.Arith.PeanoNat Nat add_0_r thm
+R4947:4957 Stdlib.Arith.PeanoNat Nat add_1_r thm
+R4966:4976 Stdlib.Arith.PeanoNat Nat le_refl thm
+R4994:4999 SeniIdealMac <> credit def
+R5027:5037 Stdlib.Arith.PeanoNat Nat le_refl thm
+R5053:5058 SeniIdealMac <> credit def
+R5086:5096 Stdlib.Arith.PeanoNat Nat le_refl thm
+R5110:5115 SeniIdealMac <> credit def
+R5143:5153 Stdlib.Arith.PeanoNat Nat le_refl thm
+prf 5168:5175 <> exec_sum
+binder 5188:5190 <> key:71
+binder 5192:5195 <> cmds:72
+binder 5197:5197 <> s:73
+R5256:5259 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R5229:5231 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5204:5210 SeniIdealMac <> effects proj
+R5213:5216 SeniIdealMac <> exec def
+R5218:5220 SeniIdealMac <> key:71 var
+R5222:5225 SeniIdealMac <> cmds:72 var
+R5227:5227 SeniIdealMac <> s:73 var
+R5232:5237 SeniIdealMac <> credit def
+R5240:5243 SeniIdealMac <> exec def
+R5245:5247 SeniIdealMac <> key:71 var
+R5249:5252 SeniIdealMac <> cmds:72 var
+R5254:5254 SeniIdealMac <> s:73 var
+R5269:5271 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5260:5266 SeniIdealMac <> effects proj
+R5268:5268 SeniIdealMac <> s:73 var
+R5272:5277 SeniIdealMac <> credit def
+R5279:5279 SeniIdealMac <> s:73 var
+R5370:5380 Stdlib.Arith.PeanoNat Nat le_refl thm
+R5500:5502 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5484:5490 SeniIdealMac <> effects proj
+R5493:5496 SeniIdealMac <> tick def
+R5503:5508 SeniIdealMac <> credit def
+R5511:5514 SeniIdealMac <> tick def
+R5460:5471 Stdlib.Arith.PeanoNat Nat le_trans thm
+R5555:5562 SeniIdealMac <> tick_sum thm
+R5571:5581 Stdlib.Arith.PeanoNat Nat le_refl thm
+R5659:5661 Corelib.Init.Peano <> ::nat_scope:x_'+'_x not
+R5633:5639 SeniIdealMac <> effects proj
+R5642:5647 SeniIdealMac <> commit def
+R5662:5667 SeniIdealMac <> credit def
+R5670:5675 SeniIdealMac <> commit def
+R5609:5620 Stdlib.Arith.PeanoNat Nat le_trans thm
+R5722:5731 SeniIdealMac <> commit_sum thm
+prf 5748:5770 <> ideal_no_mint_no_effect
+binder 5783:5785 <> key:74
+binder 5787:5790 <> cmds:75
+R5822:5824 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R5793:5799 SeniIdealMac <> effects proj
+R5802:5805 SeniIdealMac <> exec def
+R5807:5809 SeniIdealMac <> key:74 var
+R5811:5814 SeniIdealMac <> cmds:75 var
+R5816:5820 SeniIdealMac <> empty def
+R5868:5875 SeniIdealMac <> exec_sum thm
+R5886:5890 SeniIdealMac <> empty def
+R5911:5915 SeniIdealMac <> empty def
+R5918:5923 SeniIdealMac <> credit def
+R5957:5966 Stdlib.Arith.PeanoNat Nat le_0_r thm
+R5978:5989 Stdlib.Arith.PeanoNat Nat le_trans thm
+R6002:6013 Stdlib.Arith.PeanoNat Nat le_add_r thm
+prf 6046:6069 <> ideal_at_most_one_effect
+binder 6082:6084 <> key:76
+binder 6086:6089 <> cmds:77
+binder 6091:6091 <> s:78
+R6111:6118 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R6107:6109 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6098:6104 SeniIdealMac <> effects proj
+R6106:6106 SeniIdealMac <> s:78 var
+R6144:6147 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R6119:6125 SeniIdealMac <> effects proj
+R6128:6131 SeniIdealMac <> exec def
+R6133:6135 SeniIdealMac <> key:76 var
+R6137:6140 SeniIdealMac <> cmds:77 var
+R6142:6142 SeniIdealMac <> s:78 var
+R6196:6203 SeniIdealMac <> exec_sum thm
+R6249:6252 Corelib.Init.Peano <> ::nat_scope:x_'<='_x not
+R6241:6246 SeniIdealMac <> credit def
+R6268:6273 SeniIdealMac <> credit def
+R6286:6290 SeniIdealMac <> grant proj
+R6330:6340 Stdlib.Arith.PeanoNat Nat le_refl thm
+R6355:6364 Stdlib.Arith.PeanoNat Nat le_0_l thm
+R6379:6388 Stdlib.Arith.PeanoNat Nat le_0_l thm
+R6423:6433 Stdlib.Arith.PeanoNat Nat add_0_l thm
+R6453:6464 Stdlib.Arith.PeanoNat Nat le_trans thm
+R6477:6488 Stdlib.Arith.PeanoNat Nat le_add_r thm
+R6502:6513 Stdlib.Arith.PeanoNat Nat le_trans thm
+prf 6552:6583 <> ideal_commit_second_adds_nothing
+binder 6596:6598 <> key:79
+binder 6600:6600 <> t:80
+binder 6602:6602 <> s:81
+R6648:6650 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6609:6615 SeniIdealMac <> effects proj
+R6618:6623 SeniIdealMac <> commit def
+R6625:6627 SeniIdealMac <> key:79 var
+R6629:6629 SeniIdealMac <> t:80 var
+R6632:6637 SeniIdealMac <> commit def
+R6639:6641 SeniIdealMac <> key:79 var
+R6643:6643 SeniIdealMac <> t:80 var
+R6645:6645 SeniIdealMac <> s:81 var
+R6651:6657 SeniIdealMac <> effects proj
+R6660:6665 SeniIdealMac <> commit def
+R6667:6669 SeniIdealMac <> key:79 var
+R6671:6671 SeniIdealMac <> t:80 var
+R6673:6673 SeniIdealMac <> s:81 var
+R6714:6718 SeniIdealMac <> grant proj
+R6761:6766 SeniIdealMac <> accept def
+R6778:6780 SeniIdealMac <> now proj
+R6814:6818 SeniIdealMac <> grant proj
+R6844:6850 SeniIdealMac <> effects proj
+R6870:6872 SeniIdealMac <> now proj
+R6823:6826 Corelib.Init.Datatypes <> Some constr
+R6828:6828 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6831:6832 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6841:6841 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R6833:6840 SeniIdealMac <> Consumed constr
+R6855:6855 Corelib.Init.Datatypes <> S constr
+R6858:6864 SeniIdealMac <> effects proj
+R6877:6879 SeniIdealMac <> now proj
+R6921:6923 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R6907:6912 SeniIdealMac <> commit def
+R6944:6949 SeniIdealMac <> commit def
+R7026:7031 SeniIdealMac <> commit def
+R7091:7093 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R7077:7082 SeniIdealMac <> commit def
+R7113:7118 SeniIdealMac <> commit def
+R7234:7236 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R7220:7225 SeniIdealMac <> commit def
+R7254:7259 SeniIdealMac <> commit def
+R7361:7363 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R7347:7352 SeniIdealMac <> commit def
+R7381:7386 SeniIdealMac <> commit def
+prf 7551:7580 <> ideal_forge_wrong_key_rejected
+binder 7593:7595 <> key:82
+binder 7597:7600 <> key':83
+binder 7602:7605 <> gid0:84
+binder 7607:7612 <> nonce0:85
+binder 7614:7617 <> exp0:86
+binder 7619:7619 <> s:87
+R7637:7644 Corelib.Init.Notations <> ::type_scope:x_'->'_x not
+R7629:7632 Corelib.Init.Logic <> ::type_scope:x_'<>'_x not
+R7626:7628 SeniIdealMac <> key:82 var
+R7633:7636 SeniIdealMac <> key':83 var
+R7662:7664 SeniIdealMac <> gid proj
+R7675:7679 SeniIdealMac <> nonce proj
+R7713:7715 SeniIdealMac <> mac proj
+R7743:7745 SeniIdealMac <> exp proj
+R7669:7672 SeniIdealMac <> gid0:84 var
+R7684:7689 SeniIdealMac <> nonce0:85 var
+R7720:7723 SeniIdealMac <> sign def
+R7725:7728 SeniIdealMac <> key':83 var
+R7730:7733 SeniIdealMac <> gid0:84 var
+R7735:7740 SeniIdealMac <> nonce0:85 var
+R7750:7753 SeniIdealMac <> exp0:86 var
+binder 7649:7654 <> forged:88
+R7822:7824 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R7765:7771 SeniIdealMac <> effects proj
+R7774:7779 SeniIdealMac <> commit def
+R7781:7783 SeniIdealMac <> key:82 var
+R7785:7790 SeniIdealMac <> forged:88 var
+R7793:7796 SeniIdealMac <> mint def
+R7798:7800 SeniIdealMac <> key:82 var
+R7802:7805 SeniIdealMac <> gid0:84 var
+R7807:7812 SeniIdealMac <> nonce0:85 var
+R7814:7817 SeniIdealMac <> exp0:86 var
+R7819:7819 SeniIdealMac <> s:87 var
+R7825:7831 SeniIdealMac <> effects proj
+R7833:7833 SeniIdealMac <> s:87 var
+R7898:7901 SeniIdealMac <> mint def
+R7948:7950 SeniIdealMac <> gid proj
+R7961:7965 SeniIdealMac <> nonce proj
+R7998:8000 SeniIdealMac <> mac proj
+R8028:8030 SeniIdealMac <> exp proj
+R8005:8008 SeniIdealMac <> sign def
+R8068:8074 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R8060:8064 SeniIdealMac <> grant proj
+R8075:8078 Corelib.Init.Datatypes <> Some constr
+R8080:8083 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8167:8171 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8177:8177 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8084:8086 SeniIdealMac <> gid proj
+R8097:8101 SeniIdealMac <> nonce proj
+R8127:8129 SeniIdealMac <> mac proj
+R8156:8158 SeniIdealMac <> exp proj
+R8134:8137 SeniIdealMac <> sign def
+R8172:8176 SeniIdealMac <> Fresh constr
+R8196:8199 SeniIdealMac <> mint def
+R8226:8231 SeniIdealMac <> commit def
+R8307:8309 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R8261:8266 SeniIdealMac <> verify def
+R8285:8288 SeniIdealMac <> sign def
+R8310:8314 Corelib.Init.Datatypes <> false constr
+R8331:8348 SeniIdealMac <> wrong_key_rejected thm
+R8372:8377 SeniIdealMac <> accept def
+R8419:8422 SeniIdealMac <> mint def
+prf 8459:8484 <> ideal_stolen_once_concrete
+binder 8494:8496 <> key:89
+R8518:8521 SeniIdealMac <> mint def
+R8523:8525 SeniIdealMac <> key:89 var
+R8533:8537 SeniIdealMac <> empty def
+binder 8512:8513 <> s0:90
+R8550:8554 SeniIdealMac <> grant proj
+R8556:8557 SeniIdealMac <> s0:90 var
+R8568:8571 Corelib.Init.Datatypes <> Some constr
+R8573:8573 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8575:8576 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8582:8582 Corelib.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8577:8581 SeniIdealMac <> Fresh constr
+R8603:8606 SeniIdealMac <> exec def
+R8608:8610 SeniIdealMac <> key:89 var
+R8612:8612 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8621:8622 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8631:8631 Stdlib.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8613:8618 SeniIdealMac <> Submit constr
+R8623:8628 SeniIdealMac <> Submit constr
+R8633:8634 SeniIdealMac <> s0:90 var
+binder 8597:8598 <> s2:91
+R8659:8662 Corelib.Init.Logic <> ::type_scope:x_'/\'_x not
+R8655:8657 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R8645:8651 SeniIdealMac <> effects proj
+R8653:8654 SeniIdealMac <> s2:91 var
+R8672:8674 Corelib.Init.Logic <> ::type_scope:x_'='_x not
+R8663:8668 SeniIdealMac <> credit def
+R8670:8671 SeniIdealMac <> s2:91 var
+R8686:8690 Corelib.Init.Logic <> False ind

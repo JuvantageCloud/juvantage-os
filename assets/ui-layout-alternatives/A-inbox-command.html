@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Layout A — Inbox command</title>
+  <link rel="stylesheet" href="shared-layout.css" />
+  <style>
+    .inbox-body { flex: 1; display: grid; grid-template-columns: 300px 1fr; min-height: 0; }
+    .threads { border-right: 1px solid var(--hair); overflow: auto; }
+    .threads h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 14px 8px; }
+    .thread { padding: 12px 14px; border-bottom: 1px solid var(--hair); cursor: default; }
+    .thread.on { background: rgba(110,231,216,.08); border-left: 3px solid var(--accent); }
+    .thread strong { display: block; font-size: 12px; margin-top: 4px; }
+    .compose { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; overflow: auto; }
+    .compose h2 { margin: 0; font-size: 1.05rem; }
+    .evidence { font-size: 11px; background: rgba(255,255,255,.04); padding: 10px; border-radius: 8px; }
+    .top-actions { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid var(--hair); font-size: 11px; }
+    .iconnav { display: flex; gap: 4px; }
+    .iconnav span { padding: 6px 10px; border-radius: 6px; color: var(--muted); }
+    .iconnav .on { background: rgba(255,255,255,.06); color: var(--ink); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Layout A — Inbox command</h1>
+    <p class="lede">No “Work” abstraction. Left = synced mail obligations. Right = the only draft that matters. Settings live in ⚙ only.</p>
+    <div class="mac">
+      <div class="tb"><span class="dots"><i class="r"></i><i class="y"></i><i class="g"></i></span><span class="title">Juvantage — Inbox</span><span>⚙</span></div>
+      <div class="top-actions">
+        <div class="iconnav"><span class="on">Inbox</span><span>Calendar</span><span>Done</span></div>
+        <span class="muted">20 threads · demo</span>
+      </div>
+      <div class="inbox-body">
+        <div class="threads">
+          <h2>Owes reply</h2>
+          <div class="thread on"><span class="pill">Urgent</span><strong>Maya — Q3 pilot pack</strong><span class="muted">22h · gmail</span></div>
+          <div class="thread"><span class="pill soon">Soon</span><strong>Investor Q3 note</strong><span class="muted">ask</span></div>
+          <h2>Calendar</h2>
+          <div class="thread"><span class="pill soon">Soon</span><strong>Confirm Thu standup</strong><span class="muted">appointment</span></div>
+        </div>
+        <div class="compose">
+          <h2>Reply: Maya</h2>
+          <p class="muted">Approve sends · nothing goes without you</p>
+          <div class="evidence">Context ▸ thread snippet, router 92%</div>
+          <label>Title<input value="Re: Q3 pilot pack" readonly /></label>
+          <textarea readonly>Hi Maya — Thursday works. Pack attached.</textarea>
+          <button class="btn go" type="button">Approve &amp; send</button>
+        </div>
+      </div>
+    </div>
+    <p class="callout">Kills: left nav, Urgency/From chips, “screen notes” mixed into Work.</p>
+  </div>
+</body>
+</html>

@@ -6,6 +6,7 @@ struct AgentFloatView: View {
     var onTap: () -> Void
 
     @State private var bob = false
+    @State private var closedPulse = false
 
     var body: some View {
         Button(action: onTap) {
@@ -13,24 +14,31 @@ struct AgentFloatView: View {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [
-                                Color(red: 0.12, green: 0.48, blue: 0.44),
-                                Color(red: 0.08, green: 0.35, blue: 0.32),
-                            ],
+                            colors: closedPulse
+                                ? [
+                                    Color(red: 0.20, green: 0.62, blue: 0.48),
+                                    Color(red: 0.10, green: 0.45, blue: 0.38),
+                                ]
+                                : [
+                                    Color(red: 0.12, green: 0.48, blue: 0.44),
+                                    Color(red: 0.08, green: 0.35, blue: 0.32),
+                                ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .shadow(color: .black.opacity(0.25), radius: 8, y: 4)
                 Circle()
-                    .strokeBorder(Color.white.opacity(0.35), lineWidth: 1)
-                Image(systemName: "sparkles")
+                    .strokeBorder(Color.white.opacity(closedPulse ? 0.85 : 0.35), lineWidth: closedPulse ? 2 : 1)
+                Image(systemName: closedPulse ? "checkmark" : "sparkles")
                     .font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(.white.opacity(0.95))
                     .symbolEffect(.pulse, options: .repeating, value: bob)
             }
             .frame(width: 56, height: 56)
-            .offset(y: bob ? -3 : 3)
+            .scaleEffect(closedPulse ? 1.12 : 1)
+            .offset(y: closedPulse ? 0 : (bob ? -3 : 3))
+            .animation(.easeInOut(duration: 0.35), value: closedPulse)
             .animation(
                 .easeInOut(duration: 1.6).repeatForever(autoreverses: true),
                 value: bob
@@ -39,6 +47,12 @@ struct AgentFloatView: View {
         .buttonStyle(.plain)
         .help("Juvantage OS — click for Quick sheet · hold fn to talk")
         .onAppear { bob = true }
-        .accessibilityLabel("Juvantage agent")
+        .onReceive(NotificationCenter.default.publisher(for: .juvOsContextClosed)) { _ in
+            closedPulse = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+                closedPulse = false
+            }
+        }
+        .accessibilityLabel(closedPulse ? "Context closed" : "Juvantage agent")
     }
 }

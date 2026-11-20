@@ -18,6 +18,7 @@ import {
   consumeApprovalGrant,
   ensureFreshApprovalGrant,
 } from "./osGrants.js";
+import { releaseExecuteSlot, tryAdmitExecute } from "./osBus.js";
 import { canApproveExecute } from "./osModality.js";
 import { voiceDraft } from "./osVoice.js";
 
@@ -111,21 +112,42 @@ function templateDraft(loop: {
   if (loop.kind === "appointment") {
     return {
       title: `Confirm: ${topic}`,
-      body: `Hi,\n\nConfirming this works on my side — locking it in.\n\nThanks,\nJohn`,
+      body: [
+        "Proposed next steps:",
+        "1) Check time on your calendar.",
+        "2) Edit the confirm note below.",
+        "3) Approve when ready.",
+        "",
+        `Hi,\n\nConfirming this works on my side — locking it in.\n\nThanks,\nJohn`,
+      ].join("\n"),
       rationale: "Appointment loop → calendar confirm draft",
     };
   }
   if (loop.kind === "todo" || loop.kind === "other") {
     return {
       title: `Next step: ${topic}`,
-      body: `Next step for me:\n1) ${topic}\n2) Reply once done.\n\n(Clip/ambient context — edit before approve.)`,
+      body: [
+        "Proposed next steps:",
+        `1) ${topic}`,
+        "2) Reply or file once done.",
+        "3) Approve — nothing submits until you tap Approve.",
+        "",
+        "(Clip/ambient context — edit before approve.)",
+      ].join("\n"),
       rationale: "Clip/todo loop → checklist draft",
     };
   }
 
   return {
     title: `Reply: ${topic}`,
-    body: `Hi ${from.split(" ")[0] || "there"},\n\nThanks for the note on "${topic}".\n\nI can take this — here's where things stand and what I'll send next. Let me know if you need anything else before then.\n\nBest,\nJohn`,
+    body: [
+      "Proposed next steps:",
+      "1) Skim the thread one more time.",
+      "2) Edit the reply below.",
+      "3) Approve-send when ready.",
+      "",
+      `Hi ${from.split(" ")[0] || "there"},\n\nThanks for the note on "${topic}".\n\nI can take this — here's where things stand and what I'll send next. Let me know if you need anything else before then.\n\nBest,\nJohn`,
+    ].join("\n"),
     rationale: loop.summary
       ? `Reply-owed from mail: ${loop.summary.slice(0, 120)}`
       : "Reply-owed template (no LLM key — deterministic draft)",
@@ -400,6 +422,14 @@ export async function executeProposal(userId: string, proposalId: string) {
     }
   }
 
+  const slot = tryAdmitExecute(userId);
+  if (!slot.ok) {
+    throw new OsCloseError(
+      "Brain busy — retry later (backpressure, not a blocking wait)",
+      429,
+    );
+  }
+  try {
   try {
     await consumeApprovalGrant(userId, proposal.id);
   } catch (err) {
@@ -416,7 +446,16 @@ export async function executeProposal(userId: string, proposalId: string) {
 
   let result: Record<string, unknown>;
 
-  if (proposal.kind === "reply" || proposal.kind === "note") {
+  if (loop.source === "dev_fixture") {
+    result = {
+      channel: "dev_fixture",
+      mode: "dev_fixture",
+      noted: true,
+      simulatedSend: true,
+      title: proposal.title,
+      at: new Date().toISOString(),
+    };
+  } else if (proposal.kind === "reply" || proposal.kind === "note") {
     if (!gmail || gmail.mode === "demo") {
       result = {
         channel: "gmail",
@@ -539,6 +578,9 @@ export async function executeProposal(userId: string, proposalId: string) {
     proposal: serializeProposal(executed),
     result,
   };
+  } finally {
+    releaseExecuteSlot(userId);
+  }
 }
 
 /** Verify close — marks loop done after a successful execute. */

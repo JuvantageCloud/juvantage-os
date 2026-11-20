@@ -1,4 +1,7 @@
+import { sortLoopsForWork, type PresenceHint } from "@juvantage/shared";
 import { prisma } from "../db/client.js";
+import { reconcileOpenLoops } from "./osLoopLiveness.js";
+import { getPresenceHint } from "./osPresenceHint.js";
 
 const AGING_HOURS = 18;
 const SURFACE_LIMIT = 3;
@@ -150,7 +153,22 @@ const BAND_ORDER: Record<string, number> = {
   quiet: 3,
 };
 
-export async function listOpenLoops(userId: string, limit = SURFACE_LIMIT) {
+export type ListOpenLoopsOptions = {
+  limit?: number;
+  /** When omitted, uses latest ContextEvent for this user. Pass `null` to skip boosting. */
+  presence?: PresenceHint | null;
+};
+
+export async function listOpenLoops(
+  userId: string,
+  limitOrOpts: number | ListOpenLoopsOptions = SURFACE_LIMIT,
+) {
+  const opts: ListOpenLoopsOptions =
+    typeof limitOrOpts === "number" ? { limit: limitOrOpts } : limitOrOpts;
+  const limit = opts.limit ?? SURFACE_LIMIT;
+
+  await reconcileOpenLoops(userId);
+
   const now = new Date();
   await prisma.loop.updateMany({
     where: {
@@ -169,13 +187,19 @@ export async function listOpenLoops(userId: string, limit = SURFACE_LIMIT) {
     },
   });
 
-  loops.sort((a, b) => {
-    const band = (BAND_ORDER[a.band] ?? 9) - (BAND_ORDER[b.band] ?? 9);
-    if (band !== 0) return band;
-    return b.updatedAt.getTime() - a.updatedAt.getTime();
-  });
+  const presence =
+    opts.presence !== undefined ? opts.presence : await getPresenceHint(userId);
 
-  return loops.slice(0, limit).map(serializeLoop);
+  const sorted = sortLoopsForWork(
+    loops.map((loop) => ({
+      ...loop,
+      evidence: safeJson(loop.evidenceJson),
+      ambient: safeJson(loop.ambientJson),
+    })),
+    presence,
+  );
+
+  return sorted.slice(0, limit).map(serializeLoop);
 }
 
 export async function nudgeState(userId: string) {

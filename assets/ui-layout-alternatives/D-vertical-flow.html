@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Layout D — Vertical flow</title>
+  <link rel="stylesheet" href="shared-layout.css" />
+  <style>
+    .flow { flex: 1; overflow: auto; padding: 20px 28px; }
+    .step { display: grid; grid-template-columns: 32px 1fr; gap: 12px; margin-bottom: 20px; }
+    .num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #0b1220; font-weight: 800; font-size: 12px; display: grid; place-items: center; }
+    .num.dim { background: var(--hair); color: var(--muted); }
+    .step h3 { margin: 0 0 4px; font-size: 13px; }
+    .step .box { border: 1px solid var(--hair); border-radius: 10px; padding: 12px; margin-top: 8px; }
+    .step.active .box { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Layout D — Vertical flow</h1>
+    <p class="lede">One scrolling story: what Jos found → what he drafted → what you do. No side-by-side list/detail.</p>
+    <div class="mac">
+      <div class="tb"><span class="dots"><i class="r"></i><i class="y"></i><i class="g"></i></span><span class="title">Close loop</span></div>
+      <div class="flow">
+        <div class="step">
+          <span class="num dim">1</span>
+          <div><h3>Connected</h3><p class="muted">Gmail synced · 20 threads</p></div>
+        </div>
+        <div class="step active">
+          <span class="num">2</span>
+          <div>
+            <h3>Obligation</h3>
+            <p class="muted">Maya · reply owed · urgent</p>
+            <div class="box">
+              <strong>Q3 pilot pack</strong>
+              <p class="muted" style="margin:8px 0">…confirm timeline by Thursday?</p>
+            </div>
+          </div>
+        </div>
+        <div class="step active">
+          <span class="num">3</span>
+          <div>
+            <h3>Draft</h3>
+            <textarea readonly>Hi Maya — …</textarea>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num dim">4</span>
+          <div>
+            <h3>Approve</h3>
+            <p class="muted">Grant burns once · verify → done</p>
+            <button class="btn go" type="button">Approve &amp; send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="callout">Good for first-time users and demos. Weak if you juggle many open loops daily.</p>
+  </div>
+</body>
+</html>

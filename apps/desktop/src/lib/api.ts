@@ -6,6 +6,7 @@ import type {
   OsHealth,
   OsNudge,
   OsSyncSummary,
+  PresenceHint,
   Proposal,
 } from "@juvantage/shared";
 
@@ -220,12 +221,98 @@ export async function extractOsLoops(): Promise<{
   return res.json();
 }
 
-export async function fetchOsLoops(limit = 3): Promise<{
+let devFixturesOnce: Promise<void> | null = null;
+
+/** Local Vite dev only. Production builds skip this. The API also refuses when NODE_ENV=production. */
+export function ensureDevFixtures(): Promise<void> {
+  if (!import.meta.env.DEV || !getToken()) return Promise.resolve();
+  if (!devFixturesOnce) {
+    devFixturesOnce = apiFetch("/os/dev/fixtures", { method: "POST", body: "{}" })
+      .then(() => undefined)
+      .catch(() => {
+        devFixturesOnce = null;
+      });
+  }
+  return devFixturesOnce;
+}
+
+export async function fetchOsLoops(
+  limit = 3,
+  presence?: PresenceHint | null,
+): Promise<{
   loops: LoopWithProposal[];
   nudge: OsNudge;
 }> {
-  const res = await apiFetch(`/os/loops?limit=${limit}`);
+  const q = new URLSearchParams({ limit: String(limit) });
+  if (presence?.app) q.set("app", presence.app);
+  if (presence?.title) q.set("title", presence.title);
+  const res = await apiFetch(`/os/loops?${q.toString()}`);
   return res.json();
+}
+
+/** Assignment 1 / OS_CONTEXT_FUSE — ledger behind the hero loop. */
+export type LoopContextPack = {
+  loopId: string;
+  source: string | null;
+  objectType: string | null;
+  fingerprint: string | null;
+  sensitivityTags: string[];
+  sessionId: string | null;
+  eventCount: number;
+  events: Array<{
+    kind: string;
+    app: string | null;
+    title: string | null;
+    textPreview: string | null;
+    recordedAt: string;
+  }>;
+  evidence: Record<string, unknown>;
+};
+
+export async function fetchLoopContext(loopId: string): Promise<LoopContextPack> {
+  const res = await apiFetch(`/os/loops/${loopId}/context`);
+  if (!res.ok) throw new Error(`context ${res.status}`);
+  return res.json();
+}
+
+/** SSE from Brain when the hero loop changes — keeps the sheet alive without constant polling. */
+export function subscribeOsContextStream(onContextChange: () => void): () => void {
+  const token = getToken();
+  if (!token) return () => undefined;
+  const ac = new AbortController();
+  void (async () => {
+    try {
+      const res = await fetch(`${API_BASE}/os/nudge/stream`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "text/event-stream" },
+        signal: ac.signal,
+      });
+      if (!res.ok || !res.body) return;
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = "";
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const blocks = buf.split("\n\n");
+        buf = blocks.pop() ?? "";
+        for (const block of blocks) {
+          if (!block.includes("event: context")) continue;
+          const dataLine = block.split("\n").find((l) => l.startsWith("data:"));
+          if (!dataLine) continue;
+          try {
+            const payload = JSON.parse(dataLine.slice(5).trim()) as { refresh?: boolean };
+            if (payload.refresh) onContextChange();
+          } catch {
+            /* partial */
+          }
+        }
+      }
+    } catch {
+      /* offline — polling fallback still runs */
+    }
+  })();
+  return () => ac.abort();
 }
 
 export async function proposeOsLoop(loopId: string): Promise<{
@@ -321,6 +408,18 @@ export async function dismissOsLoop(
 
 export async function fetchOsMetrics(days = 14): Promise<OsDogfoodMetrics> {
   const res = await apiFetch(`/os/metrics?days=${days}`);
+  return res.json();
+}
+
+export async function surfaceEpisodic(input: {
+  app?: string;
+  title?: string | null;
+  text?: string | null;
+}): Promise<{ surfaced: boolean; reason?: string; loop?: LoopWithProposal }> {
+  const res = await apiFetch("/os/loops/episodic", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
   return res.json();
 }
 

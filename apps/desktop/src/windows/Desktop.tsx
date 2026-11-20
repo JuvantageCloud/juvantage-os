@@ -5,13 +5,15 @@ import type {
   OsSyncSummary,
   Proposal,
 } from "@juvantage/shared";
-import { isClosableObjectType } from "@juvantage/shared";
+import { isClosableObjectType, pickSheetHero, type PresenceHint } from "@juvantage/shared";
+import { readPresenceHint } from "../lib/presenceHint";
 import {
   apiBaseUrl,
   approveSendOsProposal,
   connectOsDemo,
   dismissOsLoop,
   editOsProposal,
+  ensureDevFixtures,
   extractOsLoops,
   fetchApiHealth,
   fetchOsConnectors,
@@ -30,12 +32,11 @@ import {
   type QuietReason,
 } from "../lib/api";
 import { ConnectorTile } from "../components/ConnectorTile";
-import { EvidenceDrawer } from "../components/EvidenceDrawer";
-import { ModalityHost } from "../components/ModalityHost";
+import { WaitlistActLayout } from "../components/WaitlistActLayout";
 import "../components/modality-surfaces.css";
 import "./desktop.css";
 
-type NavId = "loops" | "inbox" | "connect" | "settings";
+type OverlayId = "connect" | "settings" | "inbox" | null;
 type BandFilter = "all" | "critical" | "high" | "normal" | "quiet";
 type SourceFilter = "all" | "mail" | "clip" | "calendar";
 
@@ -68,6 +69,7 @@ function sourceFriendly(source: string | null | undefined): string {
   if (source === "gmail") return "Mail";
   if (source === "google_calendar") return "Calendar";
   if (source === "clip") return "Clip";
+  if (source === "episodic") return "Screen";
   if (source === "voice") return "Voice";
   return source;
 }
@@ -105,7 +107,7 @@ async function openUrl(url: string) {
 }
 
 export function Desktop() {
-  const [nav, setNav] = useState<NavId>("loops");
+  const [overlay, setOverlay] = useState<OverlayId>(null);
   const [health, setHealth] = useState<HealthState>({ status: "loading" });
   const [email, setEmail] = useState("john@juvantage.com");
   const [password, setPassword] = useState("demo1234");
@@ -134,11 +136,15 @@ export function Desktop() {
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   /** When Source=All, clips stay collapsed until expanded (mail stays front). */
   const [clipsExpanded, setClipsExpanded] = useState(false);
+  /** Layout B default: one hero; list is opt-in ("Show queue"). */
+  const [queueOpen, setQueueOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [proposal, setProposal] = useState<Proposal | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
   const [draftBody, setDraftBody] = useState("");
-  const [evidenceOpen, setEvidenceOpen] = useState(true);
+  const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [quietPick, setQuietPick] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(false);
   const [metrics, setMetrics] = useState<OsDogfoodMetrics | null>(null);
 
   useEffect(() => {
@@ -170,17 +176,26 @@ export function Desktop() {
     setGoogleRedirectUri(data.oauth.redirectUri ?? "");
   }, []);
 
+  const [presenceHint, setPresenceHint] = useState<PresenceHint | null>(null);
+
   const refreshLoops = useCallback(async (preferId?: string | null) => {
     if (!getToken()) {
       setLoops([]);
       return;
     }
-    const data = await fetchOsLoops(40);
+    await ensureDevFixtures();
+    const presence = await readPresenceHint();
+    setPresenceHint(presence);
+    const data = await fetchOsLoops(40, presence);
     setLoops(data.loops);
     setSelectedId((current) => {
       const prefer = preferId ?? current ?? loopIdFromHash();
       const next =
-        data.loops.find((l) => l.id === prefer) ?? data.loops[0] ?? null;
+        data.loops.find((l) => l.id === prefer) ??
+        pickSheetHero(data.loops, presence) ??
+        data.loops.find((l) => l.source !== "dev_fixture") ??
+        data.loops[0] ??
+        null;
       setProposal(next?.proposal ?? null);
       setDraftTitle(next?.proposal?.title ?? "");
       setDraftBody(next?.proposal?.body ?? "");
@@ -231,16 +246,26 @@ export function Desktop() {
     else if (sourceFilter === "calendar") {
       list = list.filter((l) => l.source === "google_calendar");
     } else if (sourceFilter === "all" && !clipsExpanded) {
-      list = list.filter((l) => l.source !== "clip");
+      list = list.filter((l) => l.source !== "clip" && l.source !== "dev_fixture");
     }
     return list;
   }, [loops, band, sourceFilter, clipsExpanded]);
+
+  const heroLoop = useMemo(
+    () => pickSheetHero(filtered, presenceHint) ?? filtered[0] ?? null,
+    [filtered, presenceHint],
+  );
+
+  const queueCount = useMemo(() => {
+    if (!heroLoop) return Math.max(0, filtered.length);
+    return filtered.filter((l) => l.id !== heroLoop.id).length;
+  }, [filtered, heroLoop]);
 
   const collapsedClipCount = useMemo(() => {
     if (sourceFilter !== "all" || clipsExpanded) return 0;
     let list = loops;
     if (band !== "all") list = list.filter((l) => l.band === band);
-    return list.filter((l) => l.source === "clip").length;
+    return list.filter((l) => l.source === "clip" || l.source === "episodic").length;
   }, [loops, band, sourceFilter, clipsExpanded]);
 
   const gmailConnected = useMemo(
@@ -323,7 +348,7 @@ export function Desktop() {
       setConnectors(res.connectors);
       setSummary(res.summary);
       await refreshLoops();
-      setNav("loops");
+      setOverlay(null);
       notify(
         `Demo linked · ${res.summary.mailCount} sample messages · check Work`,
         "success",
@@ -340,7 +365,7 @@ export function Desktop() {
     try {
       const res = await seedP01MailTest();
       await refreshLoops();
-      setNav("loops");
+      setOverlay(null);
       setSourceFilter("mail");
       notify(
         `Test mail in your inbox · open Work → “${res.subject.slice(0, 36)}…” → Draft → Approve`,
@@ -358,7 +383,7 @@ export function Desktop() {
     try {
       const res = await extractOsLoops();
       await refreshLoops();
-      setNav("loops");
+      setOverlay(null);
       notify(
         res.createdCount
           ? `Found ${res.createdCount} new · ${res.loops.length} to close`
@@ -513,15 +538,25 @@ export function Desktop() {
   return (
     <div className="desk-shell app-opaque">
       <div className="desk-titlebar">
-        <div className="titlebar-left">
-          <span
-            className={`brain-lamp ${health.status === "ok" ? "on" : ""}`}
-            title={health.status === "ok" ? "Brain connected" : "Brain offline"}
-            aria-hidden
-          />
-          <p className="brand">Juvantage OS · Desktop</p>
+        <div className="traffic-lights" aria-hidden>
+          <i className="r" />
+          <i className="y" />
+          <i className="g" />
         </div>
+        <p className="brand">Juvantage OS</p>
+        <span className="listening-pill" aria-live="polite">
+          <span className="listening-dot" aria-hidden />
+          Listening
+        </span>
         <div className="actions">
+          <button
+            type="button"
+            className="btn ghost"
+            title="Link Google, settings"
+            onClick={() => setOverlay(overlay ? null : "settings")}
+          >
+            ⚙
+          </button>
           <button
             type="button"
             className="btn ghost"
@@ -532,276 +567,99 @@ export function Desktop() {
         </div>
       </div>
 
-      <div className="desk-body">
-        <nav className="desk-nav" aria-label="Desktop">
-          <button type="button" className={nav === "loops" ? "on" : ""} onClick={() => setNav("loops")}>
-            <span className="nav-label">Work</span>
-            <span className="nav-sub">What you still owe</span>
-          </button>
-          <button type="button" className={nav === "inbox" ? "on" : ""} onClick={() => setNav("inbox")}>
-            <span className="nav-label">Synced</span>
-            <span className="nav-sub">Mail &amp; calendar feed</span>
-          </button>
-          <div className="sep" />
-          <button type="button" className={nav === "connect" ? "on" : ""} onClick={() => setNav("connect")}>
-            <span className="nav-label">Google</span>
-            <span className="nav-sub">{gmailLive ? "Linked" : "Sign in once"}</span>
-          </button>
-          <button type="button" className={nav === "settings" ? "on" : ""} onClick={() => setNav("settings")}>
-            <span className="nav-label">Settings</span>
-            <span className="nav-sub">Privacy &amp; metrics</span>
-          </button>
-        </nav>
-
-        <main className="desk-main">
-          {nav === "loops" ? (
-            <>
-              <h1>What you still owe</h1>
-              <p className="page-sub loops-one-liner">
-                Jos finds unfinished work → you get a draft → you Approve → it
-                sends or books. Nothing goes out without you.
-                {userLabel ? ` · ${userLabel}` : null}
-              </p>
-              {loops.length ? (
-                <div className="status-strip" aria-live="polite">
-                  <span>
-                    <strong>{loops.length}</strong> to close
-                  </span>
-                  <span className="status-strip-dot" aria-hidden />
-                  <span>{summary?.mailCount ?? 0} mail synced</span>
-                  <span className="status-strip-hint">Edit the draft, then Approve</span>
-                </div>
-              ) : null}
-              <div className="chips">
-                <span className="chip-label">Urgency</span>
-                {(
-                  [
-                    ["all", "All"],
-                    ["critical", "Urgent"],
-                    ["high", "Soon"],
-                    ["normal", "Normal"],
-                    ["quiet", "Quiet"],
-                  ] as const
-                ).map(([id, label]) => (
+      <div className="desk-body desk-body--product">
+        <main className="desk-main desk-main--product">
+          <WaitlistActLayout
+            loops={filtered}
+            selected={selected}
+            onSelect={(loop) => selectLoop(loop)}
+            proposal={proposal}
+            draftTitle={draftTitle}
+            draftBody={draftBody}
+            onTitleChange={setDraftTitle}
+            onBodyChange={setDraftBody}
+            busy={Boolean(busy)}
+            editorOpen={editorOpen}
+            onToggleEditor={() => setEditorOpen((v) => !v)}
+            onDraft={() => void onDraft()}
+            onApprove={() => void onApproveSend()}
+            onLinkGoogle={() => setOverlay("connect")}
+            onFindUnfinished={() => void onExtract()}
+          />
+          {selected && quietPick ? (
+            <div className="quiet-reasons" style={{ padding: "8px 0 0" }}>
+              <div className="chips" style={{ margin: 0 }}>
+                {QUIET_REASONS.map((r) => (
                   <button
-                    key={id}
+                    key={r.id}
                     type="button"
-                    className={`chip ${band === id ? "on" : ""}`}
-                    onClick={() => setBand(id)}
+                    className="chip"
+                    onClick={() =>
+                      dismissOsLoop(selected.id, r.id).then(() => {
+                        setQuietPick(false);
+                        notify(
+                          r.id === "wrong_band" ? "Noted — shouldn’t have surfaced" : "Quieted",
+                          "success",
+                        );
+                        return refreshLoops();
+                      })
+                    }
                   >
-                    {label}
+                    {r.label}
                   </button>
                 ))}
-                <span className="chip-label">From</span>
-                {(
-                  [
-                    ["all", "All"],
-                    ["mail", "Mail"],
-                    ["clip", "Clips"],
-                    ["calendar", "Calendar"],
-                  ] as const
-                ).map(([id, label]) => (
-                  <button
-                    key={id}
-                    type="button"
-                    className={`chip ${sourceFilter === id ? "on" : ""}`}
-                    onClick={() => setSourceFilter(id)}
-                  >
-                    {label}
-                  </button>
-                ))}
-                <button type="button" className="btn accent" onClick={() => void onExtract()} disabled={Boolean(busy)}>
-                  {busy === "extract" ? "Looking…" : "Find unfinished"}
-                </button>
               </div>
-
-              {!filtered.length && loops.length > 0 ? (
-                <div className="empty-panel">
-                  <strong>Nothing matches these filters.</strong> Tap <strong>All</strong> under
-                  From / Urgency.
-                </div>
-              ) : null}
-              {!loops.length ? (
-                <div className="empty-panel empty-panel--guide">
-                  <p>
-                    <strong>You’re caught up — or Jos hasn’t found unfinished work yet.</strong>
-                  </p>
-                  {!gmailConnected ? (
-                    <p>
-                      First link Google under{" "}
-                      <button type="button" className="inline-link" onClick={() => setNav("connect")}>
-                        Google
-                      </button>
-                      . Then come back here — Jos looks for replies you owe and
-                      meetings to confirm.
-                    </p>
-                  ) : (
-                    <p>
-                      Newsletters are ignored on purpose. Press{" "}
-                      <strong>⌘⇧L</strong> on something you owe, or under Google
-                      tap <strong>Send me a test to close</strong> to walk the
-                      full draft → Approve path.
-                    </p>
-                  )}
-                </div>
-              ) : null}
-              {loops.length > 0 && (filtered.length > 0 || collapsedClipCount > 0) ? (
-                <div className="loops-layout">
-                  <div className="loop-list">
-                    {filtered.map((loop) => (
-                      <button
-                        key={loop.id}
-                        type="button"
-                        className={`loop-row ${selectedId === loop.id ? "selected" : ""}`}
-                        onClick={() => selectLoop(loop)}
-                      >
-                        <span className={`band-pill ${loop.band}`}>{bandFriendly(loop.band)}</span>
-                        <strong>{loop.title}</strong>
-                        <span className="muted">
-                          {kindFriendly(loop.kind)}
-                          {loop.source ? ` · ${sourceFriendly(loop.source)}` : ""}
-                        </span>
-                      </button>
-                    ))}
-                    {collapsedClipCount > 0 ? (
-                      <button
-                        type="button"
-                        className="loop-row"
-                        onClick={() => setClipsExpanded(true)}
-                      >
-                        <span className="band-pill normal">clips</span>
-                        <strong>
-                          {collapsedClipCount} clip{collapsedClipCount === 1 ? "" : "s"} hidden
-                        </strong>
-                        <span className="muted">Show clips</span>
-                      </button>
-                    ) : null}
-                    {sourceFilter === "all" && clipsExpanded ? (
-                      <button
-                        type="button"
-                        className="btn ghost"
-                        style={{ margin: "8px 0" }}
-                        onClick={() => setClipsExpanded(false)}
-                      >
-                        Hide clips again
-                      </button>
-                    ) : null}
-                  </div>
-
-                  <div className="detail-pane">
-                    {selected ? (
-                      <>
-                        <div className="detail-top">
-                          <span className={`band-pill ${selected.band}`}>{bandFriendly(selected.band)}</span>
-                          {selected.source ? (
-                            <span className="band-pill" style={{ marginLeft: 6 }}>
-                              {sourceFriendly(selected.source)}
-                            </span>
-                          ) : null}
-                          <h2>{selected.title}</h2>
-                          <p>{selected.summary || kindFriendly(selected.kind)}</p>
-                        </div>
-                        <EvidenceDrawer
-                          loop={selected}
-                          open={evidenceOpen}
-                          onToggle={() => setEvidenceOpen((v) => !v)}
-                        />
-                        <ModalityHost
-                          loop={selected}
-                          proposal={proposal}
-                          draftTitle={draftTitle}
-                          draftBody={draftBody}
-                          onTitleChange={setDraftTitle}
-                          onBodyChange={setDraftBody}
-                          busy={Boolean(busy)}
-                        />
-                        <div className="detail-actions">
-                          <button type="button" className="btn accent" onClick={() => void onDraft()} disabled={Boolean(busy)}>
-                            {busy === "draft" ? "Drafting…" : "Draft"}
-                          </button>
-                          <button
-                            type="button"
-                            className="btn primary"
-                            onClick={() => void onApproveSend()}
-                            disabled={
-                              Boolean(busy) ||
-                              !isClosableObjectType(selected.objectType)
-                            }
-                            title={
-                              isClosableObjectType(selected.objectType)
-                                ? "Sends only after you approve — one-time send grant"
-                                : "This item can’t send — pick a Mail or Calendar item"
-                            }
-                          >
-                            {busy === "send"
-                              ? "Sending…"
-                              : selected.source === "gmail" && selected.objectType === "mail"
-                                ? "Approve & send"
-                                : "Approve & close"}
-                          </button>
-                          <button
-                            type="button"
-                            className="btn"
-                            onClick={() => setQuietPick((v) => !v)}
-                          >
-                            Quiet
-                          </button>
-                          <button
-                            type="button"
-                            className="btn"
-                            onClick={() =>
-                              selected &&
-                              snoozeOsLoop(selected.id).then(() => refreshLoops())
-                            }
-                          >
-                            Snooze
-                          </button>
-                        </div>
-                        {quietPick && selected ? (
-                          <div className="quiet-reasons" style={{ padding: "0 14px 14px" }}>
-                            <p className="page-sub" style={{ marginBottom: 8 }}>
-                              Why quiet this?
-                            </p>
-                            <div className="chips" style={{ margin: 0 }}>
-                              {QUIET_REASONS.map((r) => (
-                                <button
-                                  key={r.id}
-                                  type="button"
-                                  className="chip"
-                                  onClick={() =>
-                                    dismissOsLoop(selected.id, r.id).then(() => {
-                                      setQuietPick(false);
-                                      notify(
-                                        r.id === "wrong_band"
-                                          ? "Noted — shouldn’t have surfaced"
-                                          : "Quieted",
-                                        "success",
-                                      );
-                                      return refreshLoops();
-                                    })
-                                  }
-                                >
-                                  {r.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        ) : null}
-                      </>
-                    ) : (
-                      <div className="empty-panel" style={{ margin: 16 }}>
-                        Pick something on the left to draft and Approve.
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : null}
-            </>
+            </div>
+          ) : selected ? (
+            <button type="button" className="btn ghost" onClick={() => setQuietPick(true)}>
+              Quiet this loop
+            </button>
           ) : null}
 
-          {nav === "inbox" ? (
+          {overlay ? (
+            <div
+              className="desk-overlay"
+              role="presentation"
+              onClick={() => setOverlay(null)}
+              onKeyDown={(e) => e.key === "Escape" && setOverlay(null)}
+            >
+              <div
+                className="desk-overlay-panel"
+                role="dialog"
+                aria-modal="true"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="desk-overlay-head">
+                  <h1>
+                    {overlay === "connect"
+                      ? "Google"
+                      : overlay === "inbox"
+                        ? "Sync debug"
+                        : "Settings"}
+                  </h1>
+                  <button type="button" className="btn ghost" onClick={() => setOverlay(null)}>
+                    Done
+                  </button>
+                </div>
+                {overlay === "settings" ? (
+                  <p className="page-sub">
+                    <button type="button" className="inline-link" onClick={() => setOverlay("connect")}>
+                      Link Google
+                    </button>
+                    {" · "}
+                    <button type="button" className="inline-link" onClick={() => setOverlay("inbox")}>
+                      Sync debug
+                    </button>
+                    {" · "}
+                    <button type="button" className="inline-link" onClick={() => setFiltersOpen((v) => !v)}>
+                      {filtersOpen ? "Hide filters" : "Filters"}
+                    </button>
+                  </p>
+                ) : null}
+
+                {overlay === "inbox" ? (
             <>
-              <h1>Synced from Google</h1>
+              <p className="page-sub">Raw connector cache — not product UI.</p>
               <p className="page-sub">
                 This is the raw feed Jos reads. You don’t act here — unfinished
                 work shows up under <strong>Work</strong>.{" "}
@@ -872,12 +730,10 @@ export function Desktop() {
             </>
           ) : null}
 
-          {nav === "connect" ? (
+                {overlay === "connect" ? (
             <>
-              <h1>Google</h1>
               <p className="page-sub">
-                Link once so Jos can read mail &amp; calendar, then draft
-                replies and create events — only after you Approve.
+                Ears only — Jos checks mail/calendar in the background. You never browse a full inbox here.
               </p>
 
               <div className="connector-grid">
@@ -911,8 +767,8 @@ export function Desktop() {
                   <button type="button" className="btn" onClick={onSync} disabled={Boolean(busy) || !gmailConnected}>
                     {busy === "sync" ? "Syncing…" : "Refresh mail & calendar"}
                   </button>
-                  <button type="button" className="btn accent" onClick={() => setNav("loops")}>
-                    Go to Work →
+                  <button type="button" className="btn accent" onClick={() => setOverlay(null)}>
+                    Done
                   </button>
                 </div>
                 <div className="btn-row" style={{ marginTop: 10 }}>
@@ -946,10 +802,50 @@ export function Desktop() {
             </>
           ) : null}
 
-          {nav === "settings" ? (
+                {overlay === "settings" ? (
             <>
-              <h1>Settings</h1>
               <p className="page-sub">What Jos can see · privacy · dogfood metrics.</p>
+              {filtersOpen ? (
+                <div className="chips" style={{ marginBottom: 12 }}>
+                  <span className="chip-label">Urgency</span>
+                  {(
+                    [
+                      ["all", "All"],
+                      ["critical", "Urgent"],
+                      ["high", "Soon"],
+                      ["normal", "Normal"],
+                      ["quiet", "Quiet"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      className={`chip ${band === id ? "on" : ""}`}
+                      onClick={() => setBand(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <span className="chip-label">From</span>
+                  {(
+                    [
+                      ["all", "All"],
+                      ["mail", "Mail"],
+                      ["clip", "Clips"],
+                      ["calendar", "Calendar"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      className={`chip ${sourceFilter === id ? "on" : ""}`}
+                      onClick={() => setSourceFilter(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
               <div className="panel">
                 <h2>What Jos can see today</h2>
                 <p className="page-sub" style={{ marginTop: 0 }}>
@@ -969,6 +865,15 @@ export function Desktop() {
                   </p>
                 ) : null}
                 {health.status === "error" ? <p className="err">{health.message}</p> : null}
+              </div>
+              <div className="panel">
+                <h2>Developer</h2>
+                <p className="page-sub">
+                  Raw Gmail/Calendar cache (not product UI) — for connector debugging only.
+                </p>
+                <button type="button" className="btn ghost" onClick={() => setOverlay("inbox")}>
+                  Open sync cache debug
+                </button>
               </div>
               <div className="panel">
                 <h2>Dogfood metrics (14d)</h2>
@@ -1059,6 +964,9 @@ export function Desktop() {
                 </div>
               </div>
             </>
+                ) : null}
+              </div>
+            </div>
           ) : null}
 
           {message ? (

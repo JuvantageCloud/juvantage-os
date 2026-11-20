@@ -6,7 +6,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "tsx --test src/lib/cryptoTokens.test.ts src/services/osConnectors.test.ts src/services/osGmailSend.test.ts src/services/osCalendarCreate.test.ts src/services/osLoops.test.ts src/services/opsIncidents.test.ts src/services/osClose.test.ts src/services/osProposalState.test.ts src/integration/closePath.contract.test.ts src/services/osMetrics.test.ts src/services/osGrants.test.ts src/services/osModality.test.ts src/services/osVoice.test.ts",
+    "test": "tsx --test src/lib/cryptoTokens.test.ts src/services/osConnectors.test.ts src/services/osGmailSend.test.ts src/services/osCalendarCreate.test.ts src/services/osLoops.test.ts src/services/opsIncidents.test.ts src/services/osClose.test.ts src/services/osProposalState.test.ts src/integration/closePath.contract.test.ts src/services/osMetrics.test.ts src/services/osGrants.test.ts src/services/osDevFixtures.test.ts src/services/osEpisodic.test.ts src/services/osContextFuse.test.ts src/services/osHero.test.ts src/services/osPresenceHint.test.ts src/services/osLoopLiveness.test.ts src/services/osLoopMerge.test.ts src/services/osModality.test.ts src/services/osVoice.test.ts",
     "test:integration": "tsx --test src/integration/closeDemo.harness.test.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",

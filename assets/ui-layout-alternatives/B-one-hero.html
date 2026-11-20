@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Layout B — One hero</title>
+  <link rel="stylesheet" href="shared-layout.css" />
+  <style>
+    .hero-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; text-align: center; }
+    .hero-card { width: min(520px, 100%); text-align: left; border: 1px solid var(--hair); border-radius: 16px; padding: 20px; background: rgba(255,255,255,.03); }
+    .hero-card h2 { margin: 8px 0 4px; font-size: 1.15rem; }
+    .footer-links { margin-top: 16px; display: flex; justify-content: center; gap: 16px; font-size: 11px; color: var(--muted); }
+    .queue { margin-top: 12px; font-size: 11px; color: var(--muted); text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Layout B — One hero</h1>
+    <p class="lede">Desktop shows exactly one obligation — same rule as the teal sheet. “See all” opens a simple list, not a permanent split view.</p>
+    <div class="mac">
+      <div class="tb"><span class="dots"><i class="r"></i><i class="y"></i><i class="g"></i></span><span class="title">Juvantage OS</span><span class="muted">Undock</span></div>
+      <div class="hero-body">
+        <p class="muted" style="margin:0">Next to close</p>
+        <div class="hero-card">
+          <span class="pill">Urgent</span> <span class="muted">Mail</span>
+          <h2>Reply to Maya — pilot pack</h2>
+          <p class="muted">Jos drafted from your inbox. Edit below.</p>
+          <textarea readonly>Hi Maya — …</textarea>
+          <div class="row">
+            <button class="btn go" type="button">Approve &amp; send</button>
+            <button class="btn" type="button">Quiet</button>
+            <button class="btn" type="button">Snooze</button>
+          </div>
+        </div>
+        <p class="queue">3 more in queue · <u>Show list</u></p>
+        <div class="footer-links"><span>Google linked</span><span>Settings</span><span>Metrics</span></div>
+      </div>
+    </div>
+    <p class="callout">Kills: loop list always visible, filter chip rows, episodic competing for attention.</p>
+  </div>
+</body>
+</html>

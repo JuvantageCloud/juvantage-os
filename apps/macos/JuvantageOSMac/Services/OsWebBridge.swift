@@ -5,6 +5,7 @@ import WebKit
 extension Notification.Name {
     static let juvOsOpenDesktop = Notification.Name("juvOsOpenDesktop")
     static let juvOsCloseSheet = Notification.Name("juvOsCloseSheet")
+    static let juvOsContextClosed = Notification.Name("juvOsContextClosed")
 }
 
 /// Registers WKWebViews and broadcasts clip hotkey to injected `window.juvantageOs`.
@@ -39,13 +40,31 @@ enum OsWebViewRegistry {
         }
     }
 
+    /// Clip hotkey → quick sheet only (one owner). Desktop must not also create loops.
     static func broadcastClipHotkey() {
+        sheetViews.removeAll { $0.webView == nil }
         views.removeAll { $0.webView == nil }
-        for box in views {
+        let targets = sheetViews.isEmpty ? views : sheetViews
+        for box in targets {
             box.webView?.evaluateJavaScript(
                 "window.dispatchEvent(new Event('juv-os-clip-hotkey'));",
                 completionHandler: nil
             )
+        }
+    }
+
+    /// After native dev login, push the same token the React sheet expects.
+    static func injectAuthTokenIntoWebViews() {
+        views.removeAll { $0.webView == nil }
+        sheetViews.removeAll { $0.webView == nil }
+        guard let token = TokenStore.token else { return }
+        let escaped = token
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "'", with: "\\'")
+        let js =
+            "try { localStorage.setItem('juvantage_os_token', '\(escaped)'); window.dispatchEvent(new Event('juv-os-token')); } catch (e) {}"
+        for box in views + sheetViews {
+            box.webView?.evaluateJavaScript(js, completionHandler: nil)
         }
     }
 }
@@ -80,6 +99,7 @@ enum OsWebBridgeScript {
           window.juvantageOs = {
             ambientSample: function () { return call("ambientSample"); },
             clipContext: function () { return call("clipContext"); },
+            episodicContext: function () { return call("episodicContext"); },
             openExternal: function (url) { return call("openExternal", { url: url }); },
             platform: "darwin",
             onClipHotkey: function (cb) {
@@ -97,6 +117,7 @@ enum OsWebBridgeScript {
             openDesktop: function () { return call("openDesktop"); },
             undock: async function () { return { ok: true }; },
             closeSheet: function () { return call("closeSheet"); },
+            contextClosed: function () { return call("contextClosed"); },
             stubAction: async function (action) { return { ok: true, action: action, stub: true }; },
           };
         })();
@@ -133,6 +154,16 @@ final class OsWebBridgeHandler: NSObject, WKScriptMessageHandler {
                     "title": s.title as Any,
                     "url": s.url as Any,
                 ]
+            case "episodicContext":
+                let eye = AmbientSampler.episodicContext()
+                ok = true
+                payload = [
+                    "ok": eye.ok,
+                    "app": eye.app,
+                    "title": eye.title as Any,
+                    "text": eye.text as Any,
+                    "axTrusted": eye.axTrusted,
+                ]
             case "clipContext":
                 let c = AmbientSampler.clipContext()
                 ok = true
@@ -159,6 +190,10 @@ final class OsWebBridgeHandler: NSObject, WKScriptMessageHandler {
                 payload = ["ok": true]
             case "closeSheet":
                 NotificationCenter.default.post(name: .juvOsCloseSheet, object: nil)
+                ok = true
+                payload = ["ok": true]
+            case "contextClosed":
+                NotificationCenter.default.post(name: .juvOsContextClosed, object: nil)
                 ok = true
                 payload = ["ok": true]
             default:

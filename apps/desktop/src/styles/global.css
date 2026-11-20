@@ -1,47 +1,60 @@
+/* Act Moment — one theme (waitlist / product chrome). Light only. */
 :root {
-  /* Daylight base (paper) */
-  --bg: #f4f1ea;
-  --bg-deep: #ebe6dc;
-  --bg-well: #e3ddd2;
-  --ink: #0b1220;
-  --muted: rgba(11, 18, 32, 0.55);
-  --hair: rgba(11, 18, 32, 0.12);
+  --bg: #f5f4f0;
+  --bg-deep: #ebeae6;
+  --bg-well: #e4e3df;
+  --bg-elevated: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #334155;
+  --muted: #64748b;
+  --hair: #e2e8f0;
   --card: #ffffff;
-  --teal: #0d7a6f;
-  --teal-deep: #2d5a56;
-  --teal-soft: #d8ebe8;
-  --ink-soft: #1c2433;
-  --warn: #c45c26;
-  --warn-soft: #fde8e4;
-  --amber: #9a5b12;
-  --amber-soft: #fff1e0;
 
-  /* Night-cabin / instrument layer (Juvantage OS ambience) */
-  --cabin-dash: #141820;
-  --cabin-rail: #1c1914;
-  --cabin-rail-edge: rgba(18, 165, 148, 0.22);
-  --instrument: #14b8a6;
-  --instrument-dim: #0d7a6f;
-  --instrument-glow: rgba(20, 184, 166, 0.45);
-  --instrument-soft: rgba(20, 184, 166, 0.12);
-  --warm-cabin: #f7f2e8;
+  --accent: #1b3d36;
+  --accent-hover: #142e29;
+  --accent-soft: #e8eef5;
+  --accent-border: rgba(30, 58, 95, 0.22);
 
-  --edge-light: rgba(255, 255, 255, 0.78);
-  --edge-shade: rgba(11, 18, 32, 0.1);
-  --shadow: 0 12px 28px rgba(11, 18, 32, 0.14);
-  --shadow-sm: 0 1px 0 var(--edge-shade), 0 6px 16px rgba(11, 18, 32, 0.08);
-  --glow-module: 0 0 0 1px rgba(20, 184, 166, 0.08), 0 8px 24px rgba(11, 18, 32, 0.08);
-  --glow-live: 0 0 0 1px rgba(20, 184, 166, 0.5), 0 0 18px rgba(13, 122, 111, 0.35);
+  --listen: #2563eb;
+  --listen-soft: rgba(37, 99, 235, 0.12);
+
+  --success: #0f766e;
+  --success-soft: #ecfdf5;
+  --warn: #b45309;
+  --warn-soft: #fff7ed;
+  --danger: #be123c;
+  --danger-soft: #fff1f2;
+
+  /* Legacy aliases → same palette (stop “cabin” vs “cream” split) */
+  --teal: var(--accent);
+  --teal-deep: var(--accent-hover);
+  --teal-soft: var(--accent-soft);
+  --warm-cabin: var(--bg);
+  --cabin-dash: var(--bg);
+  --cabin-rail: var(--bg-deep);
+  --cabin-rail-edge: var(--hair);
+  --instrument: var(--listen);
+  --instrument-dim: var(--accent);
+  --instrument-glow: var(--listen-soft);
+  --instrument-soft: var(--accent-soft);
+
+  --edge-light: rgba(255, 255, 255, 0.9);
+  --edge-shade: rgba(15, 23, 42, 0.06);
+  --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --glow-module: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --glow-live: 0 0 0 2px var(--listen-soft);
   --inset-top: inset 0 1px 0 var(--edge-light);
-  --inset-well: inset 0 2px 8px rgba(11, 18, 32, 0.08);
+  --inset-well: inset 0 1px 3px rgba(15, 23, 42, 0.06);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration: 0.22s;
-  --radius: 6px;
-  --radius-lg: 8px;
-  --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --duration: 0.2s;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+
   font-family: var(--font);
   color: var(--ink);
-  background: transparent;
+  background: var(--bg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -61,16 +74,18 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: transparent;
+  background: var(--bg);
   font-family: var(--font);
+  color: var(--ink);
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font);
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
 
 button {
@@ -83,29 +98,15 @@ button {
 }
 
 .app-opaque {
-  background: var(--cabin-dash);
+  background: var(--bg);
 }
 
 @keyframes instrument-breathe {
   0%,
   100% {
-    opacity: 0.85;
-    box-shadow: 0 0 6px var(--instrument-glow);
+    opacity: 0.75;
   }
   50% {
     opacity: 1;
-    box-shadow: 0 0 14px var(--instrument-glow);
-  }
-}
-
-@keyframes live-pulse {
-  0%,
-  100% {
-    box-shadow: var(--glow-live);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px rgba(20, 184, 166, 0.65),
-      0 0 22px rgba(13, 122, 111, 0.45);
   }
 }

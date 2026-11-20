@@ -1,0 +1,35 @@
+/* Neutral chrome — layout comparison only */
+:root {
+  --bg: #0f1117;
+  --card: #181b24;
+  --ink: #e8eaed;
+  --muted: #9aa0a6;
+  --hair: rgba(255,255,255,.08);
+  --accent: #6ee7d8;
+  --warn: #f87171;
+  --desktop-w: 980px;
+  --desktop-h: 680px;
+  --sheet-w: 340px;
+  --sheet-h: 560px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 13px/1.45 system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--bg); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 24px 20px 80px; }
+h1 { font-size: 1.4rem; margin: 0 0 8px; }
+.lede { color: var(--muted); max-width: 56ch; margin: 0 0 28px; }
+.mac { width: var(--desktop-w); height: var(--desktop-h); background: var(--card); border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.mac.sheet-mac { width: var(--sheet-w); height: var(--sheet-h); margin: 24px auto 0; }
+.tb { height: 36px; display: flex; align-items: center; padding: 0 14px; gap: 10px; border-bottom: 1px solid var(--hair); font-size: 12px; font-weight: 600; }
+.tb .dots i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+.tb .r { background: #ff5f57; } .tb .y { background: #febc2e; } .tb .g { background: #28c840; }
+.tb .title { flex: 1; text-align: center; opacity: .85; }
+.body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.pill { font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--warn); color: #fff; display: inline-block; }
+.pill.soon { background: rgba(110,231,216,.2); color: var(--accent); }
+.btn { border: 1px solid var(--hair); background: transparent; color: var(--ink); padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: default; }
+.btn.go { background: var(--accent); color: #0b1220; border-color: var(--accent); }
+textarea, input { width: 100%; border: 1px solid var(--hair); border-radius: 8px; background: #0f1117; color: var(--ink); padding: 8px; font: inherit; margin-top: 4px; }
+textarea { min-height: 100px; resize: none; }
+.muted { color: var(--muted); font-size: 11px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 12px; }
+.callout { border: 1px dashed var(--accent); border-radius: 10px; padding: 12px; font-size: 12px; color: var(--accent); margin-top: 16px; }

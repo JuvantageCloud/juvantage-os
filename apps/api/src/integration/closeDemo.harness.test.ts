@@ -5,8 +5,10 @@
 import { describe, it, before } from "node:test";
 import assert from "node:assert/strict";
 import { execSync } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { pickSheetHero } from "@juvantage/shared";
 
 const apiRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -29,6 +31,14 @@ async function json<T>(res: Response): Promise<T> {
 describe("HTTP harness — demo approve-send close loop", () => {
   before(() => {
     const env = { ...process.env };
+    const dbBase = path.join(apiRoot, "harness.db");
+    for (const f of [`${dbBase}`, `${dbBase}-journal`, `${dbBase}-wal`, `${dbBase}-shm`]) {
+      try {
+        fs.unlinkSync(f);
+      } catch {
+        /* fresh harness */
+      }
+    }
     execSync("npx prisma db push --skip-generate", {
       cwd: apiRoot,
       env,
@@ -80,12 +90,23 @@ describe("HTTP harness — demo approve-send close loop", () => {
       loops.find((l) => l.source === "gmail");
     assert.ok(mailLoop, "expected at least one gmail loop after demo extract");
 
+    const hero = pickSheetHero(loops);
+    assert.equal(hero?.id, mailLoop.id, "sheet hero should be obligation mail when linked");
+
+    const ctx = await json<{
+      loopId: string;
+      events: Array<{ kind: string }>;
+      sessionId: string | null;
+    }>(await app.request(`/os/loops/${mailLoop.id}/context`, { headers: auth }));
+    assert.equal(ctx.loopId, mailLoop.id);
+
     const proposeRes = await app.request(`/os/loops/${mailLoop.id}/propose`, {
       method: "POST",
       headers: auth,
       body: "{}",
     });
-    const { proposal } = await json<{ proposal: { id: string } }>(proposeRes);
+    const { proposal } = await json<{ proposal: { id: string; body: string } }>(proposeRes);
+    assert.match(proposal.body, /Proposed next steps:/i);
 
     const closeRes = await app.request(`/os/proposals/${proposal.id}/approve-send`, {
       method: "POST",
@@ -207,5 +228,142 @@ describe("HTTP harness — demo approve-send close loop", () => {
     );
     assert.equal(closed.verified, true);
     assert.equal(closed.loop.status, "done");
+  });
+
+  it("capture/events fuses window + clipboard into episodic draft", async () => {
+    const { token } = await json<{ token: string }>(
+      await app.request("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "john@juvantage.com", password: "demo1234" }),
+      }),
+    );
+    const auth = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+
+    const cap = await json<{
+      surfaced: boolean;
+      inserted: number;
+      sessionId?: string;
+      loop?: { id: string; source: string };
+    }>(
+      await app.request("/os/capture/events", {
+        method: "POST",
+        headers: auth,
+        body: JSON.stringify({
+          events: [
+            { kind: "window_focus", app: "Xcode", title: "VoiceController.swift" },
+            {
+              kind: "clipboard",
+              app: "Xcode",
+              title: "VoiceController.swift",
+              text: "let input = engine.inputNode",
+            },
+          ],
+        }),
+      }),
+    );
+    assert.equal(cap.surfaced, true);
+    assert.equal(cap.inserted, 2);
+    assert.equal(cap.loop?.source, "episodic");
+
+    const { loops } = await json<{
+      loops: Array<{ id: string; source: string; proposal?: { body: string } | null }>;
+    }>(await app.request("/os/loops?limit=10", { headers: auth }));
+    const live = loops.find((l) => l.source === "episodic");
+    assert.ok(live?.proposal);
+    assert.match(live!.proposal!.body, /fused 2 signals/i);
+    assert.match(live!.proposal!.body, /Proposed next steps:/i);
+    assert.match(live!.proposal!.body, /1\)/);
+    assert.match(live!.proposal!.body, /let input = engine.inputNode/);
+
+    const ranked = await json<{
+      loops: Array<{ id: string; source: string }>;
+    }>(
+      await app.request(
+        "/os/loops?limit=10&app=Xcode&title=VoiceController.swift",
+        { headers: auth },
+      ),
+    );
+    assert.equal(ranked.loops[0]?.source, "episodic");
+
+    const loopId = cap.loop?.id ?? live!.id ?? loops.find((l) => l.source === "episodic")?.id;
+    assert.ok(loopId, "expected loop id for context pack");
+    const pack = await json<{
+      sessionId: string | null;
+      eventCount: number;
+      events: Array<{ textPreview: string | null }>;
+      sensitivityTags: string[];
+    }>(await app.request(`/os/loops/${loopId}/context`, { headers: auth }));
+    assert.equal(pack.sessionId, cap.sessionId);
+    assert.ok(pack.eventCount >= 2);
+    assert.ok(pack.events.some((e) => e.textPreview?.includes("engine.inputNode")));
+  });
+
+  it("merge v0 folds actionable gmail into episodic fuse", async () => {
+    const { token } = await json<{ token: string }>(
+      await app.request("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "john@juvantage.com", password: "demo1234" }),
+      }),
+    );
+    const auth = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+
+    await json(
+      await app.request("/os/connectors/demo", {
+        method: "POST",
+        headers: { ...auth, "Content-Type": "application/json" },
+        body: "{}",
+      }),
+    );
+    await json(await app.request("/os/loops/extract", { method: "POST", headers: auth, body: "{}" }));
+
+    const before = await json<{
+      loops: Array<{ id: string; source: string; title: string; status: string }>;
+    }>(await app.request("/os/loops?limit=20", { headers: auth }));
+    const mailLoop = before.loops.find(
+      (l) => l.source === "gmail" && ["open", "proposed"].includes(l.status),
+    );
+    assert.ok(mailLoop, "expected an open gmail loop before fuse");
+
+    await json(
+      await app.request("/os/capture/events", {
+        method: "POST",
+        headers: auth,
+        body: JSON.stringify({
+          events: [
+            { kind: "window_focus", app: "Mail", title: mailLoop!.title },
+            {
+              kind: "clipboard",
+              app: "Mail",
+              title: mailLoop!.title,
+              text: `Need your reply on ${mailLoop!.title} before I merge this context`,
+            },
+          ],
+        }),
+      }),
+    );
+
+    const after = await json<{
+      loops: Array<{
+        id: string;
+        source: string;
+        status: string;
+        evidence?: { childSources?: Array<{ source: string; ref: string }> };
+      }>;
+    }>(await app.request("/os/loops?limit=20", { headers: auth }));
+
+    const episodic = after.loops.find((l) => l.source === "episodic");
+    assert.ok(episodic?.evidence?.childSources?.length, "episodic should list merged childSources");
+
+    assert.ok(
+      !after.loops.some((l) => l.id === mailLoop!.id),
+      "merged gmail loop should drop off the open list",
+    );
+
+    const pack = await json<{
+      evidence: { childSources?: Array<{ source: string; title?: string }> };
+    }>(await app.request(`/os/loops/${episodic!.id}/context`, { headers: auth }));
+    assert.ok(pack.evidence.childSources?.length, "context pack should list merged ears");
   });
 });
