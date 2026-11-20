@@ -26,11 +26,6 @@ function parseDiffLines(body: string): DiffLine[] {
   return lines.slice(0, 80);
 }
 
-export function bodyLooksLikeDiff(body: string): boolean {
-  const hits = body.split(/\r?\n/).filter((l) => /^[+-]/.test(l.trim())).length;
-  return hits >= 2;
-}
-
 export function CodeDiffSurface({ proposal, body, onBodyChange, disabled }: Props) {
   const rows = parseDiffLines(body);
   const hasDiff = rows.some((r) => r.kind === "add" || r.kind === "del");

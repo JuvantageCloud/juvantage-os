@@ -21,6 +21,11 @@ export function mergedEarsFromEvidence(evidence: unknown): MergedEar[] {
     .filter((x): x is MergedEar => x != null);
 }
 
+export function bodyLooksLikeDiff(body: string): boolean {
+  const hits = body.split(/\r?\n/).filter((l) => /^[+-]/.test(l.trim())).length;
+  return hits >= 2;
+}
+
 export function loopCardTitle(loop: LoopWithProposal, max = 72): string {
   const raw = loop.title?.trim() || "Open loop";
   if (raw.length <= max) return raw;

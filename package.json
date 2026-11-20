@@ -20,6 +20,7 @@
     "dev:os:status": "node -e \"const h=require('http');h.get('http://127.0.0.1:3001/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log('Brain',r.statusCode,d))}).on('error',()=>console.log('Brain down'));h.get('http://127.0.0.1:5173/',r=>console.log('UI',r.statusCode)).on('error',()=>console.log('UI down'));\"",
     "dev:os-electron": "npm run build -w @juvantage/shared && concurrently -k -n api,desktop -c blue,magenta \"npm run dev:api\" \"npm run dev -w @juvantage/desktop\"",
     "macos:generate": "cd apps/macos && xcodegen generate",
+    "macos:reset-onboarding": "node tools/reset-mac-onboarding.mjs",
     "jira:backlog": "node tools/jira/push-backlog.mjs",
     "build": "npm run build -w @juvantage/shared && npm run build -w @juvantage/api && npm run build -w @juvantage/desktop",
     "db:generate": "npm run db:generate -w @juvantage/api",
