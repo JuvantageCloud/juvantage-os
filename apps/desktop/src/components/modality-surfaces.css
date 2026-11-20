@@ -147,3 +147,80 @@
   font-size: 0.78rem;
   color: var(--muted, #6b6560);
 }
+
+.modality-meta-grid {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.modality-meta-grid dt {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+.modality-meta-grid dd {
+  margin: 0 0 6px;
+}
+
+.modality-attachments {
+  padding: 8px 12px;
+  border-top: 1px solid var(--hair);
+}
+
+.modality-attachments ul {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.modality-attachments li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8125rem;
+}
+
+.btn-xs {
+  font-size: 0.6875rem;
+  padding: 3px 8px;
+}
+
+.code-diff {
+  margin: 0;
+  padding: 10px 12px;
+  max-height: 220px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.code-diff-line--add {
+  color: #4ade80;
+  display: block;
+}
+
+.code-diff-line--del {
+  color: #f87171;
+  display: block;
+}
+
+.code-diff-line--ctx {
+  color: #94a3b8;
+  display: block;
+}
+
+.pdf-field-grid {
+  display: grid;
+  gap: 8px;
+  padding: 0 12px 8px;
+}

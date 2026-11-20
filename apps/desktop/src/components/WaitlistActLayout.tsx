@@ -1,11 +1,10 @@
-import type { LoopWithProposal, Proposal } from "@juvantage/shared";
+import type { LoopWithProposal, Proposal, PresenceHint } from "@juvantage/shared";
 import { ModalityHost } from "./ModalityHost";
 import {
+  loopCardTitle,
   loopChannelTag,
   loopStallMeta,
   mergedEarsFromEvidence,
-  previewExcerptFromBody,
-  proposedHeadline,
   stepsFromProposalBody,
 } from "../lib/loopDisplay";
 
@@ -23,9 +22,10 @@ type Props = {
   onToggleEditor: () => void;
   onDraft: () => void;
   onApprove: () => void;
-  onVoice?: () => void;
   onLinkGoogle?: () => void;
   onFindUnfinished?: () => void;
+  presenceHint?: PresenceHint | null;
+  earsStatus?: string;
 };
 
 export function WaitlistActLayout({
@@ -44,25 +44,37 @@ export function WaitlistActLayout({
   onApprove,
   onLinkGoogle,
   onFindUnfinished,
+  presenceHint,
+  earsStatus,
 }: Props) {
   const bodyForUi = draftBody || proposal?.body || "";
   const steps = stepsFromProposalBody(bodyForUi);
-  const previewExcerpt = previewExcerptFromBody(bodyForUi);
   const hasDraft = Boolean(bodyForUi.trim());
   const mergedEars = selected ? mergedEarsFromEvidence(selected.evidence) : [];
-  const headline = selected
-    ? proposedHeadline(selected, draftTitle || proposal?.title || "")
-    : "";
-  const showEditor = hasDraft && editorOpen;
+  const showHost = Boolean(selected && (hasDraft || proposal) && editorOpen);
 
   return (
     <div className="waitlist-act waitlist-act--split" aria-labelledby="open-loops-heading">
       <aside className="waitlist-loops-col">
+        <div className="context-rail type-body">
+          <div className="context-rail-row">
+            <span className="type-label">Now</span>
+            <span>
+              {presenceHint?.app ?? "Idle"}
+              {presenceHint?.title ? ` · ${presenceHint.title.slice(0, 48)}` : ""}
+            </span>
+          </div>
+          <div className="context-rail-row">
+            <span className="type-label">Ears</span>
+            <span>{earsStatus ?? "Not linked"}</span>
+          </div>
+        </div>
+
         <header className="open-loops-head">
-          <h2 id="open-loops-heading" className="open-loops-label">
+          <h2 id="open-loops-heading" className="type-label">
             Open loops
           </h2>
-          <span className="open-loops-count">
+          <span className="open-loops-count type-body">
             {loops.length ? `${loops.length} need you` : "Clear"}
           </span>
         </header>
@@ -84,7 +96,7 @@ export function WaitlistActLayout({
                   <span className={`open-loop-channel open-loop-channel--${tag.toLowerCase()}`}>
                     {tag}
                   </span>
-                  <span className="open-loop-title">{loop.title}</span>
+                  <span className="open-loop-title type-body">{loopCardTitle(loop)}</span>
                   <span className={`open-loop-stall open-loop-stall--${stall.tone}`}>
                     {stall.text}
                   </span>
@@ -92,7 +104,7 @@ export function WaitlistActLayout({
               );
             })
           ) : (
-            <div className="open-loop-empty">
+            <div className="open-loop-empty type-body">
               <p>
                 <strong>Nothing open.</strong> Jos only surfaces work that still needs you.
               </p>
@@ -110,39 +122,32 @@ export function WaitlistActLayout({
           )}
         </div>
 
-        <p className="waitlist-loops-foot">
-          Same loops on Mac and iPhone. Jos proposes; you approve before anything sends.
+        <p className="waitlist-loops-foot type-body">
+          Same loops on Mac and iPhone. You approve before anything sends.
         </p>
       </aside>
 
       <section className="proposed-next proposed-next--panel context-surface" aria-label="Close surface">
         <header className="proposed-panel-head">
-          <span className="proposed-panel-label">Close surface</span>
+          <span className="type-label">Close surface</span>
         </header>
 
         {selected ? (
           <>
-            <p className="proposed-eyebrow">{selected.title}</p>
-            <h3 className="proposed-headline">{headline}</h3>
             {mergedEars.length ? (
-              <p className="proposed-merged-ears">
+              <p className="proposed-merged-ears type-body">
                 Folded in:{" "}
-                {mergedEars.map((e) => `${e.source === "gmail" ? "Gmail" : e.source}${e.title ? ` · ${e.title}` : ""}`).join("; ")}
+                {mergedEars
+                  .map(
+                    (e) =>
+                      `${e.source === "gmail" ? "Gmail" : e.source}${e.title ? ` · ${e.title}` : ""}`,
+                  )
+                  .join("; ")}
               </p>
             ) : null}
-            <ol className="proposed-steps">
-              {steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ol>
 
-            <div className={`context-box${showEditor ? " context-box--editing" : ""}`}>
-              {!showEditor ? (
-                <p className="context-box-excerpt">
-                  {hasDraft ? previewExcerpt : "Jos will draft the close step from this loop."}
-                </p>
-              ) : null}
-              {showEditor ? (
+            <div className={`context-box context-box--dynamic${showHost ? " context-box--host" : ""}`}>
+              {showHost ? (
                 <div className="proposed-editor">
                   <ModalityHost
                     loop={selected}
@@ -154,7 +159,13 @@ export function WaitlistActLayout({
                     busy={busy}
                   />
                 </div>
-              ) : null}
+              ) : (
+                <p className="type-body context-box-idle">
+                  {hasDraft
+                    ? "Open the editor to use the right tool for this loop."
+                    : "Jos will draft the close step, then this box becomes mail, clip, PDF, or code."}
+                </p>
+              )}
               <div className="context-box-tools">
                 {!hasDraft ? (
                   <button
@@ -168,15 +179,21 @@ export function WaitlistActLayout({
                 ) : (
                   <button
                     type="button"
-                    className="btn ghost"
+                    className="btn"
                     onClick={onToggleEditor}
                     disabled={busy}
                   >
-                    {showEditor ? "Done editing" : "Edit draft"}
+                    {showHost ? "Collapse" : "Open editor"}
                   </button>
                 )}
               </div>
             </div>
+
+            <ol className="proposed-steps proposed-steps--compact type-body">
+              {steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
 
             <div className="proposed-actions proposed-actions--primary">
               <button
@@ -197,13 +214,13 @@ export function WaitlistActLayout({
               </button>
             </div>
 
-            <p className="proposed-trust">Nothing submits until you approve.</p>
+            <p className="proposed-trust type-body">Nothing submits until you approve.</p>
           </>
         ) : (
           <div className="proposed-idle">
-            <p className="proposed-headline proposed-headline--idle">Pick an open loop</p>
-            <p className="proposed-empty">
-              This panel follows the task: draft, edit, and approve live here. You do not pick a widget.
+            <p className="type-title proposed-headline--idle">Pick an open loop</p>
+            <p className="type-body proposed-empty">
+              The close surface picks the right editor for the task. You do not choose widgets.
             </p>
           </div>
         )}
