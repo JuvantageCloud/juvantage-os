@@ -43,8 +43,8 @@ Xcode dev builds often auto-login; if sheet says “not signed in”, open **Des
 ## 3 · Path A — Demo mail (no Google)
 
 1. Desktop → **Google** → **Demo connect** → **Sync**.
-2. **Work** — you should see **Open loops** + **Proposed next step** (waitlist layout).
-3. Select a mail loop → **Preview** (if no draft) → **Approve & continue**.
+2. **Work** — you should see **Open loops** + **Close surface** (waitlist layout).
+3. Select a mail loop → **Draft close step** (if no draft) → **Approve now**.
 4. Success: loop leaves the list; toast mentions demo (no real send).
 
 ---
@@ -53,7 +53,7 @@ Xcode dev builds often auto-login; if sheet says “not signed in”, open **Des
 
 1. With Mac app + Accessibility (for window read) or **⌘C** copy a line of text.
 2. Teal agent → quick sheet should show one hero after episodic fuse.
-3. **Preview** → edit → **Approve** → loop closes.
+3. **Draft close step** → **Edit draft** if needed → **Approve now** → loop closes.
 
 Or Desktop → **Work** — episodic loop appears in **Open loops** (not hidden).
 
@@ -62,16 +62,17 @@ Or Desktop → **Work** — episodic loop appears in **Open loops** (not hidden)
 ## 5 · Path C — Live Gmail (once)
 
 1. **Google** → real **Sign in** (needs Cloud OAuth env on API).
-2. Sync → **Work** → mail loop → **Approve & continue** (sends after approve).
+2. Sync → **Work** → mail loop → **Approve now** (sends after approve).
 
 ---
 
 ## Pass criteria
 
-- [ ] `mvp:smoke` green (or unit + integration manually).
-- [ ] At least one loop visible under **Work** after demo connect **or** episodic capture.
-- [ ] **Approve & continue** removes loop or shows success.
-- [ ] Footer: *Nothing submits until you approve.*
+- [x] `mvp:smoke` green (or unit + integration manually). — 2026-11-20 agent + CI
+- [x] Live API: demo mail propose → approve-send → `done` + episodic capture (agent)
+- [ ] At least one loop visible under **Work** after demo connect **or** episodic capture (**you**, Mac UI).
+- [ ] **Approve now** removes loop or shows success (**you**, Mac UI).
+- [ ] Footer: *Nothing submits until you approve.* (**you**, visual)
 
 ---
 

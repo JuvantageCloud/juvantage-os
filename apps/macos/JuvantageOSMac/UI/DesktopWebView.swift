@@ -41,6 +41,7 @@ struct DesktopWebView: NSViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             state = .ready
             bridge?.webView = webView
+            OsWebViewRegistry.focusPendingDesktopLoop(on: webView)
             guard let token = TokenStore.token else { return }
             let escaped = token.replacingOccurrences(of: "\\", with: "\\\\")
                 .replacingOccurrences(of: "'", with: "\\'")

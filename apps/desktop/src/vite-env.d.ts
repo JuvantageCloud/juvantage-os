@@ -35,6 +35,8 @@ export type OsBridge = {
   onVoiceTranscript?: (cb: (text: string) => void) => () => void;
   voiceResult?: (result: { ok: boolean; message: string }) => Promise<{ ok: boolean }>;
   platform: string;
+  /** True inside macOS WKWebView (native title bar owns chrome). */
+  hostShell?: boolean;
 };
 
 declare global {
