@@ -122,40 +122,18 @@ final class ShellController: ObservableObject {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var clipMonitors: [Any] = []
-
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
-        registerClipHotkey()
         Task { @MainActor in
-            ShellController.shared.setupAgentPanel()
-            VoiceController.shared.start()
             await BrainClient.shared.refreshHealth()
-            await BrainClient.shared.ensureDevLoginIfNeeded()
-            OsWebViewRegistry.injectAuthTokenIntoWebViews()
-            ShellController.shared.toggleQuickSheet()
-            NSApp.activate(ignoringOtherApps: true)
-        }
-    }
-
-    private func registerClipHotkey() {
-        let handler: (NSEvent) -> Void = { event in
-            guard event.modifierFlags.contains([.command, .shift]),
-                  event.charactersIgnoringModifiers?.lowercased() == "l"
-            else { return }
-            OsWebViewRegistry.broadcastClipHotkey()
-            Task { @MainActor in
-                ShellController.shared.toggleQuickSheet()
+            if LaunchPolicy.hasCompletedOnboarding {
+                AppRuntime.shared.installGlobalShortcuts()
+                ShellController.shared.setupAgentPanel()
+                await BrainClient.shared.ensureDevLoginIfNeeded()
+                OsWebViewRegistry.injectAuthTokenIntoWebViews()
+                LaunchPolicy.hideHubWindows()
             }
         }
-        if let global = NSEvent.addGlobalMonitorForEvents(matching: .keyDown, handler: handler) {
-            clipMonitors.append(global)
-        }
-        let local = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            handler(event)
-            return event
-        }
-        clipMonitors.append(local)
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
