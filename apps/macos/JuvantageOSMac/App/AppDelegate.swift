@@ -68,8 +68,8 @@ final class ShellController: ObservableObject {
             panel.level = .floating
             panel.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary]
             let host = NSHostingView(
-                rootView: QuickSheetPanelView { [weak self] in
-                    self?.openDesktop()
+                rootView: QuickSheetPanelView { [weak self] loopId in
+                    self?.openDesktop(loopId: loopId)
                 }
             )
             panel.contentView = host
@@ -80,7 +80,8 @@ final class ShellController: ObservableObject {
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    func openDesktop() {
+    func openDesktop(loopId: String? = nil) {
+        OsWebViewRegistry.pendingDesktopLoopId = loopId
         if desktopWindow == nil {
             let window = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 980, height: 680),
@@ -97,6 +98,7 @@ final class ShellController: ObservableObject {
         desktopWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         quickSheetPanel?.orderOut(nil)
+        OsWebViewRegistry.focusPendingDesktopLoopIfLoaded()
     }
 
     private func positionAgent(_ panel: NSPanel) {

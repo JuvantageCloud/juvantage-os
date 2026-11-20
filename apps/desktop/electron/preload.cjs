@@ -21,4 +21,5 @@ contextBridge.exposeInMainWorld("juvantageOs", {
     return () => ipcRenderer.removeListener("os:clip-hotkey", handler);
   },
   platform: process.platform,
+  hostShell: false,
 });

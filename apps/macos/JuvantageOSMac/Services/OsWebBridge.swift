@@ -54,6 +54,28 @@ enum OsWebViewRegistry {
     }
 
     /// After native dev login, push the same token the React sheet expects.
+    static var pendingDesktopLoopId: String?
+
+    /// After sheet → desktop, focus the same loop in React (`#desktop?loopId=`).
+    static func focusPendingDesktopLoopIfLoaded() {
+        views.removeAll { $0.webView == nil }
+        sheetViews.removeAll { $0.webView == nil }
+        let sheets = Set(sheetViews.compactMap { $0.webView })
+        guard let desktop = views.compactMap({ $0.webView }).first(where: { !sheets.contains($0) }) else { return }
+        focusPendingDesktopLoop(on: desktop)
+    }
+
+    static func focusPendingDesktopLoop(on webView: WKWebView) {
+        guard let loopId = pendingDesktopLoopId, !loopId.isEmpty else { return }
+        pendingDesktopLoopId = nil
+        let escaped = loopId
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "'", with: "\\'")
+        let js =
+            "try { window.location.hash = 'desktop?loopId=\(escaped)'; window.dispatchEvent(new Event('hashchange')); } catch (e) {}"
+        webView.evaluateJavaScript(js, completionHandler: nil)
+    }
+
     static func injectAuthTokenIntoWebViews() {
         views.removeAll { $0.webView == nil }
         sheetViews.removeAll { $0.webView == nil }
@@ -102,6 +124,7 @@ enum OsWebBridgeScript {
             episodicContext: function () { return call("episodicContext"); },
             openExternal: function (url) { return call("openExternal", { url: url }); },
             platform: "darwin",
+            hostShell: true,
             onClipHotkey: function (cb) {
               const fn = function () { cb(); };
               window.addEventListener("juv-os-clip-hotkey", fn);
@@ -114,7 +137,11 @@ enum OsWebBridgeScript {
             },
             voiceResult: function (r) { return call("voiceResult", r || {}); },
             toggleSheet: async function () { return { ok: true }; },
-            openDesktop: function () { return call("openDesktop"); },
+            openDesktop: function (loopId) {
+              var extra = {};
+              if (loopId) extra.loopId = loopId;
+              return call("openDesktop", extra);
+            },
             undock: async function () { return { ok: true }; },
             closeSheet: function () { return call("closeSheet"); },
             contextClosed: function () { return call("contextClosed"); },
@@ -178,7 +205,11 @@ final class OsWebBridgeHandler: NSObject, WKScriptMessageHandler {
                 ok = await Self.openExternal(urlString: body["url"] as? String)
                 payload = ok ? ["ok": true] : ["ok": false, "error": "invalid url"]
             case "openDesktop":
-                NotificationCenter.default.post(name: .juvOsOpenDesktop, object: nil)
+                var info: [String: Any]?
+                if let loopId = body["loopId"] as? String, !loopId.isEmpty {
+                    info = ["loopId": loopId]
+                }
+                NotificationCenter.default.post(name: .juvOsOpenDesktop, object: nil, userInfo: info)
                 ok = true
                 payload = ["ok": true]
             case "voiceResult":

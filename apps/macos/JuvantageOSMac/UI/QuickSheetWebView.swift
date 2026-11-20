@@ -3,7 +3,7 @@ import WebKit
 
 struct QuickSheetWebView: NSViewRepresentable {
     let url: URL
-    var onOpenDesktop: () -> Void
+    var onOpenDesktop: (String?) -> Void
 
     func makeCoordinator() -> Coordinator {
         Coordinator(onOpenDesktop: onOpenDesktop)
@@ -27,10 +27,10 @@ struct QuickSheetWebView: NSViewRepresentable {
 
     final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         // NSObject required for NotificationCenter selectors
-        let onOpenDesktop: () -> Void
+        let onOpenDesktop: (String?) -> Void
         var bridge: OsWebBridgeHandler?
 
-        init(onOpenDesktop: @escaping () -> Void) {
+        init(onOpenDesktop: @escaping (String?) -> Void) {
             self.onOpenDesktop = onOpenDesktop
             super.init()
             NotificationCenter.default.addObserver(
@@ -51,8 +51,9 @@ struct QuickSheetWebView: NSViewRepresentable {
             NotificationCenter.default.removeObserver(self)
         }
 
-        @objc private func handleOpenDesktop() {
-            Task { @MainActor in onOpenDesktop() }
+        @objc private func handleOpenDesktop(_ note: Notification) {
+            let loopId = note.userInfo?["loopId"] as? String
+            Task { @MainActor in onOpenDesktop(loopId) }
         }
 
         @objc private func handleCloseSheet() {
@@ -77,7 +78,7 @@ struct QuickSheetWebView: NSViewRepresentable {
             windowFeatures: WKWindowFeatures
         ) -> WKWebView? {
             if navigationAction.request.url?.absoluteString.contains("route=desktop") == true {
-                onOpenDesktop()
+                onOpenDesktop(nil)
             }
             return nil
         }
@@ -85,7 +86,7 @@ struct QuickSheetWebView: NSViewRepresentable {
 }
 
 struct QuickSheetPanelView: View {
-    var onOpenDesktop: () -> Void
+    var onOpenDesktop: (String?) -> Void
 
     var body: some View {
         QuickSheetWebView(url: AppConfig.quickSheetWebURL, onOpenDesktop: onOpenDesktop)

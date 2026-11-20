@@ -2,8 +2,9 @@ import type { LoopWithProposal, Proposal } from "@juvantage/shared";
 import { ModalityHost } from "./ModalityHost";
 import {
   loopChannelTag,
-  loopStallLabel,
+  loopStallMeta,
   mergedEarsFromEvidence,
+  previewExcerptFromBody,
   proposedHeadline,
   stepsFromProposalBody,
 } from "../lib/loopDisplay";
@@ -41,15 +42,18 @@ export function WaitlistActLayout({
   onToggleEditor,
   onDraft,
   onApprove,
-  onVoice,
   onLinkGoogle,
   onFindUnfinished,
 }: Props) {
-  const steps = stepsFromProposalBody(draftBody || proposal?.body || "");
+  const bodyForUi = draftBody || proposal?.body || "";
+  const steps = stepsFromProposalBody(bodyForUi);
+  const previewExcerpt = previewExcerptFromBody(bodyForUi);
+  const hasDraft = Boolean(bodyForUi.trim());
   const mergedEars = selected ? mergedEarsFromEvidence(selected.evidence) : [];
   const headline = selected
     ? proposedHeadline(selected, draftTitle || proposal?.title || "")
     : "";
+  const showEditor = hasDraft && editorOpen;
 
   return (
     <div className="waitlist-act waitlist-act--split" aria-labelledby="open-loops-heading">
@@ -67,6 +71,7 @@ export function WaitlistActLayout({
           {loops.length ? (
             loops.slice(0, 8).map((loop) => {
               const tag = loopChannelTag(loop);
+              const stall = loopStallMeta(loop);
               const on = selected?.id === loop.id;
               return (
                 <button
@@ -80,14 +85,16 @@ export function WaitlistActLayout({
                     {tag}
                   </span>
                   <span className="open-loop-title">{loop.title}</span>
-                  <span className="open-loop-stall">{loopStallLabel(loop)}</span>
+                  <span className={`open-loop-stall open-loop-stall--${stall.tone}`}>
+                    {stall.text}
+                  </span>
                 </button>
               );
             })
           ) : (
             <div className="open-loop-empty">
               <p>
-                <strong>Nothing open.</strong> Jos only shows work that’s still unfinished.
+                <strong>Nothing open.</strong> Jos only surfaces work that still needs you.
               </p>
               {onFindUnfinished ? (
                 <button type="button" className="btn" onClick={() => void onFindUnfinished()}>
@@ -104,13 +111,13 @@ export function WaitlistActLayout({
         </div>
 
         <p className="waitlist-loops-foot">
-          Mac · iPhone — same loop on both. Propose, you decide, then close.
+          Same loops on Mac and iPhone. Jos proposes; you approve before anything sends.
         </p>
       </aside>
 
-      <section className="proposed-next proposed-next--panel" aria-label="Proposed next step">
+      <section className="proposed-next proposed-next--panel context-surface" aria-label="Close surface">
         <header className="proposed-panel-head">
-          <span className="proposed-panel-label">Proposed next step</span>
+          <span className="proposed-panel-label">Close surface</span>
         </header>
 
         {selected ? (
@@ -119,71 +126,84 @@ export function WaitlistActLayout({
             <h3 className="proposed-headline">{headline}</h3>
             {mergedEars.length ? (
               <p className="proposed-merged-ears">
-                Jos folded in:{" "}
+                Folded in:{" "}
                 {mergedEars.map((e) => `${e.source === "gmail" ? "Gmail" : e.source}${e.title ? ` · ${e.title}` : ""}`).join("; ")}
               </p>
             ) : null}
-            {steps.length ? (
-              <ol className="proposed-steps">
-                {steps.map((step) => (
-                  <li key={step}>{step}</li>
-                ))}
-              </ol>
-            ) : (
-              <p className="proposed-empty">
-                <button type="button" className="inline-link" onClick={() => void onDraft()}>
-                  Preview
-                </button>{" "}
-                to generate steps from fused context.
-              </p>
-            )}
+            <ol className="proposed-steps">
+              {steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
 
-            <div className="proposed-actions">
-              <button type="button" className="btn" onClick={onToggleEditor}>
-                {editorOpen ? "Hide editor" : "Open editor"}
-              </button>
-              <button
-                type="button"
-                className="btn"
-                onClick={() => (onVoice ? onVoice() : onDraft())}
-                disabled={busy}
-              >
-                Fill by voice
-              </button>
+            <div className={`context-box${showEditor ? " context-box--editing" : ""}`}>
+              {!showEditor ? (
+                <p className="context-box-excerpt">
+                  {hasDraft ? previewExcerpt : "Jos will draft the close step from this loop."}
+                </p>
+              ) : null}
+              {showEditor ? (
+                <div className="proposed-editor">
+                  <ModalityHost
+                    loop={selected}
+                    proposal={proposal}
+                    draftTitle={draftTitle}
+                    draftBody={draftBody}
+                    onTitleChange={onTitleChange}
+                    onBodyChange={onBodyChange}
+                    busy={busy}
+                  />
+                </div>
+              ) : null}
+              <div className="context-box-tools">
+                {!hasDraft ? (
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => void onDraft()}
+                    disabled={busy}
+                  >
+                    {busy ? "Drafting…" : "Draft close step"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn ghost"
+                    onClick={onToggleEditor}
+                    disabled={busy}
+                  >
+                    {showEditor ? "Done editing" : "Edit draft"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="proposed-actions proposed-actions--primary">
               <button
                 type="button"
                 className="btn primary"
                 onClick={() => void onApprove()}
-                disabled={busy}
+                disabled={busy || !hasDraft}
               >
-                {busy ? "Working…" : "Approve & continue"}
+                {busy ? "Working…" : "Approve now"}
+              </button>
+              <button
+                type="button"
+                className="btn"
+                disabled
+                title="Scheduled approve is on the V1 roadmap"
+              >
+                Approve later
               </button>
             </div>
-
-            {editorOpen ? (
-              <div className="proposed-editor">
-                <ModalityHost
-                  loop={selected}
-                  proposal={proposal}
-                  draftTitle={draftTitle}
-                  draftBody={draftBody}
-                  onTitleChange={onTitleChange}
-                  onBodyChange={onBodyChange}
-                  busy={busy}
-                />
-                <button type="button" className="btn ghost" onClick={() => void onDraft()} disabled={busy}>
-                  {busy ? "Drafting…" : proposal ? "Re-draft" : "Preview"}
-                </button>
-              </div>
-            ) : null}
 
             <p className="proposed-trust">Nothing submits until you approve.</p>
           </>
         ) : (
           <div className="proposed-idle">
-            <p className="proposed-headline proposed-headline--idle">Select an open loop</p>
+            <p className="proposed-headline proposed-headline--idle">Pick an open loop</p>
             <p className="proposed-empty">
-              The right column is your context box — steps, editor, and Approve live here.
+              This panel follows the task: draft, edit, and approve live here. You do not pick a widget.
             </p>
           </div>
         )}

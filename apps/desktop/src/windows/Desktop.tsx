@@ -49,7 +49,7 @@ const QUIET_REASONS: { id: QuietReason; label: string }[] = [
 ];
 
 function pct(rate: number | null) {
-  if (rate == null) return "—";
+  if (rate == null) return "n/a";
   return `${Math.round(rate * 100)}%`;
 }
 
@@ -145,7 +145,11 @@ export function Desktop() {
   const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [quietPick, setQuietPick] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
+  const [listeningHelp, setListeningHelp] = useState(false);
   const [metrics, setMetrics] = useState<OsDogfoodMetrics | null>(null);
+
+  const hostShell = Boolean(window.juvantageOs?.hostShell);
+  const showUndock = Boolean(window.juvantageOs) && !hostShell;
 
   useEffect(() => {
     let cancelled = false;
@@ -215,6 +219,18 @@ export function Desktop() {
 
   useEffect(() => {
     if (!authed) return;
+    const onHash = () => {
+      const id = loopIdFromHash();
+      if (!id) return;
+      setSelectedId(id);
+      void refreshLoops(id);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, [authed]);
+
+  useEffect(() => {
+    if (!authed) return;
     const onFocus = () => {
       void (async () => {
         try {
@@ -246,10 +262,24 @@ export function Desktop() {
     else if (sourceFilter === "calendar") {
       list = list.filter((l) => l.source === "google_calendar");
     } else if (sourceFilter === "all" && !clipsExpanded) {
-      list = list.filter((l) => l.source !== "clip" && l.source !== "dev_fixture");
+      list = list.filter((l) => {
+        if (l.source === "clip" || l.source === "dev_fixture") return false;
+        if (l.source === "episodic" && l.band !== "critical" && l.band !== "high") return false;
+        if (l.source === "voice" && l.band === "quiet") return false;
+        return true;
+      });
     }
     return list;
   }, [loops, band, sourceFilter, clipsExpanded]);
+
+  useEffect(() => {
+    if (!selected) {
+      setEditorOpen(false);
+      return;
+    }
+    const body = draftBody.trim() || selected.proposal?.body?.trim();
+    setEditorOpen(Boolean(body));
+  }, [selected?.id, selected?.proposal?.id, draftBody]);
 
   const heroLoop = useMemo(
     () => pickSheetHero(filtered, presenceHint) ?? filtered[0] ?? null,
@@ -493,15 +523,18 @@ export function Desktop() {
 
   if (!authed) {
     return (
-      <div className="desk-shell app-opaque">
+      <div className={`desk-shell app-opaque${hostShell ? " desk-shell--host" : ""}`}>
         <div className="desk-titlebar">
-          <p className="brand">Juvantage OS</p>
+          {hostShell ? (
+            <span className="titlebar-spacer" aria-hidden />
+          ) : (
+            <p className="brand">Juvantage OS</p>
+          )}
         </div>
         <div className="sign-gate">
           <h1>Sign in</h1>
           <p className="page-sub">
-            Jos catches unfinished work and helps you close it — nothing sends
-            without your Approve.
+            Jos catches unfinished work and helps you close it. Nothing sends without your approve.
           </p>
           <form className="auth-form" onSubmit={onLogin}>
             <label>
@@ -536,130 +569,172 @@ export function Desktop() {
   }
 
   return (
-    <div className="desk-shell app-opaque">
+    <div className={`desk-shell app-opaque${hostShell ? " desk-shell--host" : ""}`}>
       <div className="desk-titlebar">
-        <div className="traffic-lights" aria-hidden>
-          <i className="r" />
-          <i className="y" />
-          <i className="g" />
+        {!hostShell ? (
+          <>
+            <div className="traffic-lights" aria-hidden>
+              <i className="r" />
+              <i className="y" />
+              <i className="g" />
+            </div>
+            <p className="brand">Juvantage OS</p>
+          </>
+        ) : (
+          <span className="titlebar-spacer" aria-hidden />
+        )}
+        <div className="titlebar-mid">
+          <button
+            type="button"
+            className="listening-pill listening-pill--btn"
+            aria-expanded={listeningHelp}
+            onClick={() => setListeningHelp((v) => !v)}
+          >
+            <span className="listening-dot" aria-hidden />
+            Listening
+          </button>
+          {listeningHelp ? (
+            <div className="listening-popover" role="dialog" aria-label="What listening means">
+              <p>
+                <strong>Eyes:</strong> frontmost app and window title while you are active (not full screen recording).
+              </p>
+              <p>
+                <strong>Ears:</strong> Gmail and Calendar after you link Google. Jos reads in the background; you close from Work.
+              </p>
+              <p>
+                <strong>Voice:</strong> hold <kbd>fn</kbd> in the quick sheet for short asks and drafts (coming to quick answers next).
+              </p>
+              {presenceHint?.app ? (
+                <p className="listening-popover-now">
+                  Now: <strong>{presenceHint.app}</strong>
+                  {presenceHint.title ? ` · ${presenceHint.title}` : ""}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </div>
-        <p className="brand">Juvantage OS</p>
-        <span className="listening-pill" aria-live="polite">
-          <span className="listening-dot" aria-hidden />
-          Listening
-        </span>
         <div className="actions">
           <button
             type="button"
-            className="btn ghost"
-            title="Link Google, settings"
-            onClick={() => setOverlay(overlay ? null : "settings")}
+            className="btn ghost btn-settings"
+            title="Settings"
+            onClick={() => setOverlay(overlay === "settings" ? null : "settings")}
           >
-            ⚙
+            Settings
           </button>
-          <button
-            type="button"
-            className="btn ghost"
-            onClick={() => void window.juvantageOs?.undock()}
-          >
-            Undock
-          </button>
+          {showUndock ? (
+            <button
+              type="button"
+              className="btn ghost"
+              title="Open desktop in its own window"
+              onClick={() => void window.juvantageOs?.undock()}
+            >
+              Pop out
+            </button>
+          ) : null}
         </div>
       </div>
 
       <div className="desk-body desk-body--product">
         <main className="desk-main desk-main--product">
-          <WaitlistActLayout
-            loops={filtered}
-            selected={selected}
-            onSelect={(loop) => selectLoop(loop)}
-            proposal={proposal}
-            draftTitle={draftTitle}
-            draftBody={draftBody}
-            onTitleChange={setDraftTitle}
-            onBodyChange={setDraftBody}
-            busy={Boolean(busy)}
-            editorOpen={editorOpen}
-            onToggleEditor={() => setEditorOpen((v) => !v)}
-            onDraft={() => void onDraft()}
-            onApprove={() => void onApproveSend()}
-            onLinkGoogle={() => setOverlay("connect")}
-            onFindUnfinished={() => void onExtract()}
-          />
-          {selected && quietPick ? (
-            <div className="quiet-reasons" style={{ padding: "8px 0 0" }}>
-              <div className="chips" style={{ margin: 0 }}>
-                {QUIET_REASONS.map((r) => (
-                  <button
-                    key={r.id}
-                    type="button"
-                    className="chip"
-                    onClick={() =>
-                      dismissOsLoop(selected.id, r.id).then(() => {
-                        setQuietPick(false);
-                        notify(
-                          r.id === "wrong_band" ? "Noted — shouldn’t have surfaced" : "Quieted",
-                          "success",
-                        );
-                        return refreshLoops();
-                      })
-                    }
-                  >
-                    {r.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : selected ? (
-            <button type="button" className="btn ghost" onClick={() => setQuietPick(true)}>
-              Quiet this loop
-            </button>
+          {message ? (
+            <p className={`toast toast--float toast--${messageTone}`}>{message}</p>
           ) : null}
 
-          {overlay ? (
+          {!overlay ? (
+            <div className="desk-stage desk-stage--work">
+              <WaitlistActLayout
+                loops={filtered}
+                selected={selected}
+                onSelect={(loop) => selectLoop(loop)}
+                proposal={proposal}
+                draftTitle={draftTitle}
+                draftBody={draftBody}
+                onTitleChange={setDraftTitle}
+                onBodyChange={setDraftBody}
+                busy={Boolean(busy)}
+                editorOpen={editorOpen}
+                onToggleEditor={() => setEditorOpen((v) => !v)}
+                onDraft={() => void onDraft()}
+                onApprove={() => void onApproveSend()}
+                onLinkGoogle={() => setOverlay("connect")}
+                onFindUnfinished={() => void onExtract()}
+              />
+              {selected && quietPick ? (
+                <div className="quiet-reasons quiet-reasons--inline">
+                  <div className="chips">
+                    {QUIET_REASONS.map((r) => (
+                      <button
+                        key={r.id}
+                        type="button"
+                        className="chip"
+                        onClick={() =>
+                          dismissOsLoop(selected.id, r.id).then(() => {
+                            setQuietPick(false);
+                            notify(
+                              r.id === "wrong_band" ? "Noted — shouldn’t have surfaced" : "Quieted",
+                              "success",
+                            );
+                            return refreshLoops();
+                          })
+                        }
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : selected ? (
+                <button
+                  type="button"
+                  className="btn ghost quiet-loop-btn"
+                  onClick={() => setQuietPick(true)}
+                >
+                  Quiet this loop
+                </button>
+              ) : null}
+            </div>
+          ) : (
             <div
-              className="desk-overlay"
-              role="presentation"
-              onClick={() => setOverlay(null)}
-              onKeyDown={(e) => e.key === "Escape" && setOverlay(null)}
+              className="desk-stage desk-stage--overlay"
+              role="dialog"
+              aria-modal="true"
+              aria-label={
+                overlay === "connect" ? "Google" : overlay === "inbox" ? "Connector cache" : "Settings"
+              }
             >
-              <div
-                className="desk-overlay-panel"
-                role="dialog"
-                aria-modal="true"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div className="desk-overlay-panel desk-overlay-panel--full">
                 <div className="desk-overlay-head">
                   <h1>
                     {overlay === "connect"
                       ? "Google"
                       : overlay === "inbox"
-                        ? "Sync debug"
+                        ? "Connector cache (dev)"
                         : "Settings"}
                   </h1>
-                  <button type="button" className="btn ghost" onClick={() => setOverlay(null)}>
-                    Done
+                  <button
+                    type="button"
+                    className="btn primary btn-back-work"
+                    onClick={() => setOverlay(null)}
+                  >
+                    ← Back to work
                   </button>
                 </div>
                 {overlay === "settings" ? (
-                  <p className="page-sub">
+                  <p className="page-sub settings-quick-links">
                     <button type="button" className="inline-link" onClick={() => setOverlay("connect")}>
                       Link Google
                     </button>
                     {" · "}
-                    <button type="button" className="inline-link" onClick={() => setOverlay("inbox")}>
-                      Sync debug
-                    </button>
-                    {" · "}
                     <button type="button" className="inline-link" onClick={() => setFiltersOpen((v) => !v)}>
-                      {filtersOpen ? "Hide filters" : "Filters"}
+                      {filtersOpen ? "Hide filters" : "Loop filters"}
                     </button>
                   </p>
                 ) : null}
 
                 {overlay === "inbox" ? (
             <>
-              <p className="page-sub">Raw connector cache — not product UI.</p>
+              <p className="page-sub">Raw Gmail and Calendar cache for engineers. You do not work from this screen.</p>
               <p className="page-sub">
                 This is the raw feed Jos reads. You don’t act here — unfinished
                 work shows up under <strong>Work</strong>.{" "}
@@ -767,8 +842,8 @@ export function Desktop() {
                   <button type="button" className="btn" onClick={onSync} disabled={Boolean(busy) || !gmailConnected}>
                     {busy === "sync" ? "Syncing…" : "Refresh mail & calendar"}
                   </button>
-                  <button type="button" className="btn accent" onClick={() => setOverlay(null)}>
-                    Done
+                  <button type="button" className="btn" onClick={() => setOverlay(null)}>
+                    ← Back to work
                   </button>
                 </div>
                 <div className="btn-row" style={{ marginTop: 10 }}>
@@ -940,6 +1015,25 @@ export function Desktop() {
                 )}
               </div>
               <div className="panel">
+                <h2>Plan and billing</h2>
+                <p className="page-sub" style={{ marginTop: 0 }}>
+                  Personal tier is active in this build. Team seats and usage upgrades will live here with Stripe checkout (V1).
+                </p>
+                <div className="form-row">
+                  <span>Personal</span>
+                  <span className="ok">Current</span>
+                </div>
+                <div className="form-row">
+                  <span>Teams</span>
+                  <span className="page-sub" style={{ margin: 0 }}>
+                    Coming soon
+                  </span>
+                </div>
+                <p className="page-sub">
+                  Connectors for cloud agents (Cursor, custom MCP) will appear under Connectors once we ship workspace keys.
+                </p>
+              </div>
+              <div className="panel">
                 <h2>General</h2>
                 <div className="form-row"><span>Check-in morning</span><span className="page-sub" style={{ margin: 0 }}>09:30</span></div>
                 <div className="form-row"><span>Check-in afternoon</span><span className="page-sub" style={{ margin: 0 }}>15:30</span></div>
@@ -967,11 +1061,7 @@ export function Desktop() {
                 ) : null}
               </div>
             </div>
-          ) : null}
-
-          {message ? (
-            <p className={`toast toast--${messageTone}`}>{message}</p>
-          ) : null}
+          )}
         </main>
       </div>
     </div>
