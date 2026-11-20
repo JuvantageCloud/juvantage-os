@@ -2,8 +2,8 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { evidenceLinesFromContextPack, pickSheetHero, sortLoopsForWork } from "@juvantage/shared";
 
-describe("sheet hero (obligation-first)", () => {
-  it("prefers gmail over episodic when both exist", () => {
+describe("sheet hero (context-first)", () => {
+  it("prefers episodic over gmail when both exist", () => {
     const hero = pickSheetHero([
       {
         id: "e1",
@@ -18,7 +18,7 @@ describe("sheet hero (obligation-first)", () => {
         ambient: null,
         routerConf: 0.8,
         createdAt: "",
-        updatedAt: "",
+        updatedAt: new Date().toISOString(),
       },
       {
         id: "g1",
@@ -36,7 +36,7 @@ describe("sheet hero (obligation-first)", () => {
         updatedAt: "",
       },
     ]);
-    assert.equal(hero?.id, "g1");
+    assert.equal(hero?.id, "e1");
   });
 
   it("skips dev_fixture", () => {
@@ -77,12 +77,12 @@ describe("sheet hero (obligation-first)", () => {
 });
 
 describe("sortLoopsForWork", () => {
-  it("lists gmail before episodic", () => {
+  it("lists episodic before gmail", () => {
     const sorted = sortLoopsForWork([
       { id: "e", source: "episodic", objectType: "clip", band: "high", updatedAt: "2026-01-02" },
       { id: "m", source: "gmail", objectType: "mail", band: "high", updatedAt: "2026-01-01" },
     ]);
-    assert.equal(sorted[0]?.id, "m");
+    assert.equal(sorted[0]?.id, "e");
   });
 });
 

@@ -25,7 +25,8 @@ Ship order:  host-1 shell (done)  →  quartet in the running Brain
 | Brain | **Extend `apps/api`** with Brain API routes (`/loops`, `/approve`, …) | Teams needs Docker → extract image |
 | Screen fork | **B · Screen-first episodic** — connectors as hands/away-ears; presence eyes-off when idle; OCR deepens in V2 (`OS_ARCHITECTURE.md` §A6–A8) | Dogfood weak on specificity → pull episodic OCR earlier |
 | Retention | Purge raw ambient/frames ≤24h; **keep Loops + proposals** | User asks longer evidence window |
-| Quick sheet | **1** hero suggestion (list of 3 is the Desktop Work backup) | Dogfood says one is wrong |
+| Quick sheet | **1** hero suggestion (context-first rank; list of 3 on Desktop) | Presence-aware hero next |
+| Product home | **Fused context** (`OS_CONTEXT_FIRST_PLAN.md`), not mail inbox | Synced nav removed from chrome |
 | LLM | Adapter behind brain (start Anthropic if key exists); **context packs only** | Cost/privacy → Bedrock/local |
 
 ---

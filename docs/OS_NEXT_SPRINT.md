@@ -1,6 +1,8 @@
-# Next sprint — quartet in the running Brain
+# Next sprint — context-first host
 
-**Goal:** Make the four OS laws true in `apps/api`, then keep dogfooding host 1 (Mac). The float is a shell. The Brain is the product.
+**Goal:** Product home = **fused context**, not inbox. Brain still owns close law + liveness. The float is a shell.
+
+**North star:** [`OS_CONTEXT_FIRST_PLAN.md`](./OS_CONTEXT_FIRST_PLAN.md)
 
 Research tie-in: fused context lives on the **loop evidence pack** (Assignment 1 / RP-01, `docs/OS_CONTEXT_FUSE.md`) — not a separate Context tab in IA.
 
@@ -13,8 +15,20 @@ Research tie-in: fused context lives on the **loop evidence pack** (Assignment 1
 | Ears on, eyes off when idle | Idle is a scheduler: no frame retain; obligation extract still runs. |
 | Close is semantic | Float and Desktop both refuse weak clips and block Approve on non-closable types. |
 
+## Context-first (active)
+
+1. [x] Loop liveness v0 before `listOpenLoops`
+2. [x] Hero + list sort: episodic/clip before mail
+3. [x] Desktop Work copy + **ContextCanvas** (poll + motion)
+4. [x] Remove **Synced** from primary nav (debug under Settings)
+5. [x] Presence-aware hero (frontmost app ↔ bundle)
+6. [x] Liveness v1 (replied / resolved externally; episodic session stale)
+7. [x] Merge v0 (connector loops → episodic `childSources`); [x] checklist proposal body
+8. [ ] **Shell IA** — **frozen** until Brain gate ([`OS_BRAIN_FIRST.md`](./OS_BRAIN_FIRST.md))
+
 ## Do not start (yet)
 
+- Full inbox / calendar browsers in product chrome
 - Another Rocq file
 - Phase 7 Docker / Teams
 - Scene graph, meeting audio, Skills

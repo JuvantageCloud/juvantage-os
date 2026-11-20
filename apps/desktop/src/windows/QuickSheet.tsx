@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { LoopWithProposal, Proposal } from "@juvantage/shared";
 import { isClosableObjectType, pickSheetHero } from "@juvantage/shared";
+import { readPresenceHint } from "../lib/presenceHint";
 import {
   approveSendOsProposal,
   dismissOsLoop,
@@ -172,8 +173,9 @@ export function QuickSheet() {
       await ensureDevFixtures();
       await readFrontWindow();
       await maybeSyncExtract();
-      const data = await fetchOsLoops(8);
-      const hero = pickSheetHero(data.loops);
+      const presence = await readPresenceHint();
+      const data = await fetchOsLoops(8, presence);
+      const hero = pickSheetHero(data.loops, presence);
       const shown = hero ? [hero] : [];
       setLoops(shown);
       const focused = shown.find((l) => l.id === focusRef.current) ?? shown[0];
@@ -358,7 +360,7 @@ export function QuickSheet() {
     <div className={`sheet-shell${loading ? " sheet-loading" : ""}`}>
       <header className="sheet-header">
         <div>
-          <h1>Suggestion</h1>
+          <h1>Preview</h1>
           <p className="meta">
             {loading
               ? "Looking…"

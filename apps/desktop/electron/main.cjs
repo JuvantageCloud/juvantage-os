@@ -281,9 +281,19 @@ function wireIpc() {
       try {
         const { stdout } = await execFileAsync("osascript", [
           "-e",
-          'tell application "System Events" to get name of first process whose frontmost is true',
+          `tell application "System Events"
+  set frontApp to name of first application process whose frontmost is true
+  set frontTitle to ""
+  try
+    set frontTitle to name of first window of application process frontApp
+  end try
+  return frontApp & linefeed & frontTitle
+end tell`,
         ]);
-        appName = stdout.trim() || appName;
+        const parts = stdout.trim().split(/\r?\n/);
+        appName = parts[0]?.trim() || appName;
+        const t = parts.slice(1).join(" ").trim();
+        title = t.length > 0 ? t.slice(0, 240) : null;
       } catch {
         /* Accessibility permission may be required */
       }

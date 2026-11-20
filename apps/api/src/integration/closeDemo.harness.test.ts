@@ -105,7 +105,8 @@ describe("HTTP harness — demo approve-send close loop", () => {
       headers: auth,
       body: "{}",
     });
-    const { proposal } = await json<{ proposal: { id: string } }>(proposeRes);
+    const { proposal } = await json<{ proposal: { id: string; body: string } }>(proposeRes);
+    assert.match(proposal.body, /Proposed next steps:/i);
 
     const closeRes = await app.request(`/os/proposals/${proposal.id}/approve-send`, {
       method: "POST",
@@ -271,7 +272,19 @@ describe("HTTP harness — demo approve-send close loop", () => {
     const live = loops.find((l) => l.source === "episodic");
     assert.ok(live?.proposal);
     assert.match(live!.proposal!.body, /fused 2 signals/i);
+    assert.match(live!.proposal!.body, /Proposed next steps:/i);
+    assert.match(live!.proposal!.body, /1\)/);
     assert.match(live!.proposal!.body, /let input = engine.inputNode/);
+
+    const ranked = await json<{
+      loops: Array<{ id: string; source: string }>;
+    }>(
+      await app.request(
+        "/os/loops?limit=10&app=Xcode&title=VoiceController.swift",
+        { headers: auth },
+      ),
+    );
+    assert.equal(ranked.loops[0]?.source, "episodic");
 
     const loopId = cap.loop?.id ?? live!.id ?? loops.find((l) => l.source === "episodic")?.id;
     assert.ok(loopId, "expected loop id for context pack");
@@ -284,5 +297,73 @@ describe("HTTP harness — demo approve-send close loop", () => {
     assert.equal(pack.sessionId, cap.sessionId);
     assert.ok(pack.eventCount >= 2);
     assert.ok(pack.events.some((e) => e.textPreview?.includes("engine.inputNode")));
+  });
+
+  it("merge v0 folds actionable gmail into episodic fuse", async () => {
+    const { token } = await json<{ token: string }>(
+      await app.request("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "john@juvantage.com", password: "demo1234" }),
+      }),
+    );
+    const auth = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+
+    await json(
+      await app.request("/os/connectors/demo", {
+        method: "POST",
+        headers: { ...auth, "Content-Type": "application/json" },
+        body: "{}",
+      }),
+    );
+    await json(await app.request("/os/loops/extract", { method: "POST", headers: auth, body: "{}" }));
+
+    const before = await json<{
+      loops: Array<{ id: string; source: string; status?: string }>;
+    }>(await app.request("/os/loops?limit=20", { headers: auth }));
+    const mailLoop = before.loops.find(
+      (l) => l.source === "gmail" && ["open", "proposed"].includes(l.status),
+    );
+    assert.ok(mailLoop, "expected an open gmail loop before fuse");
+
+    await json(
+      await app.request("/os/capture/events", {
+        method: "POST",
+        headers: auth,
+        body: JSON.stringify({
+          events: [
+            { kind: "window_focus", app: "Mail", title: mailLoop!.title },
+            {
+              kind: "clipboard",
+              app: "Mail",
+              title: mailLoop!.title,
+              text: `Need your reply on ${mailLoop!.title} before I merge this context`,
+            },
+          ],
+        }),
+      }),
+    );
+
+    const after = await json<{
+      loops: Array<{
+        id: string;
+        source: string;
+        status: string;
+        evidence?: { childSources?: Array<{ source: string; ref: string }> };
+      }>;
+    }>(await app.request("/os/loops?limit=20", { headers: auth }));
+
+    const episodic = after.loops.find((l) => l.source === "episodic");
+    assert.ok(episodic?.evidence?.childSources?.length, "episodic should list merged childSources");
+
+    assert.ok(
+      !after.loops.some((l) => l.id === mailLoop!.id),
+      "merged gmail loop should drop off the open list",
+    );
+
+    const pack = await json<{
+      evidence: { childSources?: Array<{ source: string; title?: string }> };
+    }>(await app.request(`/os/loops/${episodic!.id}/context`, { headers: auth }));
+    assert.ok(pack.evidence.childSources?.length, "context pack should list merged ears");
   });
 });

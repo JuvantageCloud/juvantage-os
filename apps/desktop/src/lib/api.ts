@@ -6,6 +6,7 @@ import type {
   OsHealth,
   OsNudge,
   OsSyncSummary,
+  PresenceHint,
   Proposal,
 } from "@juvantage/shared";
 
@@ -235,11 +236,17 @@ export function ensureDevFixtures(): Promise<void> {
   return devFixturesOnce;
 }
 
-export async function fetchOsLoops(limit = 3): Promise<{
+export async function fetchOsLoops(
+  limit = 3,
+  presence?: PresenceHint | null,
+): Promise<{
   loops: LoopWithProposal[];
   nudge: OsNudge;
 }> {
-  const res = await apiFetch(`/os/loops?limit=${limit}`);
+  const q = new URLSearchParams({ limit: String(limit) });
+  if (presence?.app) q.set("app", presence.app);
+  if (presence?.title) q.set("title", presence.title);
+  const res = await apiFetch(`/os/loops?${q.toString()}`);
   return res.json();
 }
 

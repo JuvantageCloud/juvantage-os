@@ -25,8 +25,10 @@
     "db:generate": "npm run db:generate -w @juvantage/api",
     "db:push": "npm run db:push -w @juvantage/api",
     "db:seed": "npm run db:seed -w @juvantage/api",
+    "prepare": "node tools/setup-githooks.mjs",
     "setup": "npm install && npm run db:generate && npm run db:push && npm run db:seed",
     "test": "npm test -w @juvantage/api",
+    "mvp:smoke": "npm run build -w @juvantage/shared && npm test -w @juvantage/api && npm run test:integration -w @juvantage/api && npm run dev:os:status",
     "docker:brain": "docker compose build os-brain",
     "typecheck": "npm run build -w @juvantage/shared && npm run build -w @juvantage/api && npx tsc -p apps/desktop --noEmit",
     "investigate": "node tools/investigate-incident.mjs"

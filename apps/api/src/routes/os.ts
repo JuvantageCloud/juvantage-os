@@ -40,6 +40,7 @@ import { presencePolicy } from "../services/osPresence.js";
 import { ensureDevFixtures } from "../services/osDevFixtures.js";
 import { captureAndFuseLoop, ingestCaptureEvents } from "../services/osContextFuse.js";
 import { getLoopContextPack } from "../services/osLoopContext.js";
+import { getPresenceHint, presenceFromQuery } from "../services/osPresenceHint.js";
 import { seedP01MailTest } from "../services/osProof.js";
 import { VoiceLoopError, createVoiceLoop } from "../services/osVoice.js";
 import {
@@ -179,7 +180,16 @@ osRoutes.post("/loops/extract", async (c) => {
 osRoutes.get("/loops", async (c) => {
   const user = c.get("user");
   const limit = Number(c.req.query("limit") ?? 3);
-  const loops = await listOpenLoops(user.sub, Number.isFinite(limit) ? limit : 3);
+  const appQ = c.req.query("app");
+  const titleQ = c.req.query("title");
+  const presence =
+    appQ || titleQ
+      ? presenceFromQuery(appQ, titleQ)
+      : await getPresenceHint(user.sub);
+  const loops = await listOpenLoops(user.sub, {
+    limit: Number.isFinite(limit) ? limit : 3,
+    presence,
+  });
   const withProposals = await Promise.all(
     loops.map(async (loop) => ({
       ...loop,

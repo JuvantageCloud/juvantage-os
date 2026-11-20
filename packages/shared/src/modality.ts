@@ -133,6 +133,7 @@ export type LoopContextPackView = {
   eventCount?: number;
   fingerprint?: string | null;
   sensitivityTags?: string[];
+  evidence?: Record<string, unknown>;
   events?: Array<{
     kind: string;
     app?: string | null;
@@ -157,6 +158,19 @@ export function evidenceLinesFromContextPack(
       value: pack.sensitivityTags.join(", "),
     });
   }
+  const rawChildren = pack.evidence?.childSources ?? pack.evidence?.mergedSources;
+  const children = Array.isArray(rawChildren)
+    ? (rawChildren as Array<{ source?: string; title?: string }>)
+    : [];
+  children.slice(0, 4).forEach((c, i) => {
+    const src = c.source ?? "ear";
+    const title = c.title?.trim() ?? "";
+    lines.push({
+      key: `merge-${i}`,
+      label: "Merged ear",
+      value: title ? `${src}: ${title}` : String(src),
+    });
+  });
   const seen = new Set<string>();
   let shown = 0;
   for (const ev of pack.events ?? []) {
@@ -176,6 +190,11 @@ export function evidenceLinesFromContextPack(
   return lines;
 }
 
+export type PresenceHint = {
+  app?: string;
+  title?: string;
+};
+
 const BAND_RANK: Record<string, number> = {
   critical: 0,
   high: 1,
@@ -183,58 +202,134 @@ const BAND_RANK: Record<string, number> = {
   quiet: 3,
 };
 
-/** One hero on the float: real mail/calendar obligations beat episodic; fixtures never win. */
+function norm(s: string | undefined | null): string {
+  return (s ?? "").trim().toLowerCase();
+}
+
+/** Negative = higher priority when sorting hero (user is in this context now). */
+export function presenceBoostForLoop(
+  loop: {
+    source?: string | null;
+    evidence?: unknown;
+    ambient?: unknown;
+  },
+  presence: PresenceHint | null | undefined,
+): number {
+  if (!presence) return 0;
+  let ev: { app?: string; windowTitle?: string } = {};
+  try {
+    ev =
+      typeof loop.evidence === "object" && loop.evidence
+        ? (loop.evidence as { app?: string; windowTitle?: string })
+        : {};
+  } catch {
+    ev = {};
+  }
+  const amb =
+    typeof loop.ambient === "object" && loop.ambient
+      ? (loop.ambient as { app?: string; title?: string })
+      : {};
+  const loopApp = norm(ev.app ?? amb.app);
+  const loopTitle = norm(ev.windowTitle ?? amb.title);
+  const hintApp = norm(presence.app);
+  const hintTitle = norm(presence.title);
+
+  if (!hintApp && !hintTitle) return 0;
+
+  let boost = 0;
+  if (hintApp && loopApp && (loopApp.includes(hintApp) || hintApp.includes(loopApp))) {
+    boost -= 12;
+  }
+  if (hintTitle && loopTitle && (loopTitle.includes(hintTitle) || hintTitle.includes(loopTitle))) {
+    boost -= 8;
+  }
+  if (loop.source === "episodic" && boost < 0) {
+    boost -= 4;
+  }
+  return boost;
+}
+
+function contextSourceRank(l: { source?: string | null }): number {
+  if (l.source === "dev_fixture") return 90;
+  if (l.source === "episodic") return 0;
+  if (l.source === "clip" || l.source === "voice") return 5;
+  if (l.source === "gmail" || l.source === "google_calendar") return 12;
+  return 8;
+}
+
+function inContextNow(
+  l: { source?: string | null; evidence?: unknown; ambient?: unknown },
+  presence?: PresenceHint | null,
+): boolean {
+  return (
+    !!presence && presenceBoostForLoop(l, presence) <= -10
+  );
+}
+
+function heroScore<
+  T extends {
+    source?: string | null;
+    band?: string;
+    updatedAt?: string | Date;
+    evidence?: unknown;
+    ambient?: unknown;
+  },
+>(l: T, presence?: PresenceHint | null): number {
+  const band = BAND_RANK[l.band ?? "normal"] ?? 9;
+  const src = inContextNow(l, presence) ? 0 : contextSourceRank(l);
+  const ts =
+    l.updatedAt instanceof Date
+      ? l.updatedAt.getTime()
+      : l.updatedAt
+        ? Date.parse(l.updatedAt)
+        : 0;
+  const recencyBoost = ts > Date.now() - 4 * 3_600_000 ? -2 : 0;
+  return src * 10 + band + recencyBoost + presenceBoostForLoop(l, presence);
+}
+
+/** One hero: fused screen context beats mailbox browsing; connectors are hands, not home. */
 export function pickSheetHero<
-  T extends { id: string; source?: string | null; objectType?: string | null; band?: string },
->(loops: T[]): T | undefined {
+  T extends {
+    id: string;
+    source?: string | null;
+    objectType?: string | null;
+    band?: string;
+    updatedAt?: string | Date;
+    evidence?: unknown;
+    ambient?: unknown;
+  },
+>(loops: T[], presence?: PresenceHint | null): T | undefined {
   const live = loops.filter((l) => l.source !== "dev_fixture");
   if (!live.length) return undefined;
 
-  const obligations = live.filter(
-    (l) =>
-      (l.source === "gmail" || l.source === "google_calendar") &&
-      (l.objectType === "mail" || l.objectType === "calendar"),
-  );
-  if (obligations.length) {
-    obligations.sort(
-      (a, b) =>
-        (BAND_RANK[a.band ?? "normal"] ?? 9) - (BAND_RANK[b.band ?? "normal"] ?? 9),
+  const sorted = [...live].sort((a, b) => {
+    const sa = heroScore(a, presence);
+    const sb = heroScore(b, presence);
+    if (sa !== sb) return sa - sb;
+    return (
+      presenceBoostForLoop(a, presence) - presenceBoostForLoop(b, presence)
     );
-    return obligations[0];
-  }
-
-  const episodic = live.find((l) => l.source === "episodic");
-  if (episodic) return episodic;
-  return live[0];
+  });
+  return sorted[0];
 }
 
-function loopWorkRank(l: {
-  source?: string | null;
-  objectType?: string | null;
-}): number {
-  if (l.source === "dev_fixture") return 90;
-  if (
-    (l.source === "gmail" || l.source === "google_calendar") &&
-    (l.objectType === "mail" || l.objectType === "calendar")
-  ) {
-    return 0;
-  }
-  if (l.source === "episodic") return 20;
-  return 10;
-}
-
-/** Work list + Desktop default: real obligations first, episodic last, fixtures hidden at bottom. */
+/** Work list: context-first, then band, then recency (fixtures last). */
 export function sortLoopsForWork<
   T extends {
     source?: string | null;
     objectType?: string | null;
     band?: string;
     updatedAt?: string | Date;
+    evidence?: unknown;
+    ambient?: unknown;
   },
->(loops: T[]): T[] {
+>(loops: T[], presence?: PresenceHint | null): T[] {
   const copy = [...loops];
   copy.sort((a, b) => {
-    const rank = loopWorkRank(a) - loopWorkRank(b);
+    const pb =
+      presenceBoostForLoop(a, presence) - presenceBoostForLoop(b, presence);
+    if (pb !== 0) return pb;
+    const rank = contextSourceRank(a) - contextSourceRank(b);
     if (rank !== 0) return rank;
     const band =
       (BAND_RANK[a.band ?? "normal"] ?? 9) - (BAND_RANK[b.band ?? "normal"] ?? 9);

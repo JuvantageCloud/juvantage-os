@@ -7,6 +7,7 @@ import { prisma } from "../db/client.js";
 import { EYES_OFF_AFTER_IDLE_S } from "./osPresence.js";
 import { EPISODIC_SOURCE, episodicSignal, type EpisodicInput } from "./osEpisodic.js";
 import { serializeLoop } from "./osLoops.js";
+import { mergeRelatedOpenLoops } from "./osLoopMerge.js";
 
 export const BUNDLE_SOURCE_REF = "context-bundle";
 export const PURGE_CONTEXT_HOURS = 24;
@@ -194,13 +195,16 @@ function draftFromBundle(bundle: ContextBundle, signal: NonNullable<ReturnType<t
     body: [
       narrative,
       "",
+      "Proposed next steps:",
+      "1) Confirm the quote matches what you meant to close.",
+      "2) Edit the draft below.",
+      "3) Approve — nothing submits until you tap Approve.",
+      "",
       `Where: ${bundle.app}${bundle.windowTitle ? ` — ${bundle.windowTitle}` : ""}`,
       "",
       signal.quote,
       "",
       tagLine,
-      "",
-      "Edit, then Approve to close this locally.",
     ].join("\n"),
   };
 }
@@ -264,7 +268,19 @@ async function surfaceBundleLoop(userId: string, sessionId: string) {
     }
     const loop = await prisma.loop.update({ where: { id: existing.id }, data: loopData });
     await writeDraft(userId, loop.id, draft);
-    return { surfaced: true as const, loop: serializeLoop(loop), fresh: true as const };
+    await mergeRelatedOpenLoops(userId, loop.id, {
+      title: signal.headline,
+      quote: bundle.quote,
+      windowTitle: bundle.windowTitle,
+      sessionId,
+    });
+    return {
+      surfaced: true as const,
+      loop: serializeLoop(
+        (await prisma.loop.findUniqueOrThrow({ where: { id: loop.id } })),
+      ),
+      fresh: true as const,
+    };
   }
 
   const loop = await prisma.loop.create({
@@ -276,7 +292,19 @@ async function surfaceBundleLoop(userId: string, sessionId: string) {
     },
   });
   await writeDraft(userId, loop.id, draft);
-  return { surfaced: true as const, loop: serializeLoop(loop), fresh: true as const };
+  await mergeRelatedOpenLoops(userId, loop.id, {
+    title: signal.headline,
+    quote: bundle.quote,
+    windowTitle: bundle.windowTitle,
+    sessionId,
+  });
+  return {
+    surfaced: true as const,
+    loop: serializeLoop(
+      (await prisma.loop.findUniqueOrThrow({ where: { id: loop.id } })),
+    ),
+    fresh: true as const,
+  };
 }
 
 export async function captureAndFuseLoop(

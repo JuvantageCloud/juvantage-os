@@ -112,21 +112,42 @@ function templateDraft(loop: {
   if (loop.kind === "appointment") {
     return {
       title: `Confirm: ${topic}`,
-      body: `Hi,\n\nConfirming this works on my side — locking it in.\n\nThanks,\nJohn`,
+      body: [
+        "Proposed next steps:",
+        "1) Check time on your calendar.",
+        "2) Edit the confirm note below.",
+        "3) Approve when ready.",
+        "",
+        `Hi,\n\nConfirming this works on my side — locking it in.\n\nThanks,\nJohn`,
+      ].join("\n"),
       rationale: "Appointment loop → calendar confirm draft",
     };
   }
   if (loop.kind === "todo" || loop.kind === "other") {
     return {
       title: `Next step: ${topic}`,
-      body: `Next step for me:\n1) ${topic}\n2) Reply once done.\n\n(Clip/ambient context — edit before approve.)`,
+      body: [
+        "Proposed next steps:",
+        `1) ${topic}`,
+        "2) Reply or file once done.",
+        "3) Approve — nothing submits until you tap Approve.",
+        "",
+        "(Clip/ambient context — edit before approve.)",
+      ].join("\n"),
       rationale: "Clip/todo loop → checklist draft",
     };
   }
 
   return {
     title: `Reply: ${topic}`,
-    body: `Hi ${from.split(" ")[0] || "there"},\n\nThanks for the note on "${topic}".\n\nI can take this — here's where things stand and what I'll send next. Let me know if you need anything else before then.\n\nBest,\nJohn`,
+    body: [
+      "Proposed next steps:",
+      "1) Skim the thread one more time.",
+      "2) Edit the reply below.",
+      "3) Approve-send when ready.",
+      "",
+      `Hi ${from.split(" ")[0] || "there"},\n\nThanks for the note on "${topic}".\n\nI can take this — here's where things stand and what I'll send next. Let me know if you need anything else before then.\n\nBest,\nJohn`,
+    ].join("\n"),
     rationale: loop.summary
       ? `Reply-owed from mail: ${loop.summary.slice(0, 120)}`
       : "Reply-owed template (no LLM key — deterministic draft)",
