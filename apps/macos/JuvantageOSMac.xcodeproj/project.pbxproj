@@ -12,8 +12,6 @@
 		3BDDE0C72947ED185A9EEC01 /* AgentFloatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ACFA0572099F827CC9F5AE /* AgentFloatView.swift */; };
 		55E671B2F437763CB3401EDD /* OsWebBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660DD9771E60C629A61BE73 /* OsWebBridge.swift */; };
 		71FE67A3E3952459CC45F66D /* LaunchHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B93C61AD80D1C1B088C2EE /* LaunchHubView.swift */; };
-		A1B2C3D401234567890ABCD /* LaunchPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D402234567890ABCD /* LaunchPolicy.swift */; };
-		A1B2C3D403234567890ABCD /* AppRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D404234567890ABCD /* AppRuntime.swift */; };
 		7469A37B2DC61F6E5E7DE56E /* QuickSheetWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2316B83921B5E8632FAEF7B8 /* QuickSheetWebView.swift */; };
 		82E48F5B7EF899D8334F9B79 /* OSDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820166AD15B147234700D7C7 /* OSDTOs.swift */; };
 		8DC0814365E5BBEEACBE63DD /* DesktopWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59F8F3052DC522469BB282 /* DesktopWebView.swift */; };
@@ -43,8 +41,6 @@
 		B660DD9771E60C629A61BE73 /* OsWebBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsWebBridge.swift; sourceTree = "<group>"; };
 		C928004E3537F401ECDC9873 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E19ABCFFB67CCEB7E2637C88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		A1B2C3D402234567890ABCD /* LaunchPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPolicy.swift; sourceTree = "<group>"; };
-		A1B2C3D404234567890ABCD /* AppRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRuntime.swift; sourceTree = "<group>"; };
 		F3C7449A0C2F59289FC6ABB7 /* JuvantageOSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuvantageOSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -91,10 +87,8 @@
 		C2721B9DB66BA6626FFFB2A5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A1B2C3D404234567890ABCD /* AppRuntime.swift */,
 				9934A7DC7DF594F66104A8A4 /* AmbientSampler.swift */,
 				30C2F0D564011C5F3E59824F /* BrainClient.swift */,
-				A1B2C3D402234567890ABCD /* LaunchPolicy.swift */,
 				B660DD9771E60C629A61BE73 /* OsWebBridge.swift */,
 				67DA63A43B52708872FB3DE7 /* TokenStore.swift */,
 				11CD258E091EED972B16629C /* VoiceController.swift */,
@@ -181,9 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BDDE0C72947ED185A9EEC01 /* AgentFloatView.swift in Sources */,
-				A1B2C3D403234567890ABCD /* AppRuntime.swift in Sources */,
 				C23B7871242A637A789CD91D /* AmbientSampler.swift in Sources */,
-				A1B2C3D401234567890ABCD /* LaunchPolicy.swift in Sources */,
 				C4728F6B15B262BBB1B8C8EA /* AppConfig.swift in Sources */,
 				F21E6E001399AC825E9AF0D5 /* AppDelegate.swift in Sources */,
 				2F05E1A2DC999CE21A55CAA3 /* BrainClient.swift in Sources */,

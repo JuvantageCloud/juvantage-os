@@ -140,3 +140,69 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         false
     }
 }
+
+// MARK: - Calm launch (kept in AppDelegate.swift so Xcode target membership never drifts)
+
+enum LaunchPolicy {
+    private static let onboardKey = "juv_os_onboarding_v1"
+
+    static var hasCompletedOnboarding: Bool {
+        get { UserDefaults.standard.bool(forKey: onboardKey) }
+        set { UserDefaults.standard.set(newValue, forKey: onboardKey) }
+    }
+
+    @MainActor
+    static func finishOnboarding() {
+        hasCompletedOnboarding = true
+        AppRuntime.shared.installGlobalShortcuts()
+        ShellController.shared.setupAgentPanel()
+        hideHubWindows()
+    }
+
+    @MainActor
+    static func hideHubWindows() {
+        for window in NSApp.windows {
+            let title = window.title.lowercased()
+            if title.isEmpty || title.contains("juvantage") {
+                if window.frame.width < 520, window.frame.height < 320 {
+                    window.orderOut(nil)
+                }
+            }
+        }
+    }
+}
+
+@MainActor
+final class AppRuntime {
+    static let shared = AppRuntime()
+
+    private var clipMonitors: [Any] = []
+    private var installed = false
+
+    func installGlobalShortcuts() {
+        guard !installed else { return }
+        installed = true
+        registerClipHotkey()
+        VoiceController.shared.startMonitors()
+    }
+
+    private func registerClipHotkey() {
+        let handler: (NSEvent) -> Void = { event in
+            guard event.modifierFlags.contains([.command, .shift]),
+                  event.charactersIgnoringModifiers?.lowercased() == "l"
+            else { return }
+            OsWebViewRegistry.broadcastClipHotkey()
+            Task { @MainActor in
+                ShellController.shared.toggleQuickSheet()
+            }
+        }
+        if let global = NSEvent.addGlobalMonitorForEvents(matching: .keyDown, handler: handler) {
+            clipMonitors.append(global)
+        }
+        let local = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            handler(event)
+            return event
+        }
+        clipMonitors.append(local)
+    }
+}
