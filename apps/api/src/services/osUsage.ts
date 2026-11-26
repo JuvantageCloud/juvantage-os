@@ -1,5 +1,6 @@
 import { prisma } from "../db/client.js";
 import { env, hasLiveLlm } from "../lib/env.js";
+import { userOrgIds } from "./tenancy.js";
 
 export type OsPlanId = "personal" | "brain_pro" | "teams";
 export type FnRoute = "bundled" | "own_agent" | "bundled_then_own";
@@ -92,10 +93,20 @@ async function rolloverCounters(row: { quickAnswersDay: string | null; draftPoli
 }
 
 export async function ownAgentConnected(userId: string): Promise<boolean> {
-  const row = await prisma.connection.findFirst({
+  const personal = await prisma.connection.findFirst({
     where: { userId, provider: "cursor_agents", enabled: true },
   });
-  return Boolean(row);
+  if (personal) return true;
+  const orgIds = await userOrgIds(userId);
+  if (orgIds.length === 0) return false;
+  const orgRow = await prisma.connection.findFirst({
+    where: {
+      provider: "cursor_agents",
+      enabled: true,
+      business: { organizationId: { in: orgIds } },
+    },
+  });
+  return Boolean(orgRow);
 }
 
 export type OsUsageSnapshot = {
@@ -178,18 +189,19 @@ export async function updateFnRoute(sub: string, fnRoute: FnRoute, email?: strin
   return getOsUsageSnapshot(sub, email);
 }
 
-export type QuickAnswerGate =
-  | { allowed: true; source: "bundled" }
-  | { allowed: false; reason: "quota" | "routing" | "no_llm"; message: string };
+export type VoiceQuickPath =
+  | { path: "bundled"; userId: string }
+  | { path: "own_agent"; userId: string }
+  | { path: "deny"; reason: "quota" | "routing" | "no_llm"; message: string };
 
-/** Decide if voice fn may call bundled Brain (tier C) for this utterance. */
-export async function gateBundledQuickAnswer(sub: string, email?: string): Promise<QuickAnswerGate> {
+/** Route fn quick answer to tier C (bundled), tier D (BYO agent), or deny. */
+export async function resolveVoiceQuickPath(sub: string, email?: string): Promise<VoiceQuickPath> {
   let userId: string;
   try {
     userId = await resolveAccountUserId(sub, email);
   } catch {
     return {
-      allowed: false,
+      path: "deny",
       reason: "no_llm",
       message: "Sign in again on Desktop — your session is out of date.",
     };
@@ -202,47 +214,39 @@ export async function gateBundledQuickAnswer(sub: string, email?: string): Promi
 
   const route = (row.fnRoute as FnRoute) || "bundled";
   const own = await ownAgentConnected(userId);
+  const brainLive = hasLiveLlm();
+
   if (route === "own_agent") {
-    if (own) {
-      return {
-        allowed: false,
-        reason: "routing",
-        message:
-          "Fn is set to use your connected agent. Cloud fn routing is coming soon — open Desktop for a full answer.",
-      };
-    }
+    if (own) return { path: "own_agent", userId };
     return {
-      allowed: false,
+      path: "deny",
       reason: "routing",
       message: "Connect your cloud agent in Settings, or switch fn back to Jos Brain.",
     };
   }
 
   const limits = limitsForPlan(row.plan);
-  if (row.quickAnswersUsed >= limits.quickAnswersPerDay) {
-    if (route === "bundled_then_own" && own) {
-      return {
-        allowed: false,
-        reason: "quota",
-        message: "Daily Jos Brain quota used. Your agent would answer next — connector fn routing ships soon.",
-      };
-    }
+  const quotaLeft = row.quickAnswersUsed < limits.quickAnswersPerDay;
+
+  if (!quotaLeft) {
+    if (route === "bundled_then_own" && own) return { path: "own_agent", userId };
     return {
-      allowed: false,
+      path: "deny",
       reason: "quota",
-      message: "Daily quick-answer limit reached. Upgrade to Brain Pro in Settings → Plan & usage.",
+      message: "Daily quick-answer limit reached. Upgrade in Settings → Plan & usage, or connect your agent.",
     };
   }
 
-  if (!hasLiveLlm()) {
+  if (!brainLive) {
+    if (own && route === "bundled_then_own") return { path: "own_agent", userId };
     return {
-      allowed: false,
+      path: "deny",
       reason: "no_llm",
       message: "Jos Brain is not configured on this server. I'll open a loop instead.",
     };
   }
 
-  return { allowed: true, source: "bundled" };
+  return { path: "bundled", userId };
 }
 
 export async function recordQuickAnswerUse(sub: string, email?: string) {

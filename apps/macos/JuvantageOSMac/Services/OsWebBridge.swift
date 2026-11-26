@@ -174,23 +174,25 @@ final class OsWebBridgeHandler: NSObject, WKScriptMessageHandler {
             case "ambientSample":
                 let s = AmbientSampler.sample()
                 ok = true
-                payload = [
+                var amb: [String: Any] = [
                     "ok": s.ok,
                     "idleSeconds": s.idleSeconds,
                     "app": s.app,
-                    "title": s.title as Any,
-                    "url": s.url as Any,
                 ]
+                if let title = s.title { amb["title"] = title }
+                if let url = s.url { amb["url"] = url }
+                payload = amb
             case "episodicContext":
                 let eye = AmbientSampler.episodicContext()
                 ok = true
-                payload = [
+                var eyePayload: [String: Any] = [
                     "ok": eye.ok,
                     "app": eye.app,
-                    "title": eye.title as Any,
-                    "text": eye.text as Any,
                     "axTrusted": eye.axTrusted,
                 ]
+                if let title = eye.title { eyePayload["title"] = title }
+                if let text = eye.text { eyePayload["text"] = text }
+                payload = eyePayload
             case "clipContext":
                 let c = AmbientSampler.clipContext()
                 ok = true

@@ -44,11 +44,12 @@ import { getPresenceHint, presenceFromQuery } from "../services/osPresenceHint.j
 import { seedP01MailTest } from "../services/osProof.js";
 import { VoiceLoopError, createVoiceLoop, parseVoiceQuickAnswer } from "../services/osVoice.js";
 import { voiceQuickAnswerLlm } from "../services/osVoiceQuickLlm.js";
+import { voiceQuickAnswerOwnAgent } from "../services/osVoiceOwnAgent.js";
 import {
   createBillingPortalSession,
   createBrainProCheckout,
-  gateBundledQuickAnswer,
   getOsUsageSnapshot,
+  resolveVoiceQuickPath,
   OsUsageError,
   recordQuickAnswerUse,
   updateFnRoute,
@@ -449,8 +450,18 @@ osRoutes.post("/loops/voice", async (c) => {
         nudge: await nudgeState(user.sub),
       });
     }
-    const gate = await gateBundledQuickAnswer(user.sub, user.email);
-    if (gate.allowed) {
+    const path = await resolveVoiceQuickPath(user.sub, user.email);
+    if (path.path === "own_agent") {
+      const answer = await voiceQuickAnswerOwnAgent(path.userId, transcript);
+      if (answer) {
+        return c.json({
+          mode: "quick_answer" as const,
+          answer,
+          source: "own_agent" as const,
+          nudge: await nudgeState(user.sub),
+        });
+      }
+    } else if (path.path === "bundled") {
       const brain = await voiceQuickAnswerLlm(transcript);
       if (brain) {
         await recordQuickAnswerUse(user.sub, user.email);
@@ -461,10 +472,10 @@ osRoutes.post("/loops/voice", async (c) => {
           nudge: await nudgeState(user.sub),
         });
       }
-    } else if (gate.reason === "quota" || gate.reason === "routing") {
+    } else if (path.reason === "quota" || path.reason === "routing") {
       return c.json({
         mode: "usage_limit" as const,
-        message: gate.message,
+        message: path.message,
         nudge: await nudgeState(user.sub),
       });
     }

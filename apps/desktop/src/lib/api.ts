@@ -433,7 +433,7 @@ export async function clipOsLoop(input: {
 }
 
 export type VoiceOsResponse =
-  | { mode: "quick_answer"; answer: string; source?: "rules" | "brain"; nudge: OsNudge }
+  | { mode: "quick_answer"; answer: string; source?: "rules" | "brain" | "own_agent"; nudge: OsNudge }
   | { mode: "usage_limit"; message: string; nudge: OsNudge }
   | { mode: "loop"; loop: Loop; proposal: Proposal; nudge: OsNudge };
 
