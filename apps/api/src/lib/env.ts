@@ -30,6 +30,12 @@ export const env = {
   metaAppSecret: process.env.META_APP_SECRET ?? "",
   metaRedirectUri:
     process.env.META_REDIRECT_URI ?? "http://localhost:3001/oauth/instagram/callback",
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
+  stripePriceBrainPro: process.env.STRIPE_PRICE_BRAIN_PRO ?? "",
+  /** Where Stripe Checkout / Portal returns (desktop settings URL). */
+  osBillingReturnUrl:
+    process.env.OS_BILLING_RETURN_URL ?? "http://localhost:5173/#desktop?settings=plan",
 };
 
 export function hasLiveLlm() {

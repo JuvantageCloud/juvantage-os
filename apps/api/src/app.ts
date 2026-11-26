@@ -13,6 +13,7 @@ import {
   socialRoutes,
 } from "./routes/agents.js";
 import { recordIncident } from "./services/opsIncidents.js";
+import { stripeWebhookRoutes } from "./routes/stripeWebhook.js";
 
 /** HTTP app — used by `index.ts` server and integration harness tests. */
 export function createApp() {
@@ -35,6 +36,7 @@ export function createApp() {
     }),
   );
 
+  app.route("/webhooks/stripe", stripeWebhookRoutes);
   app.route("/auth", authRoutes);
   app.route("/os", osRoutes);
   app.route("/os/incidents", incidentRoutes);

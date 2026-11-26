@@ -1,6 +1,7 @@
 import type { SettingsSection } from "./SettingsWorkbench";
 import type { OsDogfoodMetrics } from "../lib/api";
 import { dogfoodMetricsBlurb } from "./SettingsWorkbench";
+import { PlanUsagePanel } from "./PlanUsagePanel";
 
 type HealthState =
   | { status: "loading" }
@@ -24,6 +25,7 @@ type Props = {
   onOpenConnect: () => void;
   onOpenSyncDebug: () => void;
   onRefreshMetrics: () => void;
+  onNotify: (text: string, tone?: "info" | "error" | "success") => void;
   pct: (rate: number | null) => string;
 };
 
@@ -38,8 +40,8 @@ export function DesktopSettingsContent(props: Props) {
 
   if (section === "privacy") {
     return (
-      <>
-        <h2 className="type-title">Privacy & sensors</h2>
+      <div className="settings-page">
+        <h1 className="settings-page-title">Privacy & sensors</h1>
         <p className="type-body">
           <strong>On:</strong> Gmail + Calendar when linked, frontmost app and window title while you are
           active, and clips you mark with <strong>⌘⇧L</strong>.
@@ -65,40 +67,24 @@ export function DesktopSettingsContent(props: Props) {
         {props.health.status === "error" ? (
           <p className="err type-body">{props.health.message}</p>
         ) : null}
-      </>
+      </div>
     );
   }
 
   if (section === "account") {
     return (
-      <>
-        <h2 className="type-title">Account</h2>
+      <div className="settings-page">
+        <h1 className="settings-page-title">Account</h1>
         <p className="ok type-body">{props.userLabel}</p>
         <button type="button" className="btn" onClick={props.onLogout}>
           Sign out
         </button>
-      </>
+      </div>
     );
   }
 
   if (section === "plan") {
-    return (
-      <>
-        <h2 className="type-title">Plan & billing</h2>
-        <p className="type-body">Personal tier is active. Teams and usage upgrades will checkout through Stripe in V1.</p>
-        <div className="form-row">
-          <span>Personal</span>
-          <span className="ok">Current</span>
-        </div>
-        <div className="form-row">
-          <span>Teams</span>
-          <span className="type-body">Coming soon</span>
-        </div>
-        <button type="button" className="btn ghost" onClick={props.onOpenConnect}>
-          Manage Google connection
-        </button>
-      </>
-    );
+    return <PlanUsagePanel onNotify={props.onNotify} onOpenConnect={props.onOpenConnect} />;
   }
 
   if (section === "files") {

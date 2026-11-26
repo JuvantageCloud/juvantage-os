@@ -17,6 +17,20 @@ model User {
   conversations AgentConversation[]
 }
 
+/** Personal OS — plan, fn routing, and bundled-brain usage (Stripe-backed). */
+model UserOsPlan {
+  userId              String   @id
+  plan                String   @default("personal")
+  stripeCustomerId    String?
+  stripeSubscriptionId String?
+  fnRoute             String   @default("bundled")
+  quickAnswersUsed    Int      @default(0)
+  quickAnswersDay     String?
+  draftPolishUsed     Int      @default(0)
+  draftPolishMonth    String?
+  updatedAt           DateTime @updatedAt
+}
+
 model Organization {
   id          String     @id @default(cuid())
   name        String

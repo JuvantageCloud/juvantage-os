@@ -238,6 +238,20 @@ export function Desktop() {
 
   useEffect(() => {
     if (!authed) return;
+    const raw = window.location.hash.replace(/^#\/?/, "");
+    const q = raw.includes("?") ? raw.split("?")[1] : "";
+    const params = new URLSearchParams(q);
+    if (params.get("settings") === "plan") {
+      setOverlay("settings");
+      setSettingsSection("plan");
+    }
+    if (params.get("billing") === "success") {
+      notify("Payment received — refresh Plan & usage if limits look stale.", "success");
+    }
+  }, [authed, notify]);
+
+  useEffect(() => {
+    if (!authed) return;
     const onFocus = () => {
       void (async () => {
         try {
@@ -925,6 +939,7 @@ export function Desktop() {
                       onLogout={onLogout}
                       onOpenConnect={() => setOverlay("connect")}
                       onOpenSyncDebug={() => setOverlay("inbox")}
+                      onNotify={notify}
                       onRefreshMetrics={() =>
                         void fetchOsMetrics(14)
                           .then((m) => {

@@ -433,8 +433,39 @@ export async function clipOsLoop(input: {
 }
 
 export type VoiceOsResponse =
-  | { mode: "quick_answer"; answer: string; nudge: OsNudge }
+  | { mode: "quick_answer"; answer: string; source?: "rules" | "brain"; nudge: OsNudge }
+  | { mode: "usage_limit"; message: string; nudge: OsNudge }
   | { mode: "loop"; loop: Loop; proposal: Proposal; nudge: OsNudge };
+
+export type FnRoute = "bundled" | "own_agent" | "bundled_then_own";
+
+export type OsUsageSnapshot = {
+  plan: "personal" | "brain_pro" | "teams";
+  planLabel: string;
+  priceLabel: string;
+  fnRoute: FnRoute;
+  ownAgentConnected: boolean;
+  stripeConfigured: boolean;
+  billingPortalAvailable: boolean;
+  quickAnswers: { used: number; limit: number; resetsAt: string; label: string };
+  draftPolish: { used: number; limit: number; resetsAt: string; label: string };
+  catalog: {
+    personal: {
+      id: "personal";
+      label: string;
+      priceLabel: string;
+      quickAnswersPerDay: number;
+      draftPolishPerMonth: number;
+    };
+    brain_pro: {
+      id: "brain_pro";
+      label: string;
+      priceLabel: string;
+      quickAnswersPerDay: number;
+      draftPolishPerMonth: number;
+    };
+  };
+};
 
 export async function voiceOsLoop(input: {
   text: string;
@@ -444,6 +475,37 @@ export async function voiceOsLoop(input: {
     method: "POST",
     body: JSON.stringify(input),
   });
+  return res.json();
+}
+
+export async function fetchOsUsage(): Promise<OsUsageSnapshot> {
+  const res = await apiFetch("/os/usage");
+  return res.json();
+}
+
+export async function patchOsFnRoute(fnRoute: FnRoute): Promise<OsUsageSnapshot> {
+  const res = await apiFetch("/os/usage/fn-route", {
+    method: "PATCH",
+    body: JSON.stringify({ fnRoute }),
+  });
+  return res.json();
+}
+
+export async function startBrainProCheckout(): Promise<{
+  ok: boolean;
+  url?: string;
+  message?: string;
+}> {
+  const res = await apiFetch("/os/billing/checkout", { method: "POST", body: "{}" });
+  return res.json();
+}
+
+export async function startBillingPortal(): Promise<{
+  ok: boolean;
+  url?: string;
+  message?: string;
+}> {
+  const res = await apiFetch("/os/billing/portal", { method: "POST", body: "{}" });
   return res.json();
 }
 

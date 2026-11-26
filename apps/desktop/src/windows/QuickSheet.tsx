@@ -227,6 +227,10 @@ export function QuickSheet() {
           report(true, res.answer);
           return;
         }
+        if (res.mode === "usage_limit") {
+          report(false, res.message);
+          return;
+        }
         const loop = { ...res.loop, proposal: res.proposal };
         setLoops((prev) => [loop, ...prev.filter((l) => l.id !== loop.id)]);
         setFocusId(loop.id);
