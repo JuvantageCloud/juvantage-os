@@ -205,11 +205,12 @@ Starter draft:\n${input.body}`,
       body?: string;
       rationale?: string;
     };
-    return {
+    const polished = {
       title: parsed.title?.trim() || input.title,
       body: parsed.body?.trim() || input.body,
       rationale: parsed.rationale?.trim() || `${input.rationale} (LLM polished)`,
     };
+    return polished;
   } catch {
     return input;
   }
@@ -229,11 +230,22 @@ export async function proposeForLoop(userId: string, loopId: string) {
   const starter = voice
     ? voiceDraft({ transcript: voice.transcript, intent: voice })
     : templateDraft(loop);
-  const draft = await maybeLlmPolish({
-    ...starter,
-    loopTitle: loop.title,
-    summary: loop.summary,
-  });
+  const { canUseDraftPolish } = await import("./osUsage.js");
+  const polishAllowed = await canUseDraftPolish(userId);
+  const draft = polishAllowed
+    ? await maybeLlmPolish({
+        ...starter,
+        loopTitle: loop.title,
+        summary: loop.summary,
+      })
+    : {
+        ...starter,
+        rationale: `${starter.rationale} (quota — template only; upgrade in Settings)`,
+      };
+  if (draft.rationale?.includes("(LLM polished)")) {
+    const { recordDraftPolishUse } = await import("./osUsage.js");
+    void recordDraftPolishUse(userId).catch(() => undefined);
+  }
 
   await prisma.proposal.updateMany({
     where: {

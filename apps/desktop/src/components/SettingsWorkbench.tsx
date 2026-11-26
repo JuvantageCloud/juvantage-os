@@ -12,7 +12,7 @@ export type SettingsSection =
 const NAV: { id: SettingsSection; label: string }[] = [
   { id: "privacy", label: "Privacy & sensors" },
   { id: "account", label: "Account" },
-  { id: "plan", label: "Plan & billing" },
+  { id: "plan", label: "Plan & usage" },
   { id: "files", label: "Files & folders" },
   { id: "filters", label: "Loop filters" },
   { id: "developer", label: "Developer" },
@@ -26,16 +26,20 @@ type Props = {
 };
 
 export function SettingsWorkbench({ section, onSection, onBack, children }: Props) {
+  const planSection = section === "plan";
   return (
-    <div className="settings-workbench">
+    <div className={`settings-workbench${planSection ? " settings-workbench--plan" : ""}`}>
       <header className="settings-workbench-head">
-        <h1 className="type-title">Settings</h1>
-        <button type="button" className="btn primary btn-back-work" onClick={onBack}>
-          ← Back to work
+        <button type="button" className="btn ghost settings-back" onClick={onBack}>
+          ← Back
         </button>
+        <span className="settings-workbench-eyebrow">Juvantage OS</span>
       </header>
       <div className="settings-workbench-split">
         <nav className="settings-nav" aria-label="Settings sections">
+          <div className="settings-nav-search" aria-hidden>
+            Search settings
+          </div>
           <ul>
             {NAV.map((item) => (
               <li key={item.id}>
@@ -50,7 +54,11 @@ export function SettingsWorkbench({ section, onSection, onBack, children }: Prop
             ))}
           </ul>
         </nav>
-        <div className="settings-detail type-body">{children}</div>
+        <div
+          className={`settings-detail type-body${planSection ? " settings-detail--plan" : ""}`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

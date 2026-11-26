@@ -43,6 +43,17 @@ import { getLoopContextPack } from "../services/osLoopContext.js";
 import { getPresenceHint, presenceFromQuery } from "../services/osPresenceHint.js";
 import { seedP01MailTest } from "../services/osProof.js";
 import { VoiceLoopError, createVoiceLoop, parseVoiceQuickAnswer } from "../services/osVoice.js";
+import { voiceQuickAnswerLlm } from "../services/osVoiceQuickLlm.js";
+import {
+  createBillingPortalSession,
+  createBrainProCheckout,
+  gateBundledQuickAnswer,
+  getOsUsageSnapshot,
+  OsUsageError,
+  recordQuickAnswerUse,
+  updateFnRoute,
+  type FnRoute,
+} from "../services/osUsage.js";
 import {
   osGoogleOAuthErrorHtml,
   osGoogleOAuthSuccessHtml,
@@ -434,6 +445,26 @@ osRoutes.post("/loops/voice", async (c) => {
       return c.json({
         mode: "quick_answer" as const,
         answer: quick.answer,
+        source: "rules" as const,
+        nudge: await nudgeState(user.sub),
+      });
+    }
+    const gate = await gateBundledQuickAnswer(user.sub, user.email);
+    if (gate.allowed) {
+      const brain = await voiceQuickAnswerLlm(transcript);
+      if (brain) {
+        await recordQuickAnswerUse(user.sub, user.email);
+        return c.json({
+          mode: "quick_answer" as const,
+          answer: brain,
+          source: "brain" as const,
+          nudge: await nudgeState(user.sub),
+        });
+      }
+    } else if (gate.reason === "quota" || gate.reason === "routing") {
+      return c.json({
+        mode: "usage_limit" as const,
+        message: gate.message,
         nudge: await nudgeState(user.sub),
       });
     }
@@ -470,4 +501,43 @@ osRoutes.post("/ambient", async (c) => {
     earsOn: policy.earsOn,
     retainFrames: policy.retainFrames,
   });
+});
+
+osRoutes.get("/usage", async (c) => {
+  const user = c.get("user");
+  try {
+    return c.json(await getOsUsageSnapshot(user.sub, user.email));
+  } catch (err) {
+    if (err instanceof OsUsageError) return c.json({ error: err.message }, err.status);
+    throw err;
+  }
+});
+
+osRoutes.patch("/usage/fn-route", async (c) => {
+  const user = c.get("user");
+  const body = (await c.req.json().catch(() => ({}))) as { fnRoute?: FnRoute };
+  const allowed: FnRoute[] = ["bundled", "own_agent", "bundled_then_own"];
+  if (!body.fnRoute || !allowed.includes(body.fnRoute)) {
+    return c.json({ error: "fnRoute must be bundled, own_agent, or bundled_then_own" }, 400);
+  }
+  try {
+    return c.json(await updateFnRoute(user.sub, body.fnRoute, user.email));
+  } catch (err) {
+    if (err instanceof OsUsageError) return c.json({ error: err.message }, err.status);
+    throw err;
+  }
+});
+
+osRoutes.post("/billing/checkout", async (c) => {
+  const user = c.get("user");
+  const result = await createBrainProCheckout(user.sub, user.email);
+  if (!result.ok) return c.json(result, 400);
+  return c.json(result);
+});
+
+osRoutes.post("/billing/portal", async (c) => {
+  const user = c.get("user");
+  const result = await createBillingPortalSession(user.sub, user.email);
+  if (!result.ok) return c.json(result, 400);
+  return c.json(result);
 });
