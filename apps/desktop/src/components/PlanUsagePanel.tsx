@@ -258,9 +258,9 @@ export function PlanUsagePanel({ onNotify, onOpenConnect }: Props) {
           <div className="settings-row-text">
             <p className="settings-row-title">Bring your own agent</p>
             <p className="settings-row-desc">
-              {usage.ownAgentConnected
-                ? "Cursor Agents connected — fn fallover ships next."
-                : "Connect when you want your agent to pick up after quota."}
+                {usage.ownAgentConnected
+                  ? "Connected — fn uses your agent when routing or quota says so."
+                  : "Connect when you want your agent to pick up after quota."}
             </p>
           </div>
           <button type="button" className="btn ghost" onClick={onOpenConnect}>
